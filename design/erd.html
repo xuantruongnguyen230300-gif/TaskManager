@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ERD — Quản lý Task</title>
+<style>
+:root {
+  --bg: #f5f4ef; --surface: #ffffff; --ink: #1f2430; --muted: #5f6677; --hair: #dcd8cc;
+  --canvas: #fbfaf7; --box: #ffffff; --box-head: #f3f1ea; --box-line: #cfcabd; --row-hover: #eef3ff;
+  --rel: #8a90a0; --rel-on: #c2410c; --label-ink: #4a5060; --focus: #c2410c; --hit: #fff1a6;
+  --pk-bg: #fdefc4; --pk-ink: #7a5a00; --fk-bg: #dde8ff; --fk-ink: #1f4e99; --uk-bg: #ece6ff; --uk-ink: #4b3a99;
+  --z-cat: #e8efff; --z-cat-ink: #1f4e99; --z-work: #e3f4ea; --z-work-ink: #1f6b41;
+  --z-act: #ffeae0; --z-act-ink: #9a3b1e; --z-sys: #efeaff; --z-sys-ink: #4b3a99;
+  --btn: #1f2430; --btn-ink: #ffffff;
+  --sans: "Segoe UI", system-ui, sans-serif;
+  --mono: Consolas, "Cascadia Mono", monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14161b; --surface: #1c1f26; --ink: #e7e9ef; --muted: #a3a9b8; --hair: #343945;
+    --canvas: #181b21; --box: #1f232b; --box-head: #282d37; --box-line: #4a5060; --row-hover: #243049;
+    --rel: #7f8699; --rel-on: #ff8a4c; --label-ink: #c3c8d4; --focus: #ff8a4c; --hit: #5a4a00;
+    --pk-bg: #3a3116; --pk-ink: #f0d27a; --fk-bg: #1e2c4a; --fk-ink: #a9c4ff; --uk-bg: #2b2550; --uk-ink: #c7baff;
+    --z-cat: #1a2335; --z-cat-ink: #a9c4ff; --z-work: #15281e; --z-work-ink: #8fddb0;
+    --z-act: #2e2019; --z-act-ink: #ffb59e; --z-sys: #211d35; --z-sys-ink: #c7baff;
+    --btn: #e7e9ef; --btn-ink: #14161b;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.5 var(--sans); padding-inline: 16px; }
+.wrap { max-width: 1760px; margin: 0 auto; padding-block: 16px 32px; }
+header h1 { margin: 0; font-size: 22px; letter-spacing: -0.01em; }
+header p { margin: 4px 0 0; color: var(--muted); }
+code { font-family: var(--mono); font-size: 0.95em; }
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; margin: 14px 0 10px;
+  padding: 10px 12px; background: var(--surface); border: 1px solid var(--hair); border-radius: 14px; }
+.legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend svg { display: block; }
+.lg-badge { font: 700 10px var(--sans); padding: 1px 5px; border-radius: 4px; }
+.lg-PK { background: var(--pk-bg); color: var(--pk-ink); }
+.lg-FK { background: var(--fk-bg); color: var(--fk-ink); }
+.lg-UK { background: var(--uk-bg); color: var(--uk-ink); }
+.lg-null { font: italic 12.5px var(--mono); color: var(--muted); }
+.spacer { flex: 1 1 auto; }
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.search { position: relative; }
+.search input { width: 220px; max-width: 100%; font: 13px var(--sans); color: var(--ink); background: var(--bg);
+  border: 1px solid var(--hair); border-radius: 10px; padding: 7px 10px; }
+.search input:focus { outline: 2px solid var(--focus); outline-offset: 1px; }
+#searchStatus { font-size: 12px; color: var(--muted); min-width: 110px; }
+.zoom { display: inline-flex; align-items: center; gap: 4px; }
+button { font: 600 13px var(--sans); color: var(--btn-ink); background: var(--btn); border: 0; border-radius: 10px;
+  padding: 7px 11px; cursor: pointer; }
+button.ghost { background: transparent; color: var(--ink); border: 1px solid var(--hair); }
+button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+#zoomLabel { font: 12px var(--mono); color: var(--muted); min-width: 42px; text-align: center; }
+.stage { position: relative; overflow: auto; height: min(78vh, 920px); min-height: 420px; background: var(--canvas);
+  border: 1px solid var(--hair); border-radius: 16px; }
+.sizer { position: relative; }
+.stage-inner { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+#erd { display: block; user-select: none; }
+.hint { font-size: 12.5px; color: var(--muted); margin: 8px 2px 0; }
+
+/* SVG */
+.canvas-bg { fill: var(--canvas); }
+.zone { stroke: none; }
+.zone-cat { fill: var(--z-cat); } .zone-work { fill: var(--z-work); } .zone-act { fill: var(--z-act); } .zone-sys { fill: var(--z-sys); }
+.zone-label { font: 700 15px var(--sans); letter-spacing: 0.02em; }
+.zl-cat { fill: var(--z-cat-ink); } .zl-work { fill: var(--z-work-ink); } .zl-act { fill: var(--z-act-ink); } .zl-sys { fill: var(--z-sys-ink); }
+.box { cursor: pointer; transition: opacity 0.15s; }
+.box:focus { outline: none; }
+.box-bg { fill: var(--box); stroke: var(--box-line); stroke-width: 1.2; }
+.box-head { fill: var(--box-head); }
+.box-sep { stroke: var(--box-line); stroke-width: 1; }
+.box-title { font: 700 14px var(--mono); fill: var(--ink); }
+.box-sub { font: 12px var(--sans); fill: var(--muted); }
+.box-count { font: 11px var(--sans); fill: var(--muted); }
+.row-bg { fill: transparent; }
+.row:hover .row-bg { fill: var(--row-hover); }
+.row.is-hit .row-bg { fill: var(--hit); }
+.col-name { font: 12.5px var(--mono); fill: var(--ink); }
+.col-name.is-null { font-style: italic; fill: var(--muted); }
+.col-name.is-implicit { fill: var(--muted); }
+.col-type { font: 11.5px var(--mono); fill: var(--muted); }
+.badge.b-PK { fill: var(--pk-bg); } .badge.b-FK { fill: var(--fk-bg); } .badge.b-UK { fill: var(--uk-bg); }
+.badge-t { font: 700 9px var(--sans); }
+.badge-t.b-PK { fill: var(--pk-ink); } .badge-t.b-FK { fill: var(--fk-ink); } .badge-t.b-UK { fill: var(--uk-ink); }
+.rel { transition: opacity 0.15s; }
+.rel-line { fill: none; stroke: var(--rel); stroke-width: 1.4; stroke-linejoin: round; }
+.sym { stroke: var(--rel); stroke-width: 1.4; fill: none; }
+.sym-o { fill: var(--canvas); }
+.rel-label { font: 11.5px var(--sans); fill: var(--label-ink); paint-order: stroke; stroke: var(--canvas);
+  stroke-width: 4px; stroke-linejoin: round; transition: opacity 0.15s; }
+.rel.is-active .rel-line, .rel.is-active .sym { stroke: var(--rel-on); stroke-width: 2.2; }
+.rel-label.is-active { fill: var(--rel-on); font-weight: 700; }
+.is-dim { opacity: 0.16; }
+.box.is-active .box-bg { stroke: var(--focus); stroke-width: 2.6; }
+.box.is-related .box-bg { stroke: var(--rel-on); stroke-width: 1.6; }
+.box.is-match .box-bg { stroke: var(--focus); stroke-width: 2; }
+.box:focus-visible .box-bg { stroke: var(--focus); stroke-width: 3; }
+
+/* Thẻ bảng */
+.cards-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin: 28px 0 6px; }
+.cards-head h2 { margin: 0; font-size: 18px; }
+.cards-head p { margin: 0; color: var(--muted); }
+.zone-group h3 { display: flex; align-items: center; gap: 8px; margin: 18px 0 8px; font-size: 14px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.dot-cat { background: var(--z-cat-ink); } .dot-work { background: var(--z-work-ink); }
+.dot-act { background: var(--z-act-ink); } .dot-sys { background: var(--z-sys-ink); }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.card { text-align: left; font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--hair);
+  border-radius: 14px; padding: 12px 14px; cursor: pointer; display: flex; flex-direction: column; gap: 2px; }
+.card:hover { border-color: var(--focus); }
+.card.is-active { border-color: var(--focus); box-shadow: 0 0 0 2px var(--focus) inset; }
+.card .c-name { font: 700 13.5px var(--mono); }
+.card .c-vi { font-weight: 600; }
+.card .c-desc { color: var(--muted); font-size: 12.5px; }
+.card .c-count { color: var(--muted); font-size: 12px; margin-top: 4px; }
+footer { margin-top: 24px; color: var(--muted); font-size: 12px; }
+
+@media (max-width: 640px) {
+  .search input { width: 100%; }
+  .controls, .search { width: 100%; }
+}
+@media print {
+  @page { size: A3 landscape; margin: 8mm; }
+  :root {
+    --bg: #ffffff; --surface: #ffffff; --ink: #1f2430; --muted: #5f6677; --hair: #cccccc;
+    --canvas: #ffffff; --box: #ffffff; --box-head: #f3f1ea; --box-line: #9a968a; --rel: #6b7180; --label-ink: #3a4050;
+    --pk-bg: #fdefc4; --pk-ink: #7a5a00; --fk-bg: #dde8ff; --fk-ink: #1f4e99; --uk-bg: #ece6ff; --uk-ink: #4b3a99;
+    --z-cat: #eef3ff; --z-cat-ink: #1f4e99; --z-work: #ebf7f0; --z-work-ink: #1f6b41;
+    --z-act: #fff0e9; --z-act-ink: #9a3b1e; --z-sys: #f3efff; --z-sys-ink: #4b3a99;
+    color-scheme: light;
+  }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { padding-inline: 0; }
+  .no-print { display: none !important; }
+  .wrap { max-width: none; padding: 0; }
+  .stage { height: auto; min-height: 0; overflow: visible; border: 0; border-radius: 0; }
+  .sizer { width: auto !important; height: auto !important; }
+  .stage-inner { position: static; transform: none !important; }
+  #erd { width: 100%; height: auto; }
+  .is-dim { opacity: 1; }
+  .cards-section { break-before: page; }
+  .card { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>ERD — Quản lý Task</h1>
+    <p>Schema v0.3 (bản gọn) · 8 bảng · khớp DDL <code>0001_init.sql</code> trong <code>docs/03-co-so-du-lieu.md</code> §5</p>
+  </header>
+
+  <div class="toolbar no-print" role="toolbar" aria-label="Công cụ sơ đồ">
+    <div class="legend" id="legend" aria-label="Chú giải ký hiệu"></div>
+    <div class="spacer"></div>
+    <div class="controls">
+      <div class="search">
+        <input id="search" type="search" placeholder="Tìm bảng hoặc cột… (Enter để tới)" aria-label="Tìm bảng hoặc cột" autocomplete="off">
+      </div>
+      <span id="searchStatus" aria-live="polite"></span>
+      <div class="zoom">
+        <button type="button" class="ghost" id="zoomOut" title="Thu nhỏ" aria-label="Thu nhỏ">−</button>
+        <span id="zoomLabel">100%</span>
+        <button type="button" class="ghost" id="zoomIn" title="Phóng to" aria-label="Phóng to">+</button>
+        <button type="button" class="ghost" id="zoomReset" title="Kích thước thật">100%</button>
+        <button type="button" id="zoomFit" title="Vừa màn hình">Vừa màn hình</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage">
+    <div class="sizer" id="sizer">
+      <div class="stage-inner" id="inner">
+        <svg id="erd" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sơ đồ quan hệ thực thể của ứng dụng Quản lý Task"></svg>
+      </div>
+    </div>
+  </div>
+  <p class="hint no-print">Rê chuột hoặc bấm vào một bảng để làm nổi bảng đó và các quan hệ; bấm nền để bỏ chọn. Ctrl + lăn chuột để phóng to/thu nhỏ. Cột <i>in nghiêng có dấu ?</i> cho phép NULL.</p>
+
+  <section class="cards-section" aria-labelledby="cardsTitle">
+    <div class="cards-head">
+      <h2 id="cardsTitle">Danh sách bảng</h2>
+      <p id="cardsSummary"></p>
+    </div>
+    <div id="cards"></div>
+  </section>
+
+  <footer>Tệp tự chứa, mở offline, không tải tài nguyên từ Internet. Dữ liệu schema bên dưới khớp DDL <code>0001_init.sql</code> (docs/03 §5): 8 bảng, 8 khoá ngoại.</footer>
+</div>
+
+<script>
+const SCHEMA = {"version":"0.3","boxWidth":260,"canvas":{"width":1350,"height":710},
+"zones":[
+{"id":"cat","label":"Danh mục","x":40,"y":40,"w":290,"h":360},
+{"id":"work","label":"Công việc","x":350,"y":40,"w":625,"h":540},
+{"id":"act","label":"Hoạt động","x":1020,"y":40,"w":290,"h":640},
+{"id":"sys","label":"Hệ thống","x":40,"y":420,"w":290,"h":160}],
+"tables":[
+{"name":"employees","vi":"Nhân viên","zone":"cat","x":55,"y":110,"desc":"Người phụ trách, người tạo, tác giả bình luận; đúng 1 bản ghi \"Tôi\" (is_self = 1)","columns":[
+{"name":"id","type":"INTEGER","pk":true,"fk":null,"uk":false,"nullable":false},
+{"name":"full_name","type":"TEXT","pk":false,"fk":null,"uk":false,"nullable":false},
+{"name":"title","type":"TEXT","pk":false,"fk":null,"uk":false,"nullable":true},
+{"name":"phone","type":"TEXT","pk":false,"fk":null,"uk":false,"nullable":true},
+{"name":"email","type":"TEXT","pk":false,"fk":null,"uk":false,"nullable":true},
+{"name":"color","type":"TEXT","pk":false,"fk":null,"uk":false,"nullable":false},
+{"name":"is_self","type":"INTEGER","pk":false,"fk":null,"uk":false,"nullable":false,"note":"unique có điều kiện WHERE is_self = 1"},
+{"name":"status","type":"TEXT","pk":false,"fk":null,"uk":false,"nullable":false,"note":"active | inactive"},
+{"name":"created_at","type":"INTEGER","pk":false,"fk":null,"uk":false,"nullable":false},
+{"name":"updated_at","type":"INTEGER","pk":false,"fk":null,"uk":false,"nullable":false}]},
+{"name":"projects","vi":"Dự án","zone":"work","x":370,"y":110,"desc":"Cấp tiền tố và bộ đếm mã việc; có sẵn \"Việc chung\" (VC)","columns":[
+{"name":"id","type":"INTEGER","pk":true,"fk":null,"uk":false,"nullable":false},
+{"name":"code","type":"TEXT","pk":false,"fk":null,"uk":true,"nullable":false},
+{"name":"name","type":"TEXT","pk":false,"fk":null,"uk":false,"nullable":false},
+{"name":"color","type":"TEXT","pk":false,"fk":null,"uk":false,"nullable":false},
+{"name":"next_task_no","type":"INTEGER","pk":false,"fk":null,"uk":false,"nullable":false},
+{"name":"created_at","type":"INTEGER","pk":false,"fk":null,"uk":false,"nullable":false},
+{"name":"updated_at","type":"INTEGER","pk":false,"fk":null,"uk":false,"nullable":false}]},
+{"name":"tasks","vi":"Công việc","zone":"work","x":700,"y":110,"desc":"Thực thể trung tâm: mã, trạng thái, ưu tiên, người phụ trách, hạn; xoá mềm vào Thùng rác","columns":[
+{"name":"id","type":"INTEGER","pk":true,"fk":null,"uk":false,"nullable":false},
+{"name":"code","type":"TEXT","pk":false,"fk":null,"uk":true,"nullable":false},
+{"name":"project_id","type":"INTEGER","pk":false,"fk":"projects.id","uk":false,"nullable":false,"note":"ON DELETE RESTRICT"},
+{"name":"title","type":"TEXT","pk":false,"fk":null,"uk":false,"nullable":false},
+{"name":"description","type":"TEXT","pk":false,"fk":null,"uk":false,"nullable":true},
+{"name":"status","type":"TEXT","pk":false,"fk":null,"uk":false,"nullable":false,"note":"new | in_progress | waiting | done | cancelled"},
+{"name":"status_note","type":"TEXT","pk":false,"fk":null,"uk":false,"nullable":true},
+{"name":"priority","type":"INTEGER","pk":false,"fk":null,"uk":false,"nullable":false,"note":"1–4"},
+{"name":"assignee_id","type":"INTEGER","pk":false,"fk":"employees.id","uk":false,"nullable":true,"note":"ON DELETE RESTRICT"},
+{"name":"creator_id","type":"INTEGER","pk":false,"fk":"employees.id","uk":false,"nullable":false,"note":"ON DELETE RESTRICT"},
+{"name":"start_date","type":"TEXT","pk":false,"fk":null,"uk":false,"nullable":true},
+{"name":"due_date","type":"TEXT","pk":false,"fk":null,"uk":false,"nullable":true},
+{"name":"actual_start_at","type":"INTEGER","pk":false,"fk":null,"uk":false,"nullable":true},
+{"name":"actual_end_at","type":"INTEGER","pk":false,"fk":null,"uk":false,"nullable":true},
+{"name":"created_at","type":"INTEGER","pk":false,"fk":null,"uk":false,"nullable":false},
+{"name":"updated_at","type":"INTEGER","pk":false,"fk":null,"uk":false,"nullable":false},
+{"name":"deleted_at","type":"INTEGER","pk":false,"fk":null,"uk":false,"nullable":true}]},
+{"name":"subtasks","vi":"Việc con","zone":"work","x":370,"y":390,"desc":"Checklist trong việc","columns":[
+{"name":"id","type":"INTEGER","pk":true,"fk":null,"uk":false,"nullable":false},
+{"name":"task_id","type":"INTEGER","pk":false,"fk":"tasks.id","uk":false,"nullable":false,"note":"ON DELETE CASCADE"},
+{"name":"title","type":"TEXT","pk":false,"fk":null,"uk":false,"nullable":false},
+{"name":"is_done","type":"INTEGER","pk":false,"fk":null,"uk":false,"nullable":false},
+{"name":"position","type":"INTEGER","pk":false,"fk":null,"uk":false,"nullable":false}]},
+{"name":"task_comments","vi":"Bình luận","zone":"act","x":1035,"y":110,"desc":"Bình luận, chọn tác giả (mặc định Tôi)","columns":[
+{"name":"id","type":"INTEGER","pk":true,"fk":null,"uk":false,"nullable":false},
+{"name":"task_id","type":"INTEGER","pk":false,"fk":"tasks.id","uk":false,"nullable":false,"note":"ON DELETE CASCADE"},
+{"name":"author_id","type":"INTEGER","pk":false,"fk":"employees.id","uk":false,"nullable":false,"note":"ON DELETE RESTRICT"},
+{"name":"body","type":"TEXT","pk":false,"fk":null,"uk":false,"nullable":false},
+{"name":"created_at","type":"INTEGER","pk":false,"fk":null,"uk":false,"nullable":false},
+{"name":"updated_at","type":"INTEGER","pk":false,"fk":null,"uk":false,"nullable":false}]},
+{"name":"task_attachments","vi":"Tệp đính kèm","zone":"act","x":1035,"y":300,"desc":"Siêu dữ liệu tệp đã chép vào thư mục attachments","columns":[
+{"name":"id","type":"INTEGER","pk":true,"fk":null,"uk":false,"nullable":false},
+{"name":"task_id","type":"INTEGER","pk":false,"fk":"tasks.id","uk":false,"nullable":false,"note":"ON DELETE CASCADE"},
+{"name":"file_name","type":"TEXT","pk":false,"fk":null,"uk":false,"nullable":false},
+{"name":"stored_path","type":"TEXT","pk":false,"fk":null,"uk":true,"nullable":false},
+{"name":"size_bytes","type":"INTEGER","pk":false,"fk":null,"uk":false,"nullable":false,"note":"≤ 50 MB"},
+{"name":"created_at","type":"INTEGER","pk":false,"fk":null,"uk":false,"nullable":false}]},
+{"name":"task_history","vi":"Lịch sử thay đổi","zone":"act","x":1035,"y":490,"desc":"Lịch sử, lưu sẵn chữ hiển thị (\"Trung bình\" → \"Cao\")","columns":[
+{"name":"id","type":"INTEGER","pk":true,"fk":null,"uk":false,"nullable":false},
+{"name":"task_id","type":"INTEGER","pk":false,"fk":"tasks.id","uk":false,"nullable":false,"note":"ON DELETE CASCADE"},
+{"name":"changed_at","type":"INTEGER","pk":false,"fk":null,"uk":false,"nullable":false},
+{"name":"field","type":"TEXT","pk":false,"fk":null,"uk":false,"nullable":false},
+{"name":"old_value","type":"TEXT","pk":false,"fk":null,"uk":false,"nullable":true},
+{"name":"new_value","type":"TEXT","pk":false,"fk":null,"uk":false,"nullable":true}]},
+{"name":"settings","vi":"Cài đặt","zone":"sys","x":55,"y":470,"desc":"Cặp key/value (giao diện Sáng/Tối/Theo hệ thống)","columns":[
+{"name":"key","type":"TEXT","pk":true,"fk":null,"uk":false,"nullable":false},
+{"name":"value","type":"TEXT","pk":false,"fk":null,"uk":false,"nullable":false}]}],
+"relations":[
+{"id":"r1","parent":"employees","pcol":"id","child":"tasks","ccol":"assignee_id","pcard":"0..1","ccard":"0..n","label":"phụ trách","route":{"a":["R",344],"b":["L"],"label":[480,339]}},
+{"id":"r2","parent":"employees","pcol":"id","child":"tasks","ccol":"creator_id","pcard":"1","ccard":"0..n","label":"tạo","route":{"a":["R",364],"b":["L"],"label":[560,359]}},
+{"id":"r3","parent":"employees","pcol":"id","child":"task_comments","ccol":"author_id","pcard":"1","ccard":"0..n","label":"viết","route":{"a":["T",185],"b":["T",1165],"via":[88],"label":[700,83]}},
+{"id":"r4","parent":"projects","pcol":"id","child":"tasks","ccol":"project_id","pcard":"1","ccard":"0..n","label":"chứa","route":{"a":["R",204],"b":["L"],"label":[665,199]}},
+{"id":"r5","parent":"tasks","pcol":"id","child":"subtasks","ccol":"task_id","pcard":"1","ccard":"0..n","label":"có việc con","route":{"a":["L",464],"b":["R"],"label":[665,459]}},
+{"id":"r6","parent":"tasks","pcol":"id","child":"task_comments","ccol":"task_id","pcard":"1","ccard":"0..n","label":"có bình luận","route":{"a":["R",184],"b":["L"],"label":[997,179]}},
+{"id":"r7","parent":"tasks","pcol":"id","child":"task_attachments","ccol":"task_id","pcard":"1","ccard":"0..n","label":"có tệp","route":{"a":["R",374],"b":["L"],"label":[997,369]}},
+{"id":"r8","parent":"tasks","pcol":"id","child":"task_history","ccol":"task_id","pcard":"1","ccard":"0..n","label":"có lịch sử","route":{"a":["B",930],"b":["L"],"via":[564],"label":[982,559]}}]};
+
+(function () {
+  'use strict';
+  const NS = 'http://www.w3.org/2000/svg';
+  const ROW = 20, HEAD = 44, PAD = 8, BW = SCHEMA.boxWidth;
+  const CW = SCHEMA.canvas.width, CH = SCHEMA.canvas.height;
+  const svg = document.getElementById('erd');
+  const stage = document.getElementById('stage');
+  const sizer = document.getElementById('sizer');
+  const inner = document.getElementById('inner');
+
+  function el(tag, attrs, parent) {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function text(parent, x, y, s, cls, anchor) {
+    const t = el('text', { x: x, y: y, class: cls || '' }, parent);
+    if (anchor) t.setAttribute('text-anchor', anchor);
+    t.textContent = s;
+    return t;
+  }
+  const norm = (s) => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase();
+
+  // ---------- Hình học ----------
+  const byName = {};
+  SCHEMA.tables.forEach((t) => { t.w = BW; t.h = HEAD + t.columns.length * ROW + PAD; byName[t.name] = t; });
+  function rowY(t, col) {
+    const i = t.columns.findIndex((c) => c.name === col);
+    if (i < 0) throw new Error('Không có cột ' + t.name + '.' + col);
+    return t.y + HEAD + i * ROW + ROW / 2;
+  }
+  function attach(t, spec, col) {
+    const side = spec[0], v = spec[1];
+    if (side === 'L' || side === 'R') {
+      const y = v == null ? rowY(t, col) : (typeof v === 'string' ? rowY(t, v) : v);
+      return { x: side === 'L' ? t.x : t.x + t.w, y: y, side: side };
+    }
+    const x = v == null ? t.x + t.w / 2 : v;
+    return { x: x, y: side === 'T' ? t.y : t.y + t.h, side: side };
+  }
+  const horiz = (side) => side === 'L' || side === 'R';
+  function routePoints(r) {
+    const P = byName[r.parent], C = byName[r.child], rt = r.route || {};
+    const a = attach(P, rt.a || ['R'], r.pcol), b = attach(C, rt.b || ['L'], r.ccol);
+    let axis = horiz(a.side) ? 'x' : 'y';
+    let via = rt.via;
+    if (!via) {
+      via = [];
+      if (axis === 'x' && horiz(b.side) && a.y !== b.y) via = [(a.x + b.x) / 2];
+      if (axis === 'y' && !horiz(b.side) && a.x !== b.x) via = [(a.y + b.y) / 2];
+    }
+    let cur = { x: a.x, y: a.y };
+    const pts = [cur];
+    via.forEach((v) => {
+      cur = axis === 'x' ? { x: v, y: cur.y } : { x: cur.x, y: v };
+      pts.push(cur);
+      axis = axis === 'x' ? 'y' : 'x';
+    });
+    if (horiz(b.side)) { if (cur.y !== b.y) { cur = { x: cur.x, y: b.y }; pts.push(cur); } }
+    else if (cur.x !== b.x) { cur = { x: b.x, y: cur.y }; pts.push(cur); }
+    pts.push({ x: b.x, y: b.y });
+    return pts.filter((p, i) => i === 0 || p.x !== pts[i - 1].x || p.y !== pts[i - 1].y);
+  }
+  // Ký hiệu crow's foot tại điểm p, hướng từ p về q (ra khỏi hộp)
+  function symbol(g, p, q, kind) {
+    const dx = q.x - p.x, dy = q.y - p.y, L = Math.hypot(dx, dy) || 1;
+    const ux = dx / L, uy = dy / L, px = -uy, py = ux;
+    const at = (d, s) => ({ x: p.x + ux * d + px * s, y: p.y + uy * d + py * s });
+    const line = (A, B) => el('line', { x1: A.x, y1: A.y, x2: B.x, y2: B.y, class: 'sym' }, g);
+    const ring = (d) => { const c = at(d, 0); el('circle', { cx: c.x, cy: c.y, r: 4, class: 'sym sym-o' }, g); };
+    if (kind === '1') { line(at(7, -6), at(7, 6)); line(at(12, -6), at(12, 6)); }
+    else if (kind === '0..1') { line(at(7, -6), at(7, 6)); ring(16); }
+    else { const tip = at(13, 0); line(at(0, -7), tip); line(at(0, 0), tip); line(at(0, 7), tip); ring(18); }
+  }
+
+  // ---------- Vẽ ----------
+  svg.setAttribute('viewBox', '0 0 ' + CW + ' ' + CH);
+  svg.setAttribute('width', CW);
+  svg.setAttribute('height', CH);
+  el('rect', { x: 0, y: 0, width: CW, height: CH, class: 'canvas-bg', 'data-bg': '1' }, svg);
+  const gZones = el('g', { class: 'zones' }, svg);
+  SCHEMA.zones.forEach((z) => {
+    el('rect', { x: z.x, y: z.y, width: z.w, height: z.h, rx: 18, class: 'zone zone-' + z.id, 'data-bg': '1' }, gZones);
+    text(gZones, z.x + 16, z.y + 26, z.label, 'zone-label zl-' + z.id);
+  });
+  const gRels = el('g', { class: 'rels' }, svg);
+  const gBoxes = el('g', { class: 'boxes' }, svg);
+  const gLabels = el('g', { class: 'rel-labels' }, svg);
+
+  const relEls = SCHEMA.relations.map((r) => {
+    const pts = routePoints(r);
+    const g = el('g', { class: 'rel', 'data-rel': r.id }, gRels);
+    el('polyline', { points: pts.map((p) => p.x + ',' + p.y).join(' '), class: 'rel-line' }, g);
+    symbol(g, pts[0], pts[1], r.pcard);
+    symbol(g, pts[pts.length - 1], pts[pts.length - 2], r.ccard);
+    const tip = el('title', {}, g);
+    tip.textContent = r.parent + '.' + r.pcol + ' (' + r.pcard + ') → ' + r.child + '.' + r.ccol + ' (' + r.ccard + '): ' + r.label;
+    let lx, ly;
+    if (r.route && r.route.label) { lx = r.route.label[0]; ly = r.route.label[1]; }
+    else {
+      let best = 0, bi = 0;
+      for (let i = 0; i < pts.length - 1; i++) {
+        const len = Math.abs(pts[i + 1].x - pts[i].x) + Math.abs(pts[i + 1].y - pts[i].y);
+        if (len > best) { best = len; bi = i; }
+      }
+      lx = (pts[bi].x + pts[bi + 1].x) / 2;
+      ly = (pts[bi].y + pts[bi + 1].y) / 2 - 5;
+    }
+    const lab = text(gLabels, lx, ly, r.label, 'rel-label', 'middle');
+    return { r: r, g: g, lab: lab, pts: pts };
+  });
+
+  const boxEls = {};
+  SCHEMA.tables.forEach((t) => {
+    const g = el('g', { class: 'box', 'data-table': t.name, tabindex: 0, role: 'button',
+      'aria-label': t.name + ' — ' + t.vi + ', ' + t.columns.length + ' cột' }, gBoxes);
+    el('rect', { x: t.x, y: t.y, width: t.w, height: t.h, rx: 10, class: 'box-bg' }, g);
+    el('path', { d: 'M' + t.x + ' ' + (t.y + HEAD) + ' V' + (t.y + 10) + ' Q' + t.x + ' ' + t.y + ' ' + (t.x + 10) + ' ' + t.y +
+      ' H' + (t.x + t.w - 10) + ' Q' + (t.x + t.w) + ' ' + t.y + ' ' + (t.x + t.w) + ' ' + (t.y + 10) + ' V' + (t.y + HEAD) + ' Z',
+      class: 'box-head' }, g);
+    el('path', { d: 'M' + t.x + ' ' + (t.y + HEAD) + ' H' + (t.x + t.w), class: 'box-sep' }, g);
+    text(g, t.x + 12, t.y + 19, t.name, 'box-title');
+    text(g, t.x + 12, t.y + 36, t.vi, 'box-sub');
+    text(g, t.x + t.w - 10, t.y + 19, t.columns.length + ' cột', 'box-count', 'end');
+    t.rowEls = t.columns.map((c, i) => {
+      const y0 = t.y + HEAD + i * ROW;
+      const row = el('g', { class: 'row', 'data-col': c.name }, g);
+      el('rect', { x: t.x + 1, y: y0, width: t.w - 2, height: ROW, class: 'row-bg' }, row);
+      let bx = t.x + 8;
+      ['PK', 'FK', 'UK'].forEach((k) => {
+        if (!c[k.toLowerCase()]) return;
+        el('rect', { x: bx, y: y0 + 4, width: 22, height: 12, rx: 3, class: 'badge b-' + k }, row);
+        text(row, bx + 11, y0 + 13.2, k, 'badge-t b-' + k, 'middle');
+        bx += 25;
+      });
+      const nm = text(row, t.x + 62, y0 + 14, c.name + (c.nullable ? '?' : ''),
+        'col-name' + (c.nullable ? ' is-null' : '') + (c.implicit ? ' is-implicit' : ''));
+      nm.setAttribute('data-name', c.name);
+      text(row, t.x + t.w - 10, y0 + 14, c.type, 'col-type', 'end');
+      const tip = el('title', {}, row);
+      tip.textContent = t.name + '.' + c.name + ' ' + c.type + (c.nullable ? ' NULL' : ' NOT NULL') +
+        (c.fk ? ' → ' + c.fk : '') + (c.note ? ' · ' + c.note : '');
+      return row;
+    });
+    boxEls[t.name] = g;
+  });
+
+  // ---------- Làm nổi / chọn ----------
+  let pinned = null, searching = false;
+  function activate(name) {
+    const related = new Set([name]);
+    relEls.forEach((o) => {
+      const on = o.r.parent === name || o.r.child === name;
+      o.g.classList.toggle('is-active', on); o.g.classList.toggle('is-dim', !on);
+      o.lab.classList.toggle('is-active', on); o.lab.classList.toggle('is-dim', !on);
+      if (on) { related.add(o.r.parent); related.add(o.r.child); }
+    });
+    Object.keys(boxEls).forEach((n) => {
+      const g = boxEls[n];
+      g.classList.toggle('is-active', n === name);
+      g.classList.toggle('is-related', n !== name && related.has(n));
+      g.classList.toggle('is-dim', !related.has(n));
+      g.classList.remove('is-match');
+    });
+    cardEls.forEach((c) => c.classList.toggle('is-active', c.getAttribute('data-table') === name));
+  }
+  function clearFocus() {
+    relEls.forEach((o) => { ['is-active', 'is-dim'].forEach((k) => { o.g.classList.remove(k); o.lab.classList.remove(k); }); });
+    Object.keys(boxEls).forEach((n) => { ['is-active', 'is-related', 'is-dim', 'is-match'].forEach((k) => boxEls[n].classList.remove(k)); });
+    cardEls.forEach((c) => c.classList.remove('is-active'));
+  }
+  function pin(name) {
+    clearSearch();
+    if (pinned === name) { pinned = null; clearFocus(); return; }
+    pinned = name; activate(name);
+  }
+  Object.keys(boxEls).forEach((n) => {
+    const g = boxEls[n];
+    g.addEventListener('mouseenter', () => { if (!pinned && !searching) activate(n); });
+    g.addEventListener('mouseleave', () => { if (!pinned && !searching) clearFocus(); });
+    g.addEventListener('click', (ev) => { ev.stopPropagation(); pin(n); });
+    g.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); pin(n); } });
+  });
+  svg.addEventListener('click', (ev) => {
+    if (ev.target && ev.target.closest && ev.target.closest('.box')) return;
+    pinned = null; clearFocus();
+  });
+
+  // ---------- Tìm kiếm ----------
+  const search = document.getElementById('search');
+  const status = document.getElementById('searchStatus');
+  let firstHit = null;
+  function clearSearch() {
+    searching = false; firstHit = null;
+    if (search.value) search.value = '';
+    status.textContent = '';
+    SCHEMA.tables.forEach((t) => t.rowEls.forEach((r) => r.classList.remove('is-hit')));
+  }
+  search.addEventListener('input', () => {
+    const q = norm(search.value.trim());
+    pinned = null; clearFocus();
+    SCHEMA.tables.forEach((t) => t.rowEls.forEach((r) => r.classList.remove('is-hit')));
+    if (!q) { searching = false; status.textContent = ''; firstHit = null; return; }
+    searching = true; firstHit = null;
+    let nt = 0, nc = 0;
+    SCHEMA.tables.forEach((t) => {
+      const tHit = norm(t.name).includes(q) || norm(t.vi).includes(q);
+      let cHit = 0;
+      t.columns.forEach((c, i) => {
+        const hit = norm(c.name).includes(q);
+        t.rowEls[i].classList.toggle('is-hit', hit);
+        if (hit) cHit++;
+      });
+      const m = tHit || cHit > 0;
+      boxEls[t.name].classList.toggle('is-match', m);
+      boxEls[t.name].classList.toggle('is-dim', !m);
+      if (m) { nt++; if (!firstHit) firstHit = t.name; }
+      nc += cHit;
+    });
+    relEls.forEach((o) => { o.g.classList.add('is-dim'); o.lab.classList.add('is-dim'); });
+    status.textContent = nt ? nt + ' bảng · ' + nc + ' cột khớp' : 'Không có kết quả';
+  });
+  search.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Enter' && firstHit) scrollToTable(firstHit);
+    if (ev.key === 'Escape') { clearSearch(); clearFocus(); }
+  });
+
+  // ---------- Phóng to / thu nhỏ ----------
+  let scale = 1;
+  const zoomLabel = document.getElementById('zoomLabel');
+  function setScale(s, keepCenter) {
+    const cx = (stage.scrollLeft + stage.clientWidth / 2) / scale;
+    const cy = (stage.scrollTop + stage.clientHeight / 2) / scale;
+    scale = Math.min(2.5, Math.max(0.2, s));
+    inner.style.transform = 'scale(' + scale + ')';
+    sizer.style.width = CW * scale + 'px';
+    sizer.style.height = CH * scale + 'px';
+    zoomLabel.textContent = Math.round(scale * 100) + '%';
+    if (keepCenter) {
+      stage.scrollLeft = cx * scale - stage.clientWidth / 2;
+      stage.scrollTop = cy * scale - stage.clientHeight / 2;
+    }
+  }
+  function fit() {
+    const s = Math.min((stage.clientWidth - 4) / CW, (stage.clientHeight - 4) / CH);
+    setScale(s > 0 ? s : 1, false);
+    stage.scrollLeft = 0; stage.scrollTop = 0;
+  }
+  function scrollToTable(name) {
+    const t = byName[name];
+    stage.scrollTo({ left: (t.x + t.w / 2) * scale - stage.clientWidth / 2,
+      top: (t.y + t.h / 2) * scale - stage.clientHeight / 2, behavior: 'smooth' });
+  }
+  document.getElementById('zoomIn').addEventListener('click', () => setScale(scale * 1.2, true));
+  document.getElementById('zoomOut').addEventListener('click', () => setScale(scale / 1.2, true));
+  document.getElementById('zoomReset').addEventListener('click', () => setScale(1, true));
+  document.getElementById('zoomFit').addEventListener('click', fit);
+  stage.addEventListener('wheel', (ev) => {
+    if (!ev.ctrlKey) return;
+    ev.preventDefault();
+    setScale(ev.deltaY < 0 ? scale * 1.1 : scale / 1.1, true);
+  }, { passive: false });
+
+  // ---------- Chú giải ----------
+  const legend = document.getElementById('legend');
+  [['1', 'đúng 1'], ['0..1', '0 hoặc 1'], ['0..n', '0..n (nhiều)']].forEach((it) => {
+    const span = document.createElement('span');
+    const s = el('svg', { width: 40, height: 16, viewBox: '0 0 40 16', 'aria-hidden': 'true' });
+    el('line', { x1: 4, y1: 8, x2: 38, y2: 8, class: 'rel-line' }, s);
+    symbol(s, { x: 38, y: 8 }, { x: 4, y: 8 }, it[0]);
+    span.appendChild(s);
+    span.appendChild(document.createTextNode(it[1]));
+    legend.appendChild(span);
+  });
+  [['PK', 'khoá chính'], ['FK', 'khoá ngoại'], ['UK', 'duy nhất']].forEach((it) => {
+    const span = document.createElement('span');
+    const b = document.createElement('b');
+    b.className = 'lg-badge lg-' + it[0];
+    b.textContent = it[0];
+    span.appendChild(b);
+    span.appendChild(document.createTextNode(it[1]));
+    legend.appendChild(span);
+  });
+  const nullSpan = document.createElement('span');
+  const ni = document.createElement('i');
+  ni.className = 'lg-null';
+  ni.textContent = 'cot?';
+  nullSpan.appendChild(ni);
+  nullSpan.appendChild(document.createTextNode('cho phép NULL'));
+  legend.appendChild(nullSpan);
+
+  // ---------- Thẻ bảng ----------
+  const cardsBox = document.getElementById('cards');
+  const cardEls = [];
+  let totalCols = 0;
+  SCHEMA.zones.forEach((z) => {
+    const group = document.createElement('div');
+    group.className = 'zone-group';
+    const h = document.createElement('h3');
+    const dot = document.createElement('span');
+    dot.className = 'dot dot-' + z.id;
+    h.appendChild(dot);
+    h.appendChild(document.createTextNode(z.label));
+    group.appendChild(h);
+    const grid = document.createElement('div');
+    grid.className = 'cards';
+    SCHEMA.tables.filter((t) => t.zone === z.id).forEach((t) => {
+      const real = t.columns.filter((c) => !c.implicit).length;
+      totalCols += real;
+      const card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'card';
+      card.setAttribute('data-table', t.name);
+      [['c-name', t.name], ['c-vi', t.vi], ['c-desc', t.desc],
+        ['c-count', real + ' cột' + (real !== t.columns.length ? ' (+ rowid ẩn)' : '')]].forEach((p) => {
+        const s = document.createElement('span');
+        s.className = p[0];
+        s.textContent = p[1];
+        card.appendChild(s);
+      });
+      card.addEventListener('click', () => {
+        if (pinned !== t.name) pin(t.name);
+        stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        scrollToTable(t.name);
+      });
+      grid.appendChild(card);
+      cardEls.push(card);
+    });
+    group.appendChild(grid);
+    cardsBox.appendChild(group);
+  });
+  document.getElementById('cardsSummary').textContent =
+    SCHEMA.tables.length + ' bảng · ' + totalCols + ' cột · ' + SCHEMA.relations.length + ' quan hệ';
+
+  fit();
+  window.addEventListener('resize', () => { if (scale < 1) fit(); });
+})();
+</script>
+</body>
+</html>

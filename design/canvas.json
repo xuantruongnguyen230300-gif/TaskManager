@@ -1,0 +1,28 @@
+{
+  "pages": [
+    { "id": "page-1", "name": "Màn hình" },
+    { "id": "page-2", "name": "Lưu trữ" }
+  ],
+  "artboards": [
+    { "file": "Main.dc.html", "title": "SC-1 · Tổng quan", "x": 0, "y": 0, "w": 1280, "h": 860, "is_interactive": true, "page": "page-1" },
+    { "file": "Tasks.dc.html", "title": "SC-2 · Công việc", "x": 1400, "y": 0, "w": 1280, "h": 860, "is_interactive": true, "page": "page-1" },
+    { "file": "ProjectBoard.dc.html", "title": "SC-3 · Dự án (Kanban | Danh sách)", "x": 2800, "y": 0, "w": 1280, "h": 860, "is_interactive": true, "page": "page-1" },
+
+    { "file": "TaskForm.dc.html", "title": "SC-4 · Tạo / Sửa việc", "x": 0, "y": 1080, "w": 1280, "h": 860, "is_interactive": true, "page": "page-1" },
+    { "file": "TaskDetail.dc.html", "title": "SC-5 · Chi tiết việc", "x": 1400, "y": 1080, "w": 1280, "h": 860, "is_interactive": true, "page": "page-1" },
+    { "file": "Trash.dc.html", "title": "SC-8 · Thùng rác", "x": 2800, "y": 1080, "w": 1280, "h": 860, "is_interactive": true, "page": "page-1" },
+
+    { "file": "Employees.dc.html", "title": "SC-6 · Nhân viên", "x": 0, "y": 2160, "w": 1280, "h": 860, "is_interactive": true, "page": "page-1" },
+    { "file": "EmployeeDetail.dc.html", "title": "SC-7 · Chi tiết nhân viên", "x": 1400, "y": 2160, "w": 1280, "h": 860, "is_interactive": true, "page": "page-1" },
+    { "file": "Settings.dc.html", "title": "SC-9 · Cài đặt", "x": 2800, "y": 2160, "w": 1280, "h": 860, "is_interactive": true, "page": "page-1" },
+
+    { "file": "DirectionA.dc.html", "title": "Hướng A · Giấy trắng", "x": 0, "y": 0, "w": 1280, "h": 860, "page": "page-2" },
+    { "file": "DirectionB.dc.html", "title": "Hướng B · Buồng lái", "x": 1400, "y": 0, "w": 1280, "h": 860, "page": "page-2" },
+    { "file": "DirectionC.dc.html", "title": "Hướng C · Sổ màu (đã chọn)", "x": 2800, "y": 0, "w": 1280, "h": 860, "page": "page-2" }
+  ],
+  "annotations": [
+    { "id": "guide", "page": "page-1", "x": 0, "y": -260, "w": 900, "text": "Bản GỌN — app cho manager giao việc cho nhân viên, offline, một người dùng.\n9 màn hình SC-1…SC-9, khớp với docs/02-nghiep-vu.md. Nút, tab, bộ lọc, hộp thoại trong mỗi artboard đều bấm được; bấm menu sang màn khác chỉ hiện thông báo vì mỗi màn là một artboard riêng.\nDữ liệu mẫu; hôm nay giả định là thứ Bảy 12/09/2026. Nút mặt trăng đổi sáng/tối." },
+    { "id": "archive", "page": "page-2", "x": 0, "y": -200, "w": 760, "text": "3 hướng giao diện ban đầu. Hướng C · Sổ màu đã được chọn." }
+  ],
+  "launch": { "view": "canvas", "page": "page-1" }
+}

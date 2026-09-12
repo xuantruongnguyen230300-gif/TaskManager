@@ -1,0 +1,868 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800&amp;display=swap">
+  <style>
+    body { margin: 0; font-family: "Nunito", "Segoe UI", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #5B45C9; } a:hover { color: #43329A; }
+    .app { --bg: #F1F0F7; --surface: #FFFFFF; --surface2: #F6F5FB; --ink: #26233A; --ink2: #4E4868; --muted: #8C88A0; --line: #ECEAF3; --hero: #E6DEFF; --heroInk: #6A5BB0; --btn: #2A2540; --btnInk: #FFFFFF; --pill: #EEEBF7; --focus: #D3F0DE; --focusInk: #16432B; --focusSub: #3F7D5A; --focusDot: #2E8B57; --focusDotOff: #B4E0C5; --bar: #DCD2FF; --barHot: #6E56CF; --danger: #B23A26; --overdueRow: #FFF1EE; --ring: #FFFFFF; --scrim: rgba(38, 35, 58, 0.28); --shadow: 0 1px 2px rgba(38, 35, 58, 0.05); font-family: "Nunito", "Segoe UI", system-ui, sans-serif; }
+    .app.dark { --bg: #14121D; --surface: #1D1A29; --surface2: #25213A; --ink: #ECEAF5; --ink2: #C3BFD6; --muted: #9A96B0; --line: #2C2840; --hero: #2C2550; --heroInk: #BBAEFF; --btn: #E6DEFF; --btnInk: #1B1730; --pill: #2C2840; --focus: #173A29; --focusInk: #CFF3DD; --focusSub: #8FDDB0; --focusDot: #5CCB8C; --focusDotOff: #2A5A40; --bar: #3B3263; --barHot: #9B87F5; --danger: #FF9C8A; --overdueRow: #2E1C22; --ring: #3A3456; --scrim: rgba(0, 0, 0, 0.55); --shadow: none; }
+    .app { --lane: rgba(255, 255, 255, 0.5); }
+    .app.dark { --lane: rgba(255, 255, 255, 0.035); }
+    .ic { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+    .wc { width: 44px; display: flex; align-items: center; justify-content: center; color: var(--muted); }
+    .wc .ic { width: 13px; height: 13px; stroke-width: 1.6; }
+    .nav { display: flex; align-items: center; gap: 12px; height: 40px; padding: 0 14px; border-radius: 14px; font-size: 14px; font-weight: 700; color: var(--ink2); cursor: pointer; }
+    .nav:hover { background: var(--surface2); }
+    .nav.on { background: var(--btn); color: var(--btnInk); }
+    .pill { margin-left: auto; min-width: 22px; height: 22px; padding: 0 6px; box-sizing: border-box; border-radius: 11px; background: var(--pill); color: var(--ink2); font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+    .nav.on .pill { background: rgba(255, 255, 255, 0.2); color: inherit; }
+    .sw { width: 14px; height: 14px; border-radius: 5px; flex: none; }
+    .card { background: var(--surface); border-radius: 22px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; min-width: 0; box-shadow: var(--shadow); }
+    .ct { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 800; }
+    .sub { font-size: 13px; font-weight: 600; color: var(--muted); }
+    .h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.01em; line-height: 1.15; }
+    .row { display: flex; align-items: center; gap: 12px; padding: 8px 10px; border-radius: 14px; cursor: pointer; }
+    .row:hover { box-shadow: inset 0 0 0 1.5px var(--line); }
+    .hov { cursor: pointer; transition: transform 0.12s; }
+    .hov:hover { transform: translateY(-1px); }
+    .circ { width: 20px; height: 20px; border-radius: 50%; border: 2.5px solid; box-sizing: border-box; flex: none; display: flex; align-items: center; justify-content: center; color: #FFFFFF; cursor: pointer; }
+    .circ .ic { width: 12px; height: 12px; stroke-width: 3.4; }
+    .chip { height: 22px; padding: 0 9px; border-radius: 11px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; white-space: nowrap; }
+    .t { font-size: 14.5px; font-weight: 700; }
+    .t.done { color: var(--muted); text-decoration: line-through; font-weight: 600; }
+    .tm { font-size: 12.5px; color: var(--muted); font-weight: 600; white-space: nowrap; }
+    .btn { height: 40px; padding: 0 18px; border-radius: 20px; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 800; background: var(--btn); color: var(--btnInk); cursor: pointer; white-space: nowrap; }
+    .btn.soft { background: var(--surface2); color: var(--ink); }
+    .btn.sm { height: 32px; padding: 0 14px; font-size: 13px; }
+    .seg { display: inline-flex; gap: 4px; padding: 4px; background: var(--surface2); border-radius: 14px; }
+    .seg div { height: 32px; padding: 0 14px; border-radius: 10px; display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 800; color: var(--muted); cursor: pointer; }
+    .seg div.on { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
+    .kbd { font-size: 12px; font-weight: 800; background: var(--surface2); color: var(--ink2); border-radius: 8px; padding: 3px 8px; white-space: nowrap; }
+    .tog { width: 40px; height: 24px; border-radius: 12px; background: var(--pill); position: relative; cursor: pointer; flex: none; transition: background 0.15s; }
+    .tog.on { background: #4DBB7F; }
+    .tog i { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #FFFFFF; transition: left 0.15s; }
+    .tog.on i { left: 19px; }
+    .scroll { flex: 1; min-height: 0; overflow-y: auto; }
+    *:focus-visible { outline: 2px solid #8C7AE6; outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+  </style>
+</helmet>
+<div class="app {{themeClass}}" style="position: relative; width: 1280px; height: 860px; display: flex; flex-direction: column; background: var(--bg); color: var(--ink); overflow: hidden;">
+
+  <div style="height: 32px; flex: none; display: flex; justify-content: flex-end;">
+    <div class="wc"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12h14"></path></svg></div>
+    <div class="wc"><svg class="ic" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"></rect></svg></div>
+    <div class="wc"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"></path></svg></div>
+  </div>
+
+  <div style="flex: 1; min-height: 0; display: flex; gap: 14px; padding: 0 14px 14px;">
+    <div style="width: 224px; flex: none; background: var(--surface); border-radius: 24px; padding: 18px 12px; display: flex; flex-direction: column; gap: 4px; box-sizing: border-box; box-shadow: var(--shadow);">
+      <div style="display: flex; align-items: center; gap: 10px; padding: 0 8px 16px;">
+        <div style="width: 30px; height: 30px; border-radius: 10px; background: var(--btn); color: var(--btnInk); display: flex; align-items: center; justify-content: center;"><svg class="ic" style="width: 16px; height: 16px; stroke-width: 3;" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div>
+        <div style="font-size: 16px; font-weight: 800;">Quản lý Task</div>
+      </div>
+      <sc-for list="{{nav}}" as="n" hint-placeholder-count="7">
+        <div class="{{n.cls}}" onClick="{{n.go}}"><svg class="ic" viewBox="0 0 24 24"><path d="{{n.icon}}"></path></svg>{{n.label}}<sc-if value="{{n.hasBadge}}" hint-placeholder-val="{{ true }}"><span class="pill">{{n.badge}}</span></sc-if></div>
+      </sc-for>
+      <div style="padding: 18px 14px 6px; font-size: 12px; font-weight: 800; color: var(--muted); letter-spacing: 0.04em;">DỰ ÁN CỦA BẠN</div>
+      <sc-for list="{{projects}}" as="p" hint-placeholder-count="4">
+        <div class="{{p.cls}}" onClick="{{p.go}}"><span class="sw" style="background: {{p.dot}};"></span>{{p.name}}</div>
+      </sc-for>
+      <div class="{{settingsCls}}" style="margin-top: auto;" onClick="{{goSettings}}"><svg class="ic" viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"></path></svg>Cài đặt</div>
+    </div>
+
+    <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; align-items: center; gap: 12px; flex: none;">
+        <div style="flex: 1; display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 16px; background: var(--surface); border-radius: 22px; color: var(--muted); font-size: 14px; font-weight: 600; box-shadow: var(--shadow);"><svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.3-4.3"></path></svg>Tìm kiếm việc, dự án hoặc lệnh…<span class="kbd" style="margin-left: auto;">Ctrl K</span></div>
+        <div onClick="{{toggleTheme}}" title="Đổi giao diện sáng/tối" style="width: 44px; height: 44px; border-radius: 22px; background: var(--surface); color: var(--ink2); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--shadow);"><svg class="ic" viewBox="0 0 24 24"><path d="{{themeIcon}}"></path></svg></div>
+        <div class="btn" style="height: 44px; border-radius: 22px; padding: 0 20px;" onClick="{{openQA}}"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>Thêm việc</div>
+      </div>
+
+      <sc-if value="{{isDash}}" hint-placeholder-val="{{ true }}">
+      <div class="scroll" style="display: flex; flex-direction: column; gap: 14px;">
+        <div style="background: var(--hero); border-radius: 24px; padding: 22px 28px; display: flex; align-items: center; gap: 28px; flex: none;">
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+            <div style="font-size: 13px; font-weight: 800; color: var(--heroInk);">Thứ Bảy, 12/9</div>
+            <div style="font-size: 30px; font-weight: 800; letter-spacing: -0.01em; line-height: 1.1;">Chào buổi sáng!</div>
+            <div style="font-size: 15px; font-weight: 600; color: var(--ink2);">{{heroMsg}}</div>
+            <div onClick="{{openQA}}" style="margin-top: 6px; display: flex; align-items: center; gap: 10px; height: 42px; padding: 0 16px; background: var(--surface); border-radius: 21px; font-size: 14px; font-weight: 600; color: var(--muted); max-width: 520px; cursor: text;"><svg class="ic" style="color: var(--heroInk);" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>Thêm nhanh: “Gọi khách mai 9h #khách-hàng”<span class="kbd" style="margin-left: auto;">Ctrl Shift Space</span></div>
+          </div>
+          <div onClick="{{goToday}}" style="position: relative; width: 108px; height: 108px; flex: none; cursor: pointer;">
+            <svg width="108" height="108" viewBox="0 0 108 108">
+              <circle cx="54" cy="54" r="44" fill="none" stroke="var(--ring)" stroke-width="12"></circle>
+              <circle cx="54" cy="54" r="44" fill="none" stroke="var(--barHot)" stroke-width="12" stroke-linecap="round" stroke-dasharray="{{ringDash}}" transform="rotate(-90 54 54)"></circle>
+            </svg>
+            <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.1;"><span style="font-size: 24px; font-weight: 800;">{{todayDone}}/{{todayTotal}}</span><span style="font-size: 11.5px; font-weight: 700; color: var(--heroInk);">đã xong</span></div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; flex: none;">
+          <div class="card" style="grid-column: span 2;">
+            <div class="ct">Việc hôm nay<span class="sub">{{todayLeftLabel}}</span><a onClick="{{goToday}}" style="margin-left: auto; font-size: 13px; font-weight: 800; cursor: pointer; text-decoration: none; color: var(--heroInk);">Xem tất cả</a></div>
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <sc-for list="{{todayRows}}" as="r" hint-placeholder-count="5">
+                <div class="row" style="background: {{r.rowBg}};" onClick="{{r.open}}">
+                  <div class="circ" style="border-color: {{r.dot}}; background: {{r.circBg}};" onClick="{{r.toggle}}"><sc-if value="{{r.done}}" hint-placeholder-val="{{ false }}"><svg class="ic" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></sc-if></div>
+                  <div style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px;"><span class="{{r.tCls}}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{r.title}}</span><sc-if value="{{r.hasSub}}" hint-placeholder-val="{{ false }}"><span class="tm">· {{r.subInfo}}</span></sc-if></div>
+                  <span class="tm" style="color: {{r.dueFg}};">{{r.due}}</span>
+                  <span class="chip" style="background: {{r.chipBg}}; color: {{r.chipFg}};">{{r.projName}}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div class="card" style="background: var(--focus); gap: 10px;">
+            <div class="ct" style="color: var(--focusInk);">Tập trung<span class="sub" style="color: var(--focusSub);">Pomodoro</span></div>
+            <div onClick="{{openFocusTask}}" style="font-size: 14px; font-weight: 700; color: var(--focusInk); cursor: pointer;">{{focusTitle}}</div>
+            <div onClick="{{goFocus}}" style="font-size: 54px; font-weight: 800; line-height: 1; color: var(--focusInk); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; cursor: pointer;">{{timerText}}</div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <sc-for list="{{sessionDots}}" as="d" hint-placeholder-count="4"><span style="width: 14px; height: 14px; border-radius: 50%; box-sizing: border-box; background: {{d.bg}}; border: 3px solid {{d.bd}};"></span></sc-for>
+              <span style="font-size: 12.5px; font-weight: 700; color: var(--focusSub); margin-left: 4px;">{{sessionLabel}}</span>
+            </div>
+            <div style="margin-top: auto; display: flex; gap: 8px;">
+              <div class="btn" style="background: var(--focusInk); color: var(--focus);" onClick="{{toggleTimer}}">{{playLabel}}</div>
+              <div class="btn" style="background: var(--surface); color: var(--focusInk);" onClick="{{stopTimer}}">Kết thúc</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; flex: none; min-height: 250px;">
+          <div class="card hov" onClick="{{goStats}}">
+            <div class="ct">7 ngày qua<span class="sub">{{weekSum}}</span></div>
+            <div style="flex: 1; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; align-items: end;">
+              <sc-for list="{{weekBars}}" as="b" hint-placeholder-count="7">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 12px; font-weight: 800; color: {{b.lc}};">{{b.v}}</span><div style="width: 100%; height: {{b.h}}; background: {{b.bg}}; border-radius: 8px;"></div><span style="font-size: 12px; font-weight: 700; color: {{b.lc}};">{{b.label}}</span></div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="ct">Sắp tới<a onClick="{{goUpcoming}}" style="margin-left: auto; font-size: 13px; font-weight: 800; cursor: pointer; text-decoration: none; color: var(--heroInk);">Xem tất cả</a></div>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <sc-for list="{{upcomingDash}}" as="u" hint-placeholder-count="3">
+                <div class="hov" onClick="{{u.open}}" style="display: flex; align-items: center; gap: 12px;">
+                  <div style="width: 44px; height: 44px; border-radius: 14px; flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.05; background: {{u.bg}}; color: {{u.fg}};"><b style="font-size: 16px; font-weight: 800;">{{u.day}}</b><span style="font-size: 11px; font-weight: 700;">{{u.dow}}</span></div>
+                  <div style="display: flex; flex-direction: column; min-width: 0;"><span style="font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{u.title}}</span><span class="tm">{{u.sub}}</span></div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="ct">Dự án</div>
+            <div style="flex: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+              <sc-for list="{{projTiles}}" as="pt" hint-placeholder-count="4">
+                <div class="hov" onClick="{{pt.go}}" style="border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; background: {{pt.bg}}; color: {{pt.fg}};">
+                  <span style="font-size: 13px; font-weight: 800;">{{pt.name}}</span>
+                  <span style="font-size: 22px; font-weight: 800; line-height: 1;">{{pt.pct}}</span>
+                  <div style="height: 6px; border-radius: 3px; background: rgba(255, 255, 255, 0.55);"><div style="height: 6px; border-radius: 3px; width: {{pt.w}}; background: {{pt.dot}};"></div></div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{isList}}" hint-placeholder-val="{{ false }}">
+      <div class="scroll" style="display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; align-items: flex-end; gap: 16px; padding: 6px 6px 0; flex: none;">
+          <div style="display: flex; flex-direction: column; gap: 4px;"><div class="h1">{{listTitle}}</div><div class="sub">{{listSub}}</div></div>
+          <div class="btn soft sm" style="margin-left: auto;" onClick="{{openQA}}"><svg class="ic" style="width: 16px; height: 16px;" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>Thêm việc</div>
+        </div>
+        <sc-for list="{{groups}}" as="g" hint-placeholder-count="2">
+          <div class="card" style="flex: none;">
+            <div class="ct">{{g.name}}<span class="pill" style="margin-left: 0;">{{g.count}}</span></div>
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <sc-for list="{{g.rows}}" as="r" hint-placeholder-count="3">
+                <div class="row" style="background: {{r.rowBg}}; padding: 10px 12px;" onClick="{{r.open}}">
+                  <div class="circ" style="border-color: {{r.dot}}; background: {{r.circBg}};" onClick="{{r.toggle}}"><sc-if value="{{r.done}}" hint-placeholder-val="{{ false }}"><svg class="ic" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></sc-if></div>
+                  <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+                    <span class="{{r.tCls}}">{{r.title}}</span>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                      <sc-if value="{{r.hasDue}}" hint-placeholder-val="{{ true }}"><span class="tm" style="color: {{r.dueFg}};">{{r.due}}</span></sc-if>
+                      <sc-if value="{{r.hasSub}}" hint-placeholder-val="{{ false }}"><span class="tm">{{r.subInfo}}</span></sc-if>
+                      <sc-if value="{{r.hasTags}}" hint-placeholder-val="{{ false }}"><span class="tm" style="color: var(--heroInk);">{{r.tags}}</span></sc-if>
+                    </div>
+                  </div>
+                  <sc-if value="{{r.hasPrio}}" hint-placeholder-val="{{ false }}"><span class="chip" style="background: {{r.prioBg}}; color: {{r.prioFg}};">{{r.prioLabel}}</span></sc-if>
+                  <span class="chip" style="background: {{r.chipBg}}; color: {{r.chipFg}};">{{r.projName}}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+        <sc-if value="{{noGroups}}" hint-placeholder-val="{{ false }}">
+          <div class="card" style="align-items: center; padding: 56px 20px; flex: none;"><div class="ct">Không còn việc nào ở đây</div><div class="sub">Thêm việc mới bằng nút “Thêm việc” hoặc Ctrl+Shift+Space.</div></div>
+        </sc-if>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{isProject}}" hint-placeholder-val="{{ false }}">
+      <div style="flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 18px; padding: 16px 22px; border-radius: 22px; background: {{proj.bg}}; color: {{proj.fg}}; flex: none;">
+          <span style="width: 18px; height: 18px; border-radius: 6px; background: {{proj.dot}}; flex: none;"></span>
+          <div style="display: flex; flex-direction: column; gap: 2px;"><div style="font-size: 22px; font-weight: 800; line-height: 1.15;">{{proj.name}}</div><div style="font-size: 13px; font-weight: 700;">{{proj.info}}</div></div>
+          <div style="width: 150px; display: flex; align-items: center; gap: 10px;"><div style="flex: 1; height: 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.55);"><div style="height: 8px; border-radius: 4px; width: {{proj.pct}}; background: {{proj.dot}};"></div></div><span style="font-size: 14px; font-weight: 800;">{{proj.pct}}</span></div>
+          <div class="seg" style="margin-left: auto;"><div class="{{segK}}" onClick="{{setKanban}}">Kanban</div><div class="{{segL}}" onClick="{{setList}}">Danh sách</div></div>
+        </div>
+
+        <sc-if value="{{isKanban}}" hint-placeholder-val="{{ true }}">
+        <div style="flex: 1; min-height: 0; display: flex; gap: 14px; overflow-x: auto; align-items: flex-start; padding-bottom: 4px;">
+          <sc-for list="{{columns}}" as="c" hint-placeholder-count="4">
+            <div style="width: 240px; flex: none; max-height: 100%; box-sizing: border-box; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding: 12px; border-radius: 20px; background: var(--lane);">
+              <div style="display: flex; align-items: center; gap: 8px; padding: 2px 4px;">
+                <span style="font-size: 14.5px; font-weight: 800;">{{c.name}}</span><span class="pill" style="margin-left: 0;">{{c.count}}</span>
+                <span class="chip" style="margin-left: auto; height: 20px; font-size: 11px; background: {{c.gBg}}; color: {{c.gFg}};">{{c.gLabel}}</span>
+              </div>
+              <sc-for list="{{c.cards}}" as="k" hint-placeholder-count="2">
+                <div class="hov" onClick="{{k.open}}" style="background: var(--surface); border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: var(--shadow);">
+                  <div style="display: flex; gap: 10px; align-items: flex-start;">
+                    <div class="circ" style="margin-top: 1px; border-color: {{k.dot}}; background: {{k.circBg}};" onClick="{{k.toggle}}"><sc-if value="{{k.done}}" hint-placeholder-val="{{ false }}"><svg class="ic" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></sc-if></div>
+                    <span class="{{k.tCls}}" style="font-size: 14px; line-height: 1.35;">{{k.title}}</span>
+                  </div>
+                  <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+                    <sc-if value="{{k.hasPrio}}" hint-placeholder-val="{{ false }}"><span class="chip" style="background: {{k.prioBg}}; color: {{k.prioFg}};">{{k.prioLabel}}</span></sc-if>
+                    <sc-if value="{{k.hasDue}}" hint-placeholder-val="{{ true }}"><span class="tm" style="color: {{k.dueFg}};">{{k.due}}</span></sc-if>
+                    <sc-if value="{{k.hasSub}}" hint-placeholder-val="{{ false }}"><span class="tm">{{k.subInfo}}</span></sc-if>
+                  </div>
+                  <sc-if value="{{k.canAdvance}}" hint-placeholder-val="{{ false }}"><div onClick="{{k.advance}}" style="align-self: flex-start; font-size: 12px; font-weight: 800; color: var(--heroInk); cursor: pointer;">Chuyển sang “{{k.nextCol}}” →</div></sc-if>
+                </div>
+              </sc-for>
+              <sc-if value="{{c.hasArchived}}" hint-placeholder-val="{{ false }}"><div class="tm" style="padding: 2px 6px;">{{c.archived}}</div></sc-if>
+              <div onClick="{{openQA}}" style="display: flex; align-items: center; gap: 8px; padding: 6px; font-size: 13px; font-weight: 700; color: var(--muted); cursor: pointer;"><svg class="ic" style="width: 16px; height: 16px;" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>Thêm việc</div>
+            </div>
+          </sc-for>
+          <div style="width: 200px; flex: none; height: 52px; box-sizing: border-box; border: 2px dashed var(--line); border-radius: 18px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13.5px; font-weight: 800; color: var(--muted); cursor: pointer;"><svg class="ic" style="width: 16px; height: 16px;" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>Thêm cột</div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{isProjList}}" hint-placeholder-val="{{ false }}">
+        <div class="card scroll" style="gap: 2px;">
+          <sc-for list="{{projRows}}" as="r" hint-placeholder-count="6">
+            <div class="row" style="background: {{r.rowBg}}; padding: 10px 12px;" onClick="{{r.open}}">
+              <div class="circ" style="border-color: {{r.dot}}; background: {{r.circBg}};" onClick="{{r.toggle}}"><sc-if value="{{r.done}}" hint-placeholder-val="{{ false }}"><svg class="ic" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></sc-if></div>
+              <span class="{{r.tCls}}" style="flex: 1; min-width: 0;">{{r.title}}</span>
+              <sc-if value="{{r.hasSub}}" hint-placeholder-val="{{ false }}"><span class="tm">{{r.subInfo}}</span></sc-if>
+              <sc-if value="{{r.hasDue}}" hint-placeholder-val="{{ true }}"><span class="tm" style="color: {{r.dueFg}};">{{r.due}}</span></sc-if>
+              <sc-if value="{{r.hasPrio}}" hint-placeholder-val="{{ false }}"><span class="chip" style="background: {{r.prioBg}}; color: {{r.prioFg}};">{{r.prioLabel}}</span></sc-if>
+            </div>
+          </sc-for>
+        </div>
+        </sc-if>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{isCalendar}}" hint-placeholder-val="{{ false }}">
+      <div style="flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 12px; padding: 6px 6px 0; flex: none;">
+          <div style="display: flex; flex-direction: column; gap: 4px;"><div class="h1">Tháng 9, 2026</div><div class="sub">Tuần bắt đầu từ thứ Hai · bấm vào một việc để xem chi tiết</div></div>
+          <div class="seg" style="margin-left: auto;"><div class="on">Tháng</div><div>Tuần</div></div>
+          <div class="btn soft sm">Hôm nay</div>
+          <div class="btn soft sm" style="padding: 0 10px;" title="Tháng trước"><svg class="ic" style="width: 16px; height: 16px;" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"></path></svg></div>
+          <div class="btn soft sm" style="padding: 0 10px;" title="Tháng sau"><svg class="ic" style="width: 16px; height: 16px;" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"></path></svg></div>
+        </div>
+        <div class="card" style="flex: 1; min-height: 0; padding: 14px; gap: 8px;">
+          <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; font-size: 12px; font-weight: 800; color: var(--muted); text-align: center;"><span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>CN</span></div>
+          <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); grid-template-rows: repeat(5, minmax(0, 1fr)); gap: 6px;">
+            <sc-for list="{{cells}}" as="d" hint-placeholder-count="35">
+              <div style="border-radius: 14px; background: {{d.bg}}; border: 1.5px solid var(--line); padding: 6px; display: flex; flex-direction: column; gap: 4px; min-height: 0; min-width: 0; overflow: hidden;">
+                <span style="align-self: flex-start; min-width: 24px; height: 24px; padding: 0 4px; box-sizing: border-box; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 800; background: {{d.numBg}}; color: {{d.numInk}};">{{d.num}}</span>
+                <sc-for list="{{d.items}}" as="e" hint-placeholder-count="1">
+                  <div onClick="{{e.open}}" style="font-size: 11.5px; font-weight: 700; padding: 2px 7px; border-radius: 8px; background: {{e.bg}}; color: {{e.fg}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: {{e.deco}}; cursor: pointer;">{{e.title}}</div>
+                </sc-for>
+                <sc-if value="{{d.hasMore}}" hint-placeholder-val="{{ false }}"><span class="tm" style="font-size: 11px;">{{d.more}}</span></sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{isFocus}}" hint-placeholder-val="{{ false }}">
+      <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 14px;">
+        <div class="card" style="background: var(--focus); color: var(--focusInk); align-items: center; justify-content: center; gap: 20px; padding: 28px;">
+          <div class="seg"><div class="on">Pomodoro</div><div>Bấm giờ</div><div>Nghỉ ngắn</div></div>
+          <div style="position: relative; width: 280px; height: 280px;">
+            <svg width="280" height="280" viewBox="0 0 280 280">
+              <circle cx="140" cy="140" r="120" fill="none" stroke="var(--focusDotOff)" stroke-width="16"></circle>
+              <circle cx="140" cy="140" r="120" fill="none" stroke="var(--focusDot)" stroke-width="16" stroke-linecap="round" stroke-dasharray="{{focusDash}}" transform="rotate(-90 140 140)"></circle>
+            </svg>
+            <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;">
+              <span style="font-size: 64px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">{{timerText}}</span>
+              <span style="font-size: 14px; font-weight: 800; color: var(--focusSub);">{{sessionLabel}} · còn lại</span>
+            </div>
+          </div>
+          <div onClick="{{openFocusTask}}" style="display: flex; align-items: center; gap: 10px; height: 42px; padding: 0 18px; border-radius: 21px; background: var(--surface); color: var(--ink); font-size: 14px; font-weight: 800; cursor: pointer;"><span class="sw" style="background: #5B8DEF;"></span>{{focusTitle}}<span class="tm">· {{focusProj}}</span></div>
+          <div style="display: flex; gap: 10px;">
+            <div class="btn" style="height: 48px; padding: 0 28px; border-radius: 24px; font-size: 15px; background: var(--focusInk); color: var(--focus);" onClick="{{toggleTimer}}">{{playLabel}}</div>
+            <div class="btn" style="height: 48px; padding: 0 24px; border-radius: 24px; font-size: 15px; background: var(--surface); color: var(--focusInk);" onClick="{{stopTimer}}">Kết thúc</div>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <sc-for list="{{sessionDots}}" as="d" hint-placeholder-count="4"><span style="width: 14px; height: 14px; border-radius: 50%; box-sizing: border-box; background: {{d.bg}}; border: 3px solid {{d.bd}};"></span></sc-for>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 14px; min-height: 0;">
+          <div class="card" style="flex: none;">
+            <div class="ct">Hôm nay</div>
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+              <div style="background: var(--surface2); border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; gap: 2px;"><span class="tm">Đã tập trung</span><span style="font-size: 24px; font-weight: 800;">1g 50p</span></div>
+              <div style="background: var(--surface2); border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; gap: 2px;"><span class="tm">Phiên hoàn thành</span><span style="font-size: 24px; font-weight: 800;">4</span></div>
+            </div>
+          </div>
+          <div class="card scroll">
+            <div class="ct">Các phiên hôm nay</div>
+            <sc-for list="{{sessions}}" as="x" hint-placeholder-count="4">
+              <div style="display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line);">
+                <span style="width: 8px; height: 36px; border-radius: 4px; background: {{x.dot}}; flex: none;"></span>
+                <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{x.title}}</span><span class="tm">{{x.time}} · {{x.kind}}</span></div>
+                <span class="chip" style="background: {{x.bg}}; color: {{x.fg}};">{{x.minsLabel}}</span>
+              </div>
+            </sc-for>
+            <div class="tm" style="white-space: normal; line-height: 1.5;">Pomodoro 25 phút · nghỉ ngắn 5 phút · nghỉ dài 15 phút sau 4 phiên. Đổi trong <a onClick="{{goSettings}}" style="cursor: pointer; font-weight: 800; color: var(--heroInk);">Cài đặt</a>.</div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{isStats}}" hint-placeholder-val="{{ false }}">
+      <div class="scroll" style="display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 12px; padding: 6px 6px 0; flex: none;">
+          <div class="h1">Thống kê</div>
+          <div class="seg" style="margin-left: auto;"><div class="on">Tuần này</div><div>Tháng này</div><div>3 tháng</div></div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; flex: none;">
+          <sc-for list="{{kpis}}" as="k" hint-placeholder-count="4">
+            <div class="card" style="gap: 4px;"><span class="sub">{{k.label}}</span><span style="font-size: 30px; font-weight: 800; line-height: 1.1; color: {{k.fg}};">{{k.val}}</span></div>
+          </sc-for>
+        </div>
+        <div style="display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 14px; flex: none;">
+          <div class="card">
+            <div class="ct">Việc hoàn thành mỗi ngày<span class="sub">{{weekSum}}</span></div>
+            <div style="height: 200px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 14px; align-items: end;">
+              <sc-for list="{{weekBars}}" as="b" hint-placeholder-count="7">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 13px; font-weight: 800; color: {{b.lc}};">{{b.v}}</span><div style="width: 100%; height: {{b.hBig}}; background: {{b.bg}}; border-radius: 10px;"></div><span style="font-size: 12.5px; font-weight: 700; color: {{b.lc}};">{{b.label}}</span></div>
+              </sc-for>
+            </div>
+          </div>
+          <div class="card" style="align-items: center; justify-content: center; text-align: center;">
+            <div class="ct" style="align-self: flex-start;">Hoàn thành đúng hạn</div>
+            <div style="position: relative; width: 136px; height: 136px;">
+              <svg width="136" height="136" viewBox="0 0 136 136">
+                <circle cx="68" cy="68" r="54" fill="none" stroke="var(--pill)" stroke-width="14"></circle>
+                <circle cx="68" cy="68" r="54" fill="none" stroke="#4DBB7F" stroke-width="14" stroke-linecap="round" stroke-dasharray="{{onTimeDash}}" transform="rotate(-90 68 68)"></circle>
+              </svg>
+              <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 800;">84%</div>
+            </div>
+            <div class="sub" style="max-width: 260px; line-height: 1.5;">27 trên 32 việc có hạn trong 30 ngày qua được hoàn thành đúng hạn.</div>
+          </div>
+        </div>
+        <div class="card" style="flex: none;">
+          <div class="ct">Thời gian tập trung theo dự án<span class="sub">tổng 9g 20p tuần này</span></div>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <sc-for list="{{focusByP}}" as="f" hint-placeholder-count="4">
+              <div style="display: grid; grid-template-columns: 160px minmax(0, 1fr) 70px; align-items: center; gap: 14px;">
+                <span style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700;"><span class="sw" style="background: {{f.dot}};"></span>{{f.name}}</span>
+                <div style="height: 14px; border-radius: 7px; background: var(--surface2);"><div style="height: 14px; border-radius: 7px; width: {{f.w}}; background: {{f.dot}};"></div></div>
+                <span style="font-size: 13.5px; font-weight: 800; text-align: right;">{{f.label}}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{isSettings}}" hint-placeholder-val="{{ false }}">
+      <div class="scroll" style="display: flex; flex-direction: column; gap: 14px;">
+        <div class="h1" style="padding: 6px 6px 0;">Cài đặt</div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-items: start;">
+          <div class="card">
+            <div class="ct">Giao diện</div>
+            <div style="display: flex; align-items: center; gap: 12px; padding: 6px 0;"><span style="font-size: 14px; font-weight: 700;">Chế độ màu</span><div class="seg" style="margin-left: auto;"><sc-for list="{{themeOpts}}" as="op" hint-placeholder-count="3"><div class="{{op.cls}}" onClick="{{op.pick}}">{{op.label}}</div></sc-for></div></div>
+            <div style="display: flex; align-items: center; gap: 12px; padding: 6px 0;"><span style="font-size: 14px; font-weight: 700;">Ngôn ngữ</span><div class="seg" style="margin-left: auto;"><sc-for list="{{langOpts}}" as="op" hint-placeholder-count="2"><div class="{{op.cls}}" onClick="{{op.pick}}">{{op.label}}</div></sc-for></div></div>
+          </div>
+          <div class="card">
+            <div class="ct">Phím tắt</div>
+            <div style="display: flex; align-items: center; gap: 10px;"><span style="font-size: 14px; font-weight: 700;">Thêm việc nhanh (dùng được mọi lúc)</span><span class="kbd" style="margin-left: auto;">Ctrl Shift Space</span><span class="tm" style="cursor: pointer; color: var(--heroInk); font-weight: 800;">Đổi</span></div>
+            <div style="display: flex; align-items: center; gap: 10px;"><span style="font-size: 14px; font-weight: 700;">Tìm kiếm và chạy lệnh</span><span class="kbd" style="margin-left: auto;">Ctrl K</span></div>
+            <div style="display: flex; align-items: center; gap: 10px;"><span style="font-size: 14px; font-weight: 700;">Việc mới trong app</span><span class="kbd" style="margin-left: auto;">Q</span><span class="kbd">Ctrl N</span></div>
+            <div style="display: flex; align-items: center; gap: 10px;"><span style="font-size: 14px; font-weight: 700;">Bắt đầu / dừng tập trung</span><span class="kbd" style="margin-left: auto;">Ctrl Shift F</span></div>
+          </div>
+          <div class="card">
+            <div class="ct">Tập trung và nhắc nhở</div>
+            <div style="display: flex; align-items: center; gap: 10px;"><span style="font-size: 14px; font-weight: 700;">Một phiên Pomodoro</span><span class="chip" style="margin-left: auto; background: var(--surface2); color: var(--ink);">25 phút</span></div>
+            <div style="display: flex; align-items: center; gap: 10px;"><span style="font-size: 14px; font-weight: 700;">Nghỉ ngắn / nghỉ dài</span><span class="chip" style="margin-left: auto; background: var(--surface2); color: var(--ink);">5 / 15 phút</span></div>
+            <div style="display: flex; align-items: center; gap: 10px;"><span style="font-size: 14px; font-weight: 700;">Nhắc trước hạn chót</span><span class="chip" style="margin-left: auto; background: var(--surface2); color: var(--ink);">15 phút</span></div>
+            <div style="display: flex; align-items: center; gap: 10px;"><span style="font-size: 14px; font-weight: 700;">Phát âm báo khi hết phiên</span><div class="{{soundCls}}" style="margin-left: auto;" onClick="{{toggleSound}}"><i></i></div></div>
+          </div>
+          <div class="card">
+            <div class="ct">Cửa sổ và dữ liệu</div>
+            <div style="display: flex; align-items: center; gap: 10px;"><div style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 14px; font-weight: 700;">Đóng cửa sổ thì thu nhỏ xuống khay</span><span class="tm" style="white-space: normal;">App vẫn chạy nền để gửi nhắc nhở đúng giờ</span></div><div class="{{trayCls}}" style="margin-left: auto;" onClick="{{toggleTray}}"><i></i></div></div>
+            <div style="display: flex; flex-direction: column; gap: 4px;"><span style="font-size: 14px; font-weight: 700;">Vị trí dữ liệu</span><span class="tm" style="white-space: normal;">%APPDATA%\vn.personal.quanlytask\quanlytask.db</span></div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;"><div class="btn sm" onClick="{{backupNow}}">Sao lưu ngay</div><div class="btn soft sm">Khôi phục…</div><div class="btn soft sm">Xuất JSON</div><div class="btn soft sm">Xuất CSV</div></div>
+            <span class="tm" style="white-space: normal;">Việc trong Thùng rác tự xoá vĩnh viễn sau 30 ngày.</span>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+    </div>
+  </div>
+
+  <sc-if value="{{hasOpen}}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{closeTask}}" style="position: absolute; inset: 0; background: var(--scrim); z-index: 20;"></div>
+    <div style="position: absolute; top: 12px; right: 12px; bottom: 12px; width: 440px; background: var(--surface); border-radius: 24px; z-index: 21; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25); overflow: hidden;">
+      <div style="display: flex; align-items: center; gap: 8px; padding: 16px 18px 0;">
+        <span class="chip" style="background: {{o.chipBg}}; color: {{o.chipFg}};">{{o.projName}}</span>
+        <span class="chip" style="background: var(--surface2); color: var(--ink2);">{{o.colName}}</span>
+        <div onClick="{{closeTask}}" title="Đóng" style="margin-left: auto; width: 34px; height: 34px; border-radius: 17px; display: flex; align-items: center; justify-content: center; color: var(--muted); cursor: pointer; background: var(--surface2);"><svg class="ic" style="width: 16px; height: 16px;" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"></path></svg></div>
+      </div>
+      <div class="scroll" style="padding: 14px 22px 18px; display: flex; flex-direction: column; gap: 18px;">
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+          <div class="circ" style="margin-top: 5px; width: 24px; height: 24px; border-color: {{o.dot}}; background: {{o.circBg}};" onClick="{{o.toggle}}"><sc-if value="{{o.done}}" hint-placeholder-val="{{ false }}"><svg class="ic" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></sc-if></div>
+          <div class="{{o.tCls}}" style="font-size: 21px; font-weight: 800; line-height: 1.3;">{{o.title}}</div>
+        </div>
+        <div style="display: grid; grid-template-columns: 112px minmax(0, 1fr); row-gap: 12px; column-gap: 12px; align-items: center; font-size: 14px;">
+          <span class="tm">Hạn chót</span><span style="font-weight: 700; color: {{o.dueFg}};">{{o.dueFull}}</span>
+          <span class="tm">Nhắc nhở</span><span style="font-weight: 700;">{{o.reminder}}</span>
+          <span class="tm">Ưu tiên</span><span><span class="chip" style="background: {{o.prioBg}}; color: {{o.prioFg}};">{{o.prioLabel}}</span></span>
+          <span class="tm">Tag</span>
+          <span style="display: flex; flex-wrap: wrap; gap: 6px;"><sc-for list="{{o.tagList}}" as="tg" hint-placeholder-count="1"><span class="chip" style="background: var(--hero); color: var(--heroInk);">{{tg.label}}</span></sc-for><span class="chip" style="background: var(--surface2); color: var(--muted); cursor: pointer;">+ Thêm tag</span></span>
+          <span class="tm">Đã tập trung</span><span style="font-weight: 700;">{{o.tracked}}</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div class="ct" style="font-size: 15px;">Việc con<sc-if value="{{o.hasSubs}}" hint-placeholder-val="{{ true }}"><span class="sub">{{o.subsInfo}}</span></sc-if></div>
+          <sc-for list="{{o.subs}}" as="st" hint-placeholder-count="3">
+            <div onClick="{{st.toggle}}" style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; background: var(--surface2); cursor: pointer;">
+              <span style="width: 18px; height: 18px; border-radius: 6px; border: 2px solid {{o.dot}}; box-sizing: border-box; background: {{st.bg}}; color: #FFFFFF; display: flex; align-items: center; justify-content: center; flex: none;"><sc-if value="{{st.done}}" hint-placeholder-val="{{ false }}"><svg class="ic" style="width: 11px; height: 11px; stroke-width: 3.4;" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></sc-if></span>
+              <span style="font-size: 14px; font-weight: 700; color: {{st.fg}}; text-decoration: {{st.deco}};">{{st.title}}</span>
+            </div>
+          </sc-for>
+          <div style="display: flex; align-items: center; gap: 8px; padding: 6px 10px; font-size: 13px; font-weight: 700; color: var(--muted); cursor: pointer;"><svg class="ic" style="width: 16px; height: 16px;" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>Thêm việc con</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div class="ct" style="font-size: 15px;">Mô tả</div>
+          <div style="padding: 12px 14px; border-radius: 14px; background: var(--surface2); font-size: 14px; font-weight: 600; line-height: 1.55; color: var(--ink2);">{{o.desc}}</div>
+        </div>
+      </div>
+      <div style="display: flex; gap: 8px; padding: 14px 18px; border-top: 1px solid var(--line);">
+        <div class="btn" onClick="{{focusOnTask}}"><svg class="ic" style="width: 16px; height: 16px;" viewBox="0 0 24 24"><path d="M12 5a8 8 0 1 0 0 16a8 8 0 0 0 0-16zM12 9v4l2 2M9 2h6"></path></svg>Bắt đầu tập trung</div>
+        <div class="btn soft" onClick="{{o.toggle}}"><sc-if value="{{o.done}}" hint-placeholder-val="{{ false }}">Mở lại</sc-if><sc-if value="{{o.notDone}}" hint-placeholder-val="{{ true }}">Đánh dấu xong</sc-if></div>
+        <div class="btn soft" style="margin-left: auto; color: var(--danger);" title="Chuyển vào Thùng rác"><svg class="ic" style="width: 16px; height: 16px;" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"></path></svg></div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{qaOpen}}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{closeQA}}" style="position: absolute; inset: 0; background: var(--scrim); z-index: 30;"></div>
+    <div style="position: absolute; top: 110px; left: 340px; width: 600px; background: var(--surface); border-radius: 24px; z-index: 31; padding: 20px 22px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div class="ct">Thêm việc nhanh</div>
+        <span class="tm">mở từ bất kỳ đâu bằng</span><span class="kbd">Ctrl Shift Space</span>
+        <div onClick="{{closeQA}}" title="Đóng" style="margin-left: auto; width: 32px; height: 32px; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: var(--muted); cursor: pointer; background: var(--surface2);"><svg class="ic" style="width: 15px; height: 15px;" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"></path></svg></div>
+      </div>
+      <input id="qa-input" value="{{qaText}}" onChange="{{onQAChange}}" onKeyDown="{{onQAKey}}" placeholder="Ví dụ: Gọi khách mai 9h @website #khách-hàng !cao" style="height: 50px; border-radius: 16px; border: 2px solid var(--bar); background: var(--surface2); color: var(--ink); padding: 0 16px; font-family: inherit; font-size: 16px; font-weight: 700; outline: none;">
+      <div style="display: grid; grid-template-columns: minmax(0, 2fr) repeat(4, minmax(0, 1fr)); gap: 8px;">
+        <sc-for list="{{qaChips}}" as="c" hint-placeholder-count="5">
+          <div style="background: var(--surface2); border-radius: 14px; padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; min-width: 0;"><span style="font-size: 11px; font-weight: 800; color: var(--muted);">{{c.k}}</span><span style="font-size: 13px; font-weight: 800; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{c.v}}</span></div>
+        </sc-for>
+      </div>
+      <div class="tm" style="white-space: normal; line-height: 1.6;">Cú pháp: #tag · @dự-án · !cao hoặc !1–!4 · hôm nay, mai, ngày kia, thứ 2…cn · 9h, 9h30, 14:00. Nhấn Enter để thêm.</div>
+      <div style="display: flex; gap: 8px; justify-content: flex-end;"><div class="btn soft" onClick="{{closeQA}}">Huỷ</div><div class="btn" onClick="{{submitQA}}">Thêm vào {{qaTarget}}</div></div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{hasToast}}" hint-placeholder-val="{{ false }}">
+    <div style="position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%); z-index: 40; display: flex; align-items: center; gap: 10px; padding: 12px 20px; border-radius: 16px; background: var(--btn); color: var(--btnInk); font-size: 14px; font-weight: 800; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); white-space: nowrap;"><svg class="ic" style="width: 16px; height: 16px; stroke-width: 3;" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg>{{toast}}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1280,"height":860}}'>
+const TODAY = 12;
+const DOW = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+const dowOf = (d) => (d + 1) % 7;
+const pad = (n) => String(n).padStart(2, '0');
+const fmtMins = (m) => (m >= 60 ? Math.floor(m / 60) + 'g ' + pad(m % 60) + 'p' : m + ' phút');
+
+const ICON = {
+  dash: 'M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z',
+  inbox: 'M22 12h-6l-2 3h-4l-2-3H2M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z',
+  today: 'M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM16 2v4M8 2v4M3 10h18M9 16l2 2 4-4',
+  upcoming: 'M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18zM12 7v5l3 2',
+  cal: 'M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM16 2v4M8 2v4M3 10h18',
+  focus: 'M12 5a8 8 0 1 0 0 16a8 8 0 0 0 0-16zM12 9v4l2 2M9 2h6',
+  stats: 'M3 3v18h18M7 16v-5M12 16V8M17 16V7',
+  moon: 'M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z',
+  sun: 'M12 8a4 4 0 1 0 0 8a4 4 0 0 0 0-8zM12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4',
+};
+
+const PAL = {
+  sky: { dot: '#5B8DEF', light: ['#DDE8FF', '#1F4E99'], dark: ['#1E2C4A', '#A9C4FF'] },
+  butter: { dot: '#E5B93A', light: ['#FFF3C9', '#7A5A00'], dark: ['#3A3116', '#F0D27A'] },
+  mint: { dot: '#4DBB7F', light: ['#D8F2E3', '#1F6B41'], dark: ['#173A29', '#8FDDB0'] },
+  peach: { dot: '#F28B6E', light: ['#FFE3D9', '#9A3B1E'], dark: ['#43261D', '#FFB59E'] },
+  lilac: { dot: '#8C7AE6', light: ['#ECE6FF', '#4B3A99'], dark: ['#2B2550', '#C7BAFF'] },
+};
+const TONE = {
+  low: { light: ['#EEEBF7', '#57536D'], dark: ['#2C2840', '#C3BFD6'] },
+  mid: { light: ['#FFF3C9', '#7A5A00'], dark: ['#3A3116', '#F0D27A'] },
+  high: { light: ['#FFD9D2', '#B23A26'], dark: ['#4A2019', '#FF9C8A'] },
+  done: { light: ['#D8F2E3', '#1F6B41'], dark: ['#173A29', '#8FDDB0'] },
+};
+const PROJECTS = [
+  { id: 'web', name: 'Website công ty', pal: 'sky', baseDone: 11, baseTotal: 13 },
+  { id: 'ielts', name: 'Học IELTS', pal: 'butter', baseDone: 6, baseTotal: 18 },
+  { id: 'home', name: 'Việc nhà', pal: 'mint', baseDone: 8, baseTotal: 8 },
+  { id: 'me', name: 'Cá nhân', pal: 'peach', baseDone: 2, baseTotal: 4 },
+];
+const ALLP = { inbox: { id: 'inbox', name: 'Hộp thư', pal: 'lilac', baseDone: 0, baseTotal: 0 } };
+PROJECTS.forEach((p) => { ALLP[p.id] = p; });
+const COLS = {
+  web: [
+    { id: 'todo', name: 'Cần làm', group: 'todo' },
+    { id: 'doing', name: 'Đang làm', group: 'doing' },
+    { id: 'wait', name: 'Chờ phản hồi', group: 'doing' },
+    { id: 'done', name: 'Hoàn thành', group: 'done' },
+  ],
+  default: [
+    { id: 'todo', name: 'Cần làm', group: 'todo' },
+    { id: 'doing', name: 'Đang làm', group: 'doing' },
+    { id: 'done', name: 'Hoàn thành', group: 'done' },
+  ],
+};
+const GROUP = { todo: { label: 'Chưa bắt đầu', tone: 'low' }, doing: { label: 'Đang làm', tone: 'mid' }, done: { label: 'Xong', tone: 'done' } };
+const PRIO = [null, { label: 'Thấp', tone: 'low' }, { label: 'Trung bình', tone: 'mid' }, { label: 'Cao', tone: 'high' }, { label: 'Khẩn cấp', tone: 'high' }];
+
+const TASKS = [
+  { id: 't1', title: 'Thanh toán hoá đơn điện tháng 9', p: 'home', col: 'todo', prio: 3, day: 10, time: '', tags: ['hoá-đơn'], subs: [], desc: 'Thanh toán qua app ngân hàng, lưu biên lai vào thư mục Hoá đơn 2026.', mins: 0 },
+  { id: 't2', title: 'Gửi báo giá cho khách hàng Minh Phát', p: 'web', col: 'doing', prio: 3, day: 12, time: '10:00', tags: ['khách-hàng'], subs: ['Tổng hợp hạng mục', 'Tính chi phí hosting', 'Xuất PDF và gửi email'], desc: 'Báo giá gói thiết kế website 8 trang, kèm hosting 1 năm.', mins: 35 },
+  { id: 't3', title: 'Review thiết kế trang chủ', p: 'web', col: 'doing', prio: 2, day: 12, time: '14:00', tags: ['thiết-kế'], subs: ['Kiểm tra bố cục desktop', 'Kiểm tra bản mobile', 'Góp ý phần hero', 'Chốt màu nút CTA'], desc: 'Xem bản thiết kế mới nhất, ghi góp ý trực tiếp lên file.', mins: 56 },
+  { id: 't4', title: 'Luyện đề Reading Cambridge 17', p: 'ielts', col: 'todo', prio: 2, day: 12, time: '', tags: ['reading'], subs: [], desc: 'Test 2, bấm giờ 60 phút.', mins: 60 },
+  { id: 't5', title: 'Đặt lịch khám răng', p: 'me', col: 'todo', prio: 1, day: 12, time: '', tags: [], subs: [], desc: '', mins: 0 },
+  { id: 't6', title: 'Nộp bài Writing Task 2', p: 'ielts', col: 'todo', prio: 2, day: 14, time: '', tags: ['writing'], subs: ['Lập dàn ý', 'Viết bài 250 từ', 'Tự chấm theo tiêu chí'], desc: 'Đề: Some people think universities should focus on job skills.', mins: 0 },
+  { id: 't7', title: 'Họp kick-off dự án app', p: 'web', col: 'todo', prio: 2, day: 15, time: '09:00', tags: ['họp'], subs: [], desc: 'Chuẩn bị agenda và danh sách câu hỏi cho khách.', mins: 0 },
+  { id: 't10', title: 'Chờ khách duyệt logo mới', p: 'web', col: 'wait', prio: 1, day: 16, time: '', tags: ['khách-hàng'], subs: [], desc: 'Đã gửi 3 phương án ngày 11/9.', mins: 0 },
+  { id: 't9', title: 'Viết nội dung trang Giới thiệu', p: 'web', col: 'todo', prio: 1, day: 17, time: '', tags: ['nội-dung'], subs: [], desc: '', mins: 0 },
+  { id: 't8', title: 'Gia hạn bảo hiểm xe máy', p: 'me', col: 'todo', prio: 2, day: 18, time: '', tags: [], subs: [], desc: '', mins: 0 },
+  { id: 't14', title: 'Dọn kho, thanh lý đồ cũ', p: 'home', col: 'todo', prio: 1, day: 20, time: '', tags: [], subs: [], desc: '', mins: 0 },
+  { id: 't11', title: 'Tối ưu ảnh cho trang Dự án', p: 'web', col: 'todo', prio: 0, day: null, time: '', tags: ['hiệu-năng'], subs: [], desc: '', mins: 0 },
+  { id: 't12', title: 'Dựng khung trang chủ', p: 'web', col: 'done', prio: 2, day: 11, time: '', tags: [], subs: [], desc: '', mins: 140 },
+  { id: 't13', title: 'Chọn bảng màu thương hiệu', p: 'web', col: 'done', prio: 1, day: 9, time: '', tags: ['thiết-kế'], subs: [], desc: '', mins: 45 },
+  { id: 'i1', title: 'Tìm hiểu gói bảo hiểm sức khoẻ', p: 'inbox', col: 'todo', prio: 0, day: null, time: '', tags: [], subs: [], desc: '', mins: 0 },
+  { id: 'i2', title: 'Mua quà sinh nhật cho mẹ', p: 'inbox', col: 'todo', prio: 0, day: null, time: '', tags: [], subs: [], desc: '', mins: 0 },
+  { id: 'i3', title: 'Ý tưởng: blog chia sẻ kinh nghiệm IELTS', p: 'inbox', col: 'todo', prio: 0, day: null, time: '', tags: ['ý-tưởng'], subs: [], desc: '', mins: 0 },
+];
+const WEEK = [1, 3, 5, 2, 4, 3];
+const SESSIONS = [
+  { time: '07:50 – 08:15', title: 'Luyện đề Reading Cambridge 17', p: 'ielts', kind: 'Pomodoro', mins: 25 },
+  { time: '08:20 – 08:55', title: 'Luyện đề Reading Cambridge 17', p: 'ielts', kind: 'Bấm giờ', mins: 35 },
+  { time: '09:12 – 09:37', title: 'Review thiết kế trang chủ', p: 'web', kind: 'Pomodoro', mins: 25 },
+  { time: '09:42 – 10:07', title: 'Review thiết kế trang chủ', p: 'web', kind: 'Pomodoro', mins: 25 },
+];
+const FOCUS_BY_P = [['web', 250], ['ielts', 185], ['me', 75], ['home', 50]];
+const SLUG = { 'website': 'web', 'web': 'web', 'công-ty': 'web', 'ielts': 'ielts', 'học-ielts': 'ielts', 'việc-nhà': 'home', 'nhà': 'home', 'cá-nhân': 'me' };
+
+function dueText(day, time) {
+  if (day == null) return '';
+  let s;
+  if (day === TODAY) s = 'Hôm nay';
+  else if (day === TODAY + 1) s = 'Mai';
+  else s = DOW[dowOf(day)] + ' ' + day + '/9';
+  return time ? s + ' · ' + time : s;
+}
+
+function parseQA(text) {
+  let rest = ' ' + (text || '') + ' ';
+  const out = { tags: [], p: null, prio: 0, day: null, time: '' };
+  rest = rest.replace(/\s#([^\s#@!]+)/g, (m, g) => { out.tags.push(g); return ' '; });
+  rest = rest.replace(/\s@([^\s#@!]+)/g, (m, g) => { const k = g.toLowerCase(); if (SLUG[k]) out.p = SLUG[k]; return ' '; });
+  rest = rest.replace(/\s!(khẩn|cao|tb|thấp|[1-4])(?=\s)/i, (m, g) => {
+    const k = g.toLowerCase();
+    out.prio = { 'thấp': 1, 'tb': 2, 'cao': 3, 'khẩn': 4 }[k] || (5 - Number(k));
+    return ' ';
+  });
+  rest = rest.replace(/\s(hôm nay|ngày kia|mai|thứ [2-7]|chủ nhật|cn)(?=\s)/i, (m, g) => {
+    const k = g.toLowerCase();
+    if (k === 'hôm nay') out.day = TODAY;
+    else if (k === 'mai') out.day = TODAY + 1;
+    else if (k === 'ngày kia') out.day = TODAY + 2;
+    else {
+      const target = (k === 'cn' || k === 'chủ nhật') ? 0 : Number(k.slice(-1)) - 1;
+      let ahead = (target - dowOf(TODAY) + 7) % 7;
+      if (ahead === 0) ahead = 7;
+      out.day = TODAY + ahead;
+    }
+    return ' ';
+  });
+  rest = rest.replace(/\s(\d{1,2})(?:h(\d{2})?|:(\d{2}))(?=\s)/i, (m, h, m1, m2) => { out.time = pad(h) + ':' + (m1 || m2 || '00'); return ' '; });
+  out.title = rest.replace(/\s+/g, ' ').trim();
+  if (out.time && out.day == null) out.day = TODAY;
+  return out;
+}
+
+const DEFAULTS = {
+  screen: 'dash', projectId: 'web', projectView: 'kanban', themeMode: 'light', lang: 'vi',
+  openTaskId: null, qaOpen: false, qaText: 'Gọi khách hàng Minh Phát mai 9h @website #khách-hàng !cao',
+  running: true, remaining: 1104, session: 3,
+  done: { t4: true, t5: true, t12: true, t13: true },
+  subDone: { 't2-0': true, 't3-0': true, 't3-1': true },
+  colOver: {}, extra: [], toast: '', tray: true, sound: true,
+};
+
+class Component extends DCLogic {
+  S() { return Object.assign({}, DEFAULTS, this.state || {}); }
+
+  componentDidMount() {
+    this._iv = setInterval(() => {
+      const s = this.S();
+      if (s.running && s.remaining > 0) this.setState({ remaining: s.remaining - 1 });
+      else if (s.running && s.remaining === 0) this.setState({ running: false, toast: 'Hết phiên Pomodoro. Nghỉ 5 phút nhé!' });
+    }, 1000);
+  }
+
+  componentWillUnmount() { clearInterval(this._iv); clearTimeout(this._tt); }
+
+  renderVals() {
+    const s = this.S();
+    const th = s.themeMode === 'dark' ? 'dark' : 'light';
+    const set = (patch) => this.setState(patch);
+    const stop = (e) => { if (e && e.stopPropagation) e.stopPropagation(); };
+    const pal = (k) => ({ dot: PAL[k].dot, bg: PAL[k][th][0], fg: PAL[k][th][1] });
+    const tone = (k) => ({ bg: TONE[k][th][0], fg: TONE[k][th][1] });
+    const flash = (msg) => { clearTimeout(this._tt); this._tt = setTimeout(() => this.setState({ toast: '' }), 2600); return msg; };
+    const tasks = TASKS.concat(s.extra);
+    const isDone = (t) => !!s.done[t.id];
+    const colsOf = (pid) => COLS[pid] || COLS.default;
+    const colOf = (t) => {
+      const cols = colsOf(t.p);
+      if (isDone(t)) return cols[cols.length - 1].id;
+      const c = cols.find((x) => x.id === (s.colOver[t.id] || t.col));
+      return (!c || c.group === 'done') ? cols[0].id : c.id;
+    };
+    const isOverdue = (t) => t.day != null && t.day < TODAY && !isDone(t);
+    const go = (screen, extra) => () => set(Object.assign({ screen, openTaskId: null }, extra || {}));
+
+    const row = (t) => {
+      const p = pal(ALLP[t.p].pal);
+      const done = isDone(t);
+      const od = isOverdue(t);
+      const pr = PRIO[t.prio];
+      const subs = t.subs || [];
+      const sd = subs.filter((_, i) => s.subDone[t.id + '-' + i]).length;
+      const cols = colsOf(t.p);
+      const ci = cols.findIndex((c) => c.id === colOf(t));
+      return {
+        id: t.id, title: t.title, done, notDone: !done, tCls: done ? 't done' : 't',
+        dot: p.dot, circBg: done ? p.dot : 'transparent', chipBg: p.bg, chipFg: p.fg, projName: ALLP[t.p].name,
+        overdue: od, rowBg: od ? 'var(--overdueRow)' : 'transparent',
+        due: od ? 'Quá hạn ' + t.day + '/9' : (t.day === TODAY ? t.time : dueText(t.day, t.time)),
+        dueFg: od ? 'var(--danger)' : 'var(--muted)', hasDue: t.day != null,
+        hasPrio: !!pr && !done, prioLabel: pr ? pr.label : '', prioBg: pr ? tone(pr.tone).bg : '', prioFg: pr ? tone(pr.tone).fg : '',
+        hasSub: subs.length > 0, subInfo: sd + '/' + subs.length + ' việc con',
+        hasTags: (t.tags || []).length > 0, tags: (t.tags || []).map((x) => '#' + x).join('  '),
+        canAdvance: !done && ci < cols.length - 1, nextCol: ci < cols.length - 1 ? cols[ci + 1].name : '',
+        toggle: (e) => { stop(e); set({ done: Object.assign({}, s.done, { [t.id]: !done }) }); },
+        advance: (e) => {
+          stop(e);
+          const next = cols[ci + 1];
+          if (!next) return;
+          if (next.group === 'done') set({ done: Object.assign({}, s.done, { [t.id]: true }) });
+          else set({ colOver: Object.assign({}, s.colOver, { [t.id]: next.id }) });
+        },
+        open: () => set({ openTaskId: t.id }),
+      };
+    };
+
+    // Sidebar
+    const todayTasks = tasks.filter((t) => t.day === TODAY || isOverdue(t));
+    const todayDone = todayTasks.filter(isDone).length;
+    const todayLeft = todayTasks.length - todayDone;
+    const inboxTasks = tasks.filter((t) => t.p === 'inbox');
+    const upcomingTasks = tasks.filter((t) => t.day != null && t.day > TODAY && !isDone(t)).sort((a, b) => a.day - b.day);
+    const NAV = [
+      ['dash', 'Tổng quan', ICON.dash, 0], ['inbox', 'Hộp thư', ICON.inbox, inboxTasks.filter((t) => !isDone(t)).length],
+      ['today', 'Hôm nay', ICON.today, todayLeft], ['upcoming', 'Sắp tới', ICON.upcoming, upcomingTasks.length],
+      ['calendar', 'Lịch', ICON.cal, 0], ['focus', 'Tập trung', ICON.focus, 0], ['stats', 'Thống kê', ICON.stats, 0],
+    ];
+    const nav = NAV.map(([id, label, icon, badge]) => ({ label, icon, badge, hasBadge: badge > 0, cls: s.screen === id ? 'nav on' : 'nav', go: go(id) }));
+    const projects = PROJECTS.map((p) => ({ name: p.name, dot: PAL[p.pal].dot, cls: s.screen === 'project' && s.projectId === p.id ? 'nav on' : 'nav', go: go('project', { projectId: p.id }) }));
+
+    // Dashboard
+    const C1 = 2 * Math.PI * 44;
+    const weekVals = WEEK.concat([todayDone]);
+    const wMax = Math.max(5, ...weekVals);
+    const weekBars = weekVals.map((v, i) => ({
+      v, h: Math.round((v / wMax) * 80) + 'px', hBig: Math.round((v / wMax) * 150) + 'px',
+      bg: i === 6 ? 'var(--barHot)' : 'var(--bar)', lc: i === 6 ? 'var(--ink)' : 'var(--muted)', label: DOW[i],
+    }));
+    const upRow = (t) => { const p = pal(ALLP[t.p].pal); return { day: t.day, dow: DOW[dowOf(t.day)], title: t.title, sub: ALLP[t.p].name + (t.time ? ' · ' + t.time : ''), bg: p.bg, fg: p.fg, open: () => set({ openTaskId: t.id }) }; };
+    const projStat = (p) => {
+      const ts = tasks.filter((t) => t.p === p.id);
+      const d = ts.filter(isDone).length + p.baseDone;
+      const tot = ts.length + p.baseTotal;
+      return { d, tot, pct: tot ? Math.round((d / tot) * 100) : 0 };
+    };
+    const projTiles = PROJECTS.map((p) => { const st = projStat(p); const c = pal(p.pal); return { name: p.name, pct: st.pct + '%', w: st.pct + '%', bg: c.bg, fg: c.fg, dot: c.dot, go: go('project', { projectId: p.id }) }; });
+
+    // Focus
+    const elapsed = 1500 - s.remaining;
+    const C2 = 2 * Math.PI * 120;
+    const sessionDots = [0, 1, 2, 3].map((i) => ({
+      bg: i < s.session - 1 ? 'var(--focusDot)' : (i === s.session - 1 ? 'var(--surface)' : 'var(--focusDotOff)'),
+      bd: i === s.session - 1 ? 'var(--focusDot)' : 'transparent',
+    }));
+    const sessions = SESSIONS.map((x) => { const p = pal(ALLP[x.p].pal); return Object.assign({}, x, { minsLabel: x.mins + ' phút', bg: p.bg, fg: p.fg, dot: p.dot }); });
+
+    // List screens (Hộp thư / Hôm nay / Sắp tới)
+    let listTitle = '', listSub = '', groups = [];
+    if (s.screen === 'inbox') {
+      listTitle = 'Hộp thư'; listSub = 'Việc ghi nhanh chưa xếp vào dự án. Mở một việc để chọn dự án cho nó.';
+      groups = [{ name: 'Chưa phân loại', rows: inboxTasks.map(row) }];
+    } else if (s.screen === 'today') {
+      listTitle = 'Hôm nay'; listSub = 'Thứ Bảy, 12/9 · ' + todayDone + '/' + todayTasks.length + ' việc đã xong';
+      groups = [
+        { name: 'Quá hạn', rows: tasks.filter(isOverdue).map(row) },
+        { name: 'Hôm nay', rows: tasks.filter((t) => t.day === TODAY).map(row) },
+      ];
+    } else if (s.screen === 'upcoming') {
+      listTitle = 'Sắp tới'; listSub = 'Các việc có hạn trong 14 ngày tới';
+      const days = [...new Set(upcomingTasks.map((t) => t.day))];
+      groups = days.map((d) => ({ name: DOW[dowOf(d)] + ', ' + d + '/9' + (d === TODAY + 1 ? ' · Mai' : ''), rows: upcomingTasks.filter((t) => t.day === d).map(row) }));
+    }
+    groups = groups.filter((g) => g.rows.length > 0).map((g) => Object.assign(g, { count: g.rows.length }));
+
+    // Project
+    const P = ALLP[s.projectId];
+    const pp = pal(P.pal);
+    const pst = projStat(P);
+    const columns = colsOf(P.id).map((c) => {
+      const cards = tasks.filter((t) => t.p === P.id && colOf(t) === c.id).map(row);
+      const g = GROUP[c.group];
+      const gt = tone(g.tone);
+      const arch = c.group === 'done' ? P.baseDone : 0;
+      return { name: c.name, count: cards.length, gLabel: g.label, gBg: gt.bg, gFg: gt.fg, cards, hasArchived: arch > 0, archived: '+ ' + arch + ' việc đã xong trước đó' };
+    });
+    const projRows = tasks.filter((t) => t.p === P.id).sort((a, b) => Number(isDone(a)) - Number(isDone(b))).map(row);
+
+    // Calendar (tuần bắt đầu thứ Hai; 31/8 là thứ Hai)
+    const cells = [];
+    for (let i = 0; i < 35; i++) {
+      const out = i === 0 || i > 30;
+      const num = i === 0 ? 31 : (i > 30 ? i - 30 : i);
+      const items = out ? [] : tasks.filter((t) => t.day === num);
+      cells.push({
+        num, bg: out ? 'transparent' : 'var(--surface)', numFg: out ? 'var(--muted)' : 'var(--ink)',
+        numBg: !out && num === TODAY ? 'var(--btn)' : 'transparent', numInk: !out && num === TODAY ? 'var(--btnInk)' : (out ? 'var(--muted)' : 'var(--ink)'),
+        items: items.slice(0, 3).map((t) => { const p = pal(ALLP[t.p].pal); return { title: t.title, bg: p.bg, fg: p.fg, deco: isDone(t) ? 'line-through' : 'none', open: () => set({ openTaskId: t.id }) }; }),
+        hasMore: items.length > 3, more: '+' + (items.length - 3) + ' việc',
+      });
+    }
+
+    // Stats
+    const overdueCount = tasks.filter(isOverdue).length;
+    const fMax = Math.max(...FOCUS_BY_P.map((x) => x[1]));
+    const focusByP = FOCUS_BY_P.map(([id, m]) => ({ name: ALLP[id].name, dot: PAL[ALLP[id].pal].dot, label: fmtMins(m), w: Math.round((m / fMax) * 100) + '%' }));
+    const C3 = 2 * Math.PI * 54;
+    const kpis = [
+      { label: 'Hoàn thành tuần này', val: String(17 + todayDone), fg: 'var(--ink)' },
+      { label: 'Tỉ lệ đúng hạn', val: '84%', fg: 'var(--ink)' },
+      { label: 'Tập trung tuần này', val: '9g 20p', fg: 'var(--ink)' },
+      { label: 'Đang quá hạn', val: String(overdueCount), fg: overdueCount ? 'var(--danger)' : 'var(--ink)' },
+    ];
+
+    // Settings
+    const themeOpts = [['light', 'Sáng'], ['dark', 'Tối'], ['system', 'Theo hệ thống']].map(([id, label]) => ({ label, cls: s.themeMode === id ? 'on' : '', pick: () => set({ themeMode: id }) }));
+    const langOpts = [['vi', 'Tiếng Việt'], ['en', 'English']].map(([id, label]) => ({ label, cls: s.lang === id ? 'on' : '', pick: () => set({ lang: id }) }));
+
+    // Task drawer
+    const ot = tasks.find((t) => t.id === s.openTaskId);
+    let o = { title: '', projName: '', chipBg: '', chipFg: '', dot: '', colName: '', dueFull: '', reminder: '', subs: [], subsInfo: '', hasSubs: false, desc: '', tracked: '', tagList: [], hasTags: false, prioLabel: '', prioBg: '', prioFg: '', done: false, tCls: 't', circBg: 'transparent', toggle: () => {} };
+    if (ot) {
+      const r = row(ot);
+      const subs = (ot.subs || []).map((x, i) => {
+        const k = ot.id + '-' + i;
+        const d = !!s.subDone[k];
+        return { title: x, deco: d ? 'line-through' : 'none', fg: d ? 'var(--muted)' : 'var(--ink)', bg: d ? r.dot : 'transparent', done: d, toggle: () => set({ subDone: Object.assign({}, s.subDone, { [k]: !d }) }) };
+      });
+      o = Object.assign({}, r, {
+        colName: colsOf(ot.p).find((c) => c.id === colOf(ot)).name,
+        dueFull: ot.day != null ? DOW[dowOf(ot.day)] + ', ' + ot.day + '/9/2026' + (ot.time ? ' · ' + ot.time : '') : 'Chưa đặt hạn',
+        reminder: ot.time ? 'Trước 15 phút' : (ot.day != null ? '09:00 cùng ngày' : 'Không có'),
+        subs, hasSubs: subs.length > 0, subsInfo: subs.filter((x) => x.done).length + '/' + subs.length,
+        desc: ot.desc || 'Chưa có mô tả.', tracked: ot.mins ? fmtMins(ot.mins) : 'Chưa có',
+        tagList: (ot.tags || []).map((x) => ({ label: '#' + x })), hasTags: (ot.tags || []).length > 0,
+        prioLabel: PRIO[ot.prio] ? PRIO[ot.prio].label : 'Không', prioBg: PRIO[ot.prio] ? tone(PRIO[ot.prio].tone).bg : 'var(--surface2)', prioFg: PRIO[ot.prio] ? tone(PRIO[ot.prio].tone).fg : 'var(--muted)',
+      });
+    }
+
+    // Quick-add
+    const q = parseQA(s.qaText);
+    const qaChips = [
+      ['Việc', q.title || '—'],
+      ['Hạn', q.day != null ? dueText(q.day, q.time) : 'Chưa có'],
+      ['Dự án', q.p ? ALLP[q.p].name : 'Hộp thư'],
+      ['Ưu tiên', PRIO[q.prio] ? PRIO[q.prio].label : 'Không'],
+      ['Tag', q.tags.length ? q.tags.map((x) => '#' + x).join(' ') : 'Không'],
+    ].map(([k, v]) => ({ k, v }));
+    const submitQA = () => {
+      if (!q.title) return;
+      const nt = { id: 'n' + (s.extra.length + 1), title: q.title, p: q.p || 'inbox', col: 'todo', prio: q.prio, day: q.day, time: q.time, tags: q.tags, subs: [], desc: '', mins: 0 };
+      set({ extra: s.extra.concat([nt]), qaOpen: false, qaText: '', toast: flash('Đã thêm “' + q.title + '” vào ' + ALLP[nt.p].name) });
+    };
+
+    return {
+      themeClass: th === 'dark' ? 'dark' : '', themeIcon: th === 'dark' ? ICON.sun : ICON.moon,
+      toggleTheme: () => set({ themeMode: th === 'dark' ? 'light' : 'dark' }),
+      nav, projects, settingsCls: s.screen === 'settings' ? 'nav on' : 'nav', goSettings: go('settings'),
+      isDash: s.screen === 'dash', isList: ['inbox', 'today', 'upcoming'].includes(s.screen), isProject: s.screen === 'project',
+      isCalendar: s.screen === 'calendar', isFocus: s.screen === 'focus', isStats: s.screen === 'stats', isSettings: s.screen === 'settings',
+      // dashboard
+      todayRows: todayTasks.map(row), todayDone, todayTotal: todayTasks.length, todayLeftLabel: todayLeft + ' việc còn lại',
+      heroMsg: todayLeft === 0 ? 'Bạn đã xong hết việc hôm nay. Nghỉ ngơi thôi!' : 'Hôm nay có ' + todayTasks.length + ' việc, bạn đã xong ' + todayDone + '. Còn ' + todayLeft + ' việc nữa thôi!',
+      ringDash: (C1 * (todayTasks.length ? todayDone / todayTasks.length : 0)).toFixed(1) + ' ' + C1.toFixed(1),
+      weekBars, weekSum: weekVals.reduce((a, b) => a + b, 0) + ' việc xong', upcomingDash: upcomingTasks.slice(0, 3).map(upRow), projTiles,
+      goToday: go('today'), goFocus: go('focus'), goStats: go('stats'), goUpcoming: go('upcoming'),
+      // focus
+      timerText: pad(Math.floor(s.remaining / 60)) + ':' + pad(s.remaining % 60), running: s.running,
+      playLabel: s.running ? 'Tạm dừng' : (s.remaining === 1500 ? 'Bắt đầu' : 'Tiếp tục'),
+      toggleTimer: () => set({ running: !s.running }), stopTimer: () => set({ running: false, remaining: 1500 }),
+      focusW: ((elapsed / 1500) * 100).toFixed(1) + '%', focusDash: ((C2 * elapsed) / 1500).toFixed(1) + ' ' + C2.toFixed(1),
+      sessionDots, sessionLabel: 'Phiên ' + s.session + '/4', sessions, focusTitle: 'Review thiết kế trang chủ', focusProj: 'Website công ty',
+      openFocusTask: () => set({ openTaskId: 't3' }),
+      // lists
+      listTitle, listSub, groups, hasGroups: groups.length > 0, noGroups: groups.length === 0,
+      // project
+      proj: { name: P.name, dot: pp.dot, bg: pp.bg, fg: pp.fg, pct: pst.pct + '%', info: pst.d + '/' + pst.tot + ' việc đã xong' },
+      isKanban: s.projectView === 'kanban', isProjList: s.projectView !== 'kanban',
+      segK: s.projectView === 'kanban' ? 'on' : '', segL: s.projectView !== 'kanban' ? 'on' : '',
+      setKanban: () => set({ projectView: 'kanban' }), setList: () => set({ projectView: 'list' }),
+      columns, projRows,
+      // calendar
+      cells,
+      // stats
+      kpis, focusByP, onTimeDash: (C3 * 0.84).toFixed(1) + ' ' + C3.toFixed(1),
+      // settings
+      themeOpts, langOpts, trayCls: s.tray ? 'tog on' : 'tog', soundCls: s.sound ? 'tog on' : 'tog',
+      toggleTray: () => set({ tray: !s.tray }), toggleSound: () => set({ sound: !s.sound }),
+      backupNow: () => set({ toast: flash('Đã sao lưu: quanlytask-backup-20260912-1015.db') }),
+      // drawer
+      hasOpen: !!ot, o, closeTask: () => set({ openTaskId: null }), focusOnTask: () => set({ screen: 'focus', openTaskId: null }),
+      // quick-add
+      qaOpen: s.qaOpen, qaText: s.qaText, qaChips, qaTarget: q.p ? ALLP[q.p].name : 'Hộp thư',
+      openQA: () => set({ qaOpen: true }), closeQA: () => set({ qaOpen: false }),
+      onQAChange: (e) => set({ qaText: e.target.value }),
+      onQAKey: (e) => { if (e.key === 'Enter') submitQA(); if (e.key === 'Escape') set({ qaOpen: false }); },
+      submitQA, noop: (e) => stop(e),
+      hasToast: !!s.toast, toast: s.toast,
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,797 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800&amp;display=swap">
+  <style>
+    body { margin: 0; font-family: "Nunito", "Segoe UI", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #5B45C9; } a:hover { color: #43329A; }
+    .app { --bg: #F1F0F7; --surface: #FFFFFF; --surface2: #F6F5FB; --ink: #26233A; --ink2: #4E4868; --muted: #6B6682; --line: #ECEAF3; --hero: #E6DEFF; --heroInk: #6A5BB0; --btn: #2A2540; --btnInk: #FFFFFF; --pill: #EEEBF7; --bar: #DCD2FF; --barHot: #6E56CF; --danger: #B23A26; --dangerBg: #FFE7E2; --warn: #7A5A00; --warnBg: #FFF3C9; --overdueRow: #FFF1EE; --ring: #FFFFFF; --lane: rgba(255, 255, 255, 0.5); --scrim: rgba(38, 35, 58, 0.28); --shadow: 0 1px 2px rgba(38, 35, 58, 0.05); --pop: 0 20px 60px rgba(38, 35, 58, 0.22); font-family: "Nunito", "Segoe UI", system-ui, sans-serif; }
+    .app.dark { --bg: #14121D; --surface: #1D1A29; --surface2: #25213A; --ink: #ECEAF5; --ink2: #C3BFD6; --muted: #9A96B0; --line: #2C2840; --hero: #2C2550; --heroInk: #BBAEFF; --btn: #E6DEFF; --btnInk: #1B1730; --pill: #2C2840; --bar: #3B3263; --barHot: #9B87F5; --danger: #FF9C8A; --dangerBg: #3A1D1A; --warn: #F0D27A; --warnBg: #3A3116; --overdueRow: #2E1C22; --ring: #3A3456; --lane: rgba(255, 255, 255, 0.035); --scrim: rgba(0, 0, 0, 0.55); --shadow: none; --pop: 0 20px 60px rgba(0, 0, 0, 0.5); }
+    .ic { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+    .ic.sm { width: 15px; height: 15px; }
+    .wc { width: 44px; display: flex; align-items: center; justify-content: center; color: var(--muted); }
+    .wc .ic { width: 13px; height: 13px; stroke-width: 1.6; }
+    .nav { display: flex; align-items: center; gap: 12px; height: 38px; padding: 0 14px; border-radius: 14px; font-size: 14px; font-weight: 700; color: var(--ink2); cursor: pointer; }
+    .nav:hover { background: var(--surface2); }
+    .nav.on { background: var(--btn); color: var(--btnInk); }
+    .navcode { margin-left: auto; font-size: 11px; font-weight: 800; color: var(--muted); letter-spacing: 0.04em; }
+    .nav.on .navcode { color: inherit; opacity: 0.8; }
+    .pill { margin-left: auto; min-width: 22px; height: 22px; padding: 0 6px; box-sizing: border-box; border-radius: 11px; background: var(--pill); color: var(--ink2); font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; }
+    .nav.on .pill { background: rgba(255, 255, 255, 0.2); color: inherit; }
+    .sq { width: 12px; height: 12px; border-radius: 4px; flex: none; display: inline-block; }
+    .card { background: var(--surface); border-radius: 22px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; min-width: 0; box-shadow: var(--shadow); }
+    .ct { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 800; }
+    .sub { font-size: 13px; font-weight: 600; color: var(--muted); }
+    .h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.01em; line-height: 1.15; }
+    .lbl { font-size: 12px; font-weight: 800; color: var(--muted); letter-spacing: 0.02em; }
+    .chip { height: 22px; padding: 0 9px; border-radius: 11px; font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+    .chip .ic { width: 13px; height: 13px; stroke-width: 2.4; }
+    .code { font-size: 12px; font-weight: 800; color: var(--muted); letter-spacing: 0.02em; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .av { width: 24px; height: 24px; border-radius: 50%; flex: none; display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 10px; font-weight: 800; letter-spacing: 0.02em; }
+    .av.lg { width: 40px; height: 40px; font-size: 14px; }
+    .t { font-size: 14.5px; font-weight: 700; }
+    .t.done { color: var(--muted); text-decoration: line-through; font-weight: 600; }
+    .tm { font-size: 12.5px; color: var(--muted); font-weight: 600; white-space: nowrap; }
+    .btn { height: 40px; padding: 0 18px; border-radius: 20px; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 800; background: var(--btn); color: var(--btnInk); cursor: pointer; white-space: nowrap; box-sizing: border-box; }
+    .btn.soft { background: var(--surface2); color: var(--ink); }
+    .btn.ghost { background: transparent; color: var(--ink2); box-shadow: inset 0 0 0 1.5px var(--line); }
+    .btn.danger { background: var(--dangerBg); color: var(--danger); }
+    .btn.sm { height: 32px; padding: 0 14px; font-size: 13px; }
+    .btn.off { opacity: 0.45; cursor: not-allowed; }
+    .seg { display: inline-flex; gap: 4px; padding: 4px; background: var(--surface2); border-radius: 14px; }
+    .seg div { height: 30px; padding: 0 12px; border-radius: 10px; display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 800; color: var(--muted); cursor: pointer; }
+    .seg div.on { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
+    .kbd { font-size: 12px; font-weight: 800; background: var(--surface2); color: var(--ink2); border-radius: 8px; padding: 3px 8px; white-space: nowrap; }
+    .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+    .input { height: 40px; border-radius: 12px; background: var(--surface2); color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--line); padding: 0 12px; display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; box-sizing: border-box; min-width: 0; }
+    .input.err { box-shadow: inset 0 0 0 1.5px var(--danger); }
+    .errmsg { font-size: 12px; font-weight: 700; color: var(--danger); }
+    .row { display: flex; align-items: center; gap: 12px; padding: 8px 10px; border-radius: 14px; cursor: pointer; }
+    .row:hover { box-shadow: inset 0 0 0 1.5px var(--line); }
+    .hov { cursor: pointer; transition: transform 0.12s; }
+    .hov:hover { transform: translateY(-1px); }
+    .tog { width: 40px; height: 24px; border-radius: 12px; background: var(--pill); position: relative; cursor: pointer; flex: none; }
+    .tog.on { background: #4DBB7F; }
+    .tog i { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #FFFFFF; }
+    .tog.on i { left: 19px; }
+    .tbl { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    .tbl th { text-align: left; font-size: 12px; font-weight: 800; color: var(--muted); padding: 8px 10px; border-bottom: 1.5px solid var(--line); white-space: nowrap; }
+    .tbl td { padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+    .banner { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 14px; font-size: 13.5px; font-weight: 700; }
+    .scroll { flex: 1; min-height: 0; overflow-y: auto; }
+    *:focus-visible { outline: 2px solid #8C7AE6; outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+    /* ===== SC-5 Chi tiết việc (spec gọn §5–§6): class riêng ===== */
+    .grow { flex: 1; min-width: 0; }
+    .ell { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .inp { height: 40px; width: 100%; border: none; outline: none; border-radius: 12px; background: var(--surface2); color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--line); padding: 0 12px; font-family: inherit; font-size: 14px; font-weight: 700; box-sizing: border-box; min-width: 0; }
+    .inp::placeholder { color: var(--muted); font-weight: 600; }
+    .inp:focus { box-shadow: inset 0 0 0 2px #8C7AE6; }
+    .inp.err { box-shadow: inset 0 0 0 1.5px var(--danger); }
+    textarea.inp { height: 80px; padding: 10px 12px; line-height: 1.5; resize: none; font-weight: 600; display: block; }
+    .ttl { font-size: 21px; font-weight: 800; line-height: 1.3; }
+    .ttl.done { text-decoration: line-through; color: var(--muted); }
+    .pop { position: absolute; z-index: 10; background: var(--surface); border-radius: 18px; box-shadow: var(--pop), inset 0 0 0 1px var(--line); padding: 8px; display: flex; flex-direction: column; gap: 2px; box-sizing: border-box; }
+    .opt { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 700; }
+    .opt:hover { background: var(--surface2); }
+    .opt.on { background: var(--hero); }
+    .optsub { font-size: 12px; font-weight: 600; color: var(--muted); }
+    .hint { font-size: 12px; font-weight: 600; color: var(--muted); }
+    .icbtn { width: 32px; height: 32px; border-radius: 16px; display: inline-flex; align-items: center; justify-content: center; color: var(--muted); cursor: pointer; flex: none; background: var(--surface2); }
+    .icbtn:hover { color: var(--ink); }
+    .xbtn { width: 22px; height: 22px; border-radius: 11px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; color: var(--muted); flex: none; }
+    .xbtn:hover { color: var(--danger); background: var(--dangerBg); }
+    .xbtn .ic { width: 12px; height: 12px; stroke-width: 2.6; }
+    .stdd { height: 30px; padding: 0 8px 0 11px; border-radius: 15px; display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 800; cursor: pointer; white-space: nowrap; }
+    .stdd .ic { width: 14px; height: 14px; stroke-width: 2.4; }
+    .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px 8px; }
+    .cell { display: flex; flex-direction: column; gap: 3px; padding: 7px 10px; border-radius: 12px; min-width: 0; position: relative; }
+    .cell.ed { cursor: pointer; }
+    .cell.ed:hover { background: var(--surface2); }
+    .cl { font-size: 11.5px; font-weight: 800; color: var(--muted); display: flex; align-items: center; gap: 5px; }
+    .cl .ic { width: 12px; height: 12px; }
+    .cv { font-size: 13.5px; font-weight: 700; display: flex; align-items: center; gap: 7px; min-width: 0; }
+    .tabs { display: flex; gap: 2px; border-bottom: 1.5px solid var(--line); }
+    .tab { padding: 10px 9px; font-size: 13.5px; font-weight: 800; color: var(--muted); cursor: pointer; border-bottom: 2.5px solid transparent; margin-bottom: -1.5px; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+    .tab.on { color: var(--ink); border-bottom-color: var(--barHot); }
+    .tab .n { font-size: 11.5px; min-width: 18px; height: 18px; border-radius: 9px; background: var(--pill); display: inline-flex; align-items: center; justify-content: center; padding: 0 5px; box-sizing: border-box; color: var(--ink2); }
+    .hrow { display: flex; align-items: baseline; gap: 10px; padding: 8px 10px; border-radius: 12px; }
+    .chg { font-size: 13.5px; font-weight: 600; color: var(--ink2); line-height: 1.5; }
+    .chg b { font-weight: 800; color: var(--ink); }
+    .cmb { background: var(--surface2); border-radius: 4px 16px 16px 16px; padding: 9px 12px; font-size: 13.5px; font-weight: 600; line-height: 1.5; color: var(--ink2); }
+    .lnk { font-size: 12px; font-weight: 800; color: var(--heroInk); cursor: pointer; }
+    .lnk.danger { color: var(--danger); }
+    .cbx { width: 18px; height: 18px; border-radius: 6px; box-sizing: border-box; border: 2px solid var(--muted); display: flex; align-items: center; justify-content: center; flex: none; cursor: pointer; color: #FFFFFF; }
+    .cbx.on { background: #4DBB7F; border-color: #4DBB7F; }
+    .cbx .ic { width: 11px; height: 11px; stroke-width: 3.4; }
+    .srow { display: flex; align-items: center; gap: 10px; padding: 8px 8px 8px 10px; border-radius: 12px; background: var(--surface2); font-size: 14px; font-weight: 700; }
+    .sdone { color: var(--muted); text-decoration: line-through; }
+    .frow { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 14px; background: var(--surface2); min-width: 0; }
+    .fic { width: 36px; height: 36px; border-radius: 10px; background: var(--surface); color: var(--heroInk); display: flex; align-items: center; justify-content: center; flex: none; font-size: 10px; font-weight: 800; }
+    .dlg { position: absolute; z-index: 41; background: var(--surface); border-radius: 24px; padding: 22px 24px; display: flex; flex-direction: column; gap: 14px; box-shadow: var(--pop); box-sizing: border-box; }
+    .bgrow { display: grid; grid-template-columns: 64px 122px minmax(0, 1fr) 180px 110px; align-items: center; gap: 10px; padding: 10px; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+    .bgrow.head { font-size: 12px; font-weight: 800; color: var(--muted); border-bottom: 1.5px solid var(--line); }
+    .dsc { display: flex; flex-direction: column; gap: 3px; }
+    .dtx { font-size: 13.5px; font-weight: 600; color: var(--ink2); line-height: 1.5; white-space: pre-wrap; max-height: 82px; overflow-y: auto; }
+    .dtx.empty { color: var(--muted); }
+  </style>
+</helmet>
+<div class="app {{themeClass}}" style="position: relative; width: 1280px; height: 860px; display: flex; flex-direction: column; background: var(--bg); color: var(--ink); overflow: hidden;">
+
+  <div style="height: 32px; flex: none; display: flex; justify-content: flex-end;">
+    <div class="wc"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12h14"></path></svg></div>
+    <div class="wc"><svg class="ic" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"></rect></svg></div>
+    <div class="wc"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"></path></svg></div>
+  </div>
+
+  <div style="flex: 1; min-height: 0; display: flex; gap: 14px; padding: 0 14px 14px;">
+    <div style="width: 224px; flex: none; background: var(--surface); border-radius: 24px; padding: 16px 12px; display: flex; flex-direction: column; gap: 3px; box-sizing: border-box; box-shadow: var(--shadow);">
+      <div style="display: flex; align-items: center; gap: 10px; padding: 0 8px 12px;">
+        <div style="width: 30px; height: 30px; border-radius: 10px; background: var(--btn); color: var(--btnInk); display: flex; align-items: center; justify-content: center;"><svg class="ic" style="width: 16px; height: 16px; stroke-width: 3;" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div>
+        <div style="font-size: 16px; font-weight: 800;">Quản lý Task</div>
+      </div>
+      <sc-for list="{{nav}}" as="n" hint-placeholder-count="8">
+        <div class="{{n.cls}}" onClick="{{n.go}}"><svg class="ic" viewBox="0 0 24 24"><path d="{{n.icon}}"></path></svg>{{n.label}}<sc-if value="{{n.hasBadge}}" hint-placeholder-val="{{ false }}"><span class="pill">{{n.badge}}</span></sc-if></div>
+      </sc-for>
+      <div style="padding: 14px 14px 4px; font-size: 12px; font-weight: 800; color: var(--muted); letter-spacing: 0.04em;">DỰ ÁN</div>
+      <sc-for list="{{navProjects}}" as="p" hint-placeholder-count="4">
+        <div class="{{p.cls}}" onClick="{{p.go}}"><span class="sq" style="background: {{p.dot}};"></span><span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{p.name}}</span><span class="navcode">{{p.code}}</span></div>
+      </sc-for>
+      <div class="nav" style="color: var(--muted);" onClick="{{onNewProject}}"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>Dự án mới</div>
+      <div style="margin-top: auto; display: flex; flex-direction: column; gap: 3px;">
+        <div class="{{trashCls}}" onClick="{{goTrash}}"><svg class="ic" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"></path></svg>Thùng rác</div>
+        <div class="{{settingsCls}}" onClick="{{goSettings}}"><svg class="ic" viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"></path></svg>Cài đặt</div>
+      </div>
+    </div>
+
+    <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; align-items: center; gap: 12px; flex: none;">
+        <div style="flex: 1; display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 16px; background: var(--surface); border-radius: 22px; color: var(--muted); font-size: 14px; font-weight: 600; box-shadow: var(--shadow);"><svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.3-4.3"></path></svg>Tìm việc theo mã hoặc tiêu đề…</div>
+        <div onClick="{{toggleTheme}}" title="Đổi giao diện sáng/tối" style="width: 44px; height: 44px; border-radius: 22px; background: var(--surface); color: var(--ink2); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--shadow);"><svg class="ic" viewBox="0 0 24 24"><path d="{{themeIcon}}"></path></svg></div>
+        <div class="btn" style="height: 44px; border-radius: 22px; padding: 0 20px;" onClick="{{onAddTask}}"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>Thêm việc</div>
+      </div>
+
+      <!-- SC-2 · Nền: màn Công việc giản lược; bấm một dòng → mở panel Chi tiết việc (SC-5) -->
+      <div style="display: flex; align-items: flex-end; gap: 12px; padding: 6px 6px 0; flex: none;">
+        <div style="display: flex; flex-direction: column; gap: 4px;"><div class="h1">Công việc</div><div class="sub">{{bgSub}}</div></div>
+      </div>
+      <div class="card scroll" style="padding: 8px 14px; gap: 0;">
+        <div class="bgrow head"><span>Mã</span><span>Trạng thái</span><span>Tiêu đề</span><span>Người phụ trách</span><span>Hạn chót</span></div>
+        <sc-for list="{{bgRows}}" as="r" hint-placeholder-count="6">
+          <div class="bgrow" style="background: {{r.rowBg}}; cursor: pointer; box-shadow: {{r.ring}};" onClick="{{r.open}}">
+            <span class="code">{{r.code}}</span>
+            <span><span class="chip" style="background: {{r.stBg}}; color: {{r.stFg}};"><svg class="ic" viewBox="0 0 24 24"><path d="{{r.stIcon}}"></path></svg>{{r.stLabel}}</span></span>
+            <span class="{{r.tCls}}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{r.title}}</span>
+            <span style="display: flex; align-items: center; gap: 8px; min-width: 0;"><span class="av" style="background: {{r.avBg}}; color: {{r.avInk}};">{{r.avIni}}</span><span class="ell" style="font-weight: 700;">{{r.asgName}}</span><sc-if value="{{r.inactive}}" hint-placeholder-val="{{ false }}"><span class="chip" style="background: var(--warnBg); color: var(--warn); height: 20px; font-size: 11px;">Đã nghỉ</span></sc-if></span>
+            <span class="tm" style="color: {{r.dueFg}};">{{r.due}}</span>
+          </div>
+        </sc-for>
+        <div class="hint" style="padding: 12px 10px;">Bấm một dòng để mở chi tiết việc ở panel bên phải.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SC-5 · spec gọn §5 · Panel Chi tiết việc (bên phải, 560px). Nền làm mờ nhưng vẫn bấm được dòng khác để đổi việc -->
+  <sc-if value="{{hasPanel}}" hint-placeholder-val="{{ true }}">
+    <div style="position: absolute; inset: 0; background: var(--scrim); z-index: 20; pointer-events: none;"></div>
+    <div onClick="{{closePop}}" style="position: absolute; top: 12px; right: 12px; bottom: 12px; width: 560px; background: var(--surface); border-radius: 24px; z-index: 21; display: flex; flex-direction: column; box-shadow: var(--pop); overflow: hidden;">
+
+      <!-- §5 Đầu: mã · dropdown trạng thái (5 trạng thái, chuyển tự do §6) · Sửa (mở SC-4) · Xoá (xác nhận → Thùng rác) · Đóng · tiêu đề -->
+      <div style="flex: none; padding: 16px 20px 12px; display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid var(--line);">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="code" style="height: 30px; padding: 0 12px; border-radius: 15px; background: var(--surface2); color: var(--ink2); display: inline-flex; align-items: center;">{{d.code}}</span>
+          <div style="position: relative;">
+            <div class="stdd" style="background: {{d.st.bg}}; color: {{d.st.fg}};" onClick="{{d.stToggle}}" title="Đổi trạng thái"><svg class="ic" viewBox="0 0 24 24"><path d="{{d.st.icon}}"></path></svg>{{d.st.label}}<svg class="ic" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></div>
+            <sc-if value="{{d.stOpen}}" hint-placeholder-val="{{ false }}">
+              <div class="pop" style="top: 38px; left: 0; width: 320px;" onClick="{{stop}}">
+                <div class="hint" style="padding: 4px 10px 6px; font-weight: 800;">Chuyển sang</div>
+                <sc-for list="{{d.stItems}}" as="o" hint-placeholder-count="5">
+                  <div class="opt {{o.cls}}" onClick="{{o.pick}}"><span class="chip" style="background: {{o.bg}}; color: {{o.fg}};"><svg class="ic" viewBox="0 0 24 24"><path d="{{o.icon}}"></path></svg>{{o.label}}</span><span class="optsub grow">{{o.note}}</span><sc-if value="{{o.sel}}" hint-placeholder-val="{{ false }}"><svg class="ic sm" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></sc-if></div>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+          <div class="btn soft sm" style="margin-left: auto;" onClick="{{d.edit}}"><svg class="ic sm" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4"></path></svg>Sửa</div>
+          <div class="icbtn" title="Xoá việc" onClick="{{d.del}}"><svg class="ic sm" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"></path></svg></div>
+          <div class="icbtn" title="Đóng" onClick="{{closePanel}}"><svg class="ic sm" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"></path></svg></div>
+        </div>
+        <div class="{{d.ttlCls}}">{{d.title}}</div>
+        <!-- §4 Mô tả: chỉ đọc, sửa qua nút Sửa (SC-4) -->
+        <div class="dsc"><span class="cl">Mô tả</span><sc-if value="{{d.hasDesc}}" hint-placeholder-val="{{ true }}"><div class="dtx">{{d.desc}}</div></sc-if><sc-if value="{{d.noDesc}}" hint-placeholder-val="{{ false }}"><div class="dtx empty">Chưa có mô tả</div></sc-if></div>
+      </div>
+
+      <div class="scroll" style="padding: 14px 20px 22px; display: flex; flex-direction: column; gap: 14px;">
+        <!-- §5 Có lý do chờ/huỷ → một dòng ghi chú -->
+        <sc-if value="{{d.hasNote}}" hint-placeholder-val="{{ false }}"><div class="banner" style="background: {{d.noteBg}}; color: {{d.noteFg}};"><svg class="ic" viewBox="0 0 24 24"><path d="{{d.st.icon}}"></path></svg><span class="grow">{{d.noteText}}</span></div></sc-if>
+
+        <!-- §5 Thông tin: Dự án · Người phụ trách · Người tạo · Ưu tiên · Ngày bắt đầu · Hạn chót · Bắt đầu / Kết thúc thực tế (sửa tại chỗ) · Ngày tạo · Cập nhật lần cuối -->
+        <div class="grid2">
+          <div class="cell"><span class="cl">Dự án</span><span class="cv"><span class="sq" style="background: {{d.projDot}};"></span><span class="ell">{{d.projName}}</span><span class="code">{{d.projCode}}</span></span></div>
+          <div class="cell"><span class="cl">Người phụ trách</span><span class="cv"><span class="av" style="background: {{d.asg.bg}}; color: {{d.asg.ink}};">{{d.asg.ini}}</span><span class="ell">{{d.asg.name}}</span><sc-if value="{{d.asg.inactive}}" hint-placeholder-val="{{ false }}"><span class="chip" style="background: var(--warnBg); color: var(--warn); height: 20px; font-size: 11px;">Đã nghỉ</span></sc-if></span></div>
+          <div class="cell"><span class="cl">Người tạo</span><span class="cv"><span class="av" style="background: {{d.cre.bg}}; color: {{d.cre.ink}};">{{d.cre.ini}}</span><span class="ell">{{d.cre.name}}</span><sc-if value="{{d.cre.inactive}}" hint-placeholder-val="{{ false }}"><span class="chip" style="background: var(--warnBg); color: var(--warn); height: 20px; font-size: 11px;">Đã nghỉ</span></sc-if></span></div>
+          <div class="cell"><span class="cl">Ưu tiên</span><span class="cv" style="color: {{d.prio.fg}};"><svg class="ic sm" viewBox="0 0 24 24"><path d="M5 22V4h12l-2 4 2 4H5"></path></svg>{{d.prio.label}}</span></div>
+          <div class="cell"><span class="cl">Ngày bắt đầu</span><span class="cv">{{d.startText}}</span></div>
+          <div class="cell"><span class="cl">Hạn chót</span><span class="cv" style="color: {{d.dueFg}}; flex-wrap: wrap;">{{d.dueText}}<sc-if value="{{d.overdue}}" hint-placeholder-val="{{ false }}"><span class="chip" style="background: var(--dangerBg); color: var(--danger);">{{d.overdueText}}</span></sc-if></span></div>
+          <!-- §5 Bắt đầu / Kết thúc thực tế: bấm để sửa tại chỗ · §7.6 kết thúc ≥ bắt đầu -->
+          <sc-for list="{{d.actual}}" as="a" hint-placeholder-count="2">
+            <div class="cell ed" style="grid-column: {{a.span}};" onClick="{{a.edit}}" title="Bấm để sửa">
+              <span class="cl">{{a.label}}<svg class="ic" style="margin-left: auto;" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4"></path></svg></span>
+              <sc-if value="{{a.view}}" hint-placeholder-val="{{ true }}"><span class="cv">{{a.text}}</span></sc-if>
+              <sc-if value="{{a.editing}}" hint-placeholder-val="{{ false }}">
+                <div style="display: flex; align-items: center; gap: 6px;" onClick="{{a.stop}}"><input class="{{a.inpCls}}" style="height: 32px; font-size: 13px; width: 190px; flex: none;" value="{{a.val}}" onChange="{{a.onText}}" onKeyDown="{{a.onKey}}" placeholder="dd/MM/yyyy HH:mm"><div class="btn soft sm" style="height: 32px; padding: 0 12px;" onClick="{{a.save}}">Lưu</div><div class="btn ghost sm" style="height: 32px; padding: 0 12px;" title="Xoá giá trị" onClick="{{a.clear}}">Xoá giá trị</div><span class="xbtn" style="margin-left: auto;" title="Huỷ sửa" onClick="{{a.cancel}}"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"></path></svg></span></div>
+                <sc-if value="{{a.hasErr}}" hint-placeholder-val="{{ false }}"><span class="errmsg">{{a.err}}</span></sc-if>
+              </sc-if>
+            </div>
+          </sc-for>
+          <div class="cell"><span class="cl">Ngày tạo</span><span class="cv">{{d.createdText}}</span></div>
+          <div class="cell"><span class="cl">Cập nhật lần cuối</span><span class="cv">{{d.updatedText}}</span></div>
+        </div>
+
+        <!-- §5 Tab: Việc con · Bình luận · Tệp · Lịch sử -->
+        <div class="tabs">
+          <sc-for list="{{d.tabs}}" as="tb" hint-placeholder-count="4"><div class="{{tb.cls}}" onClick="{{tb.pick}}">{{tb.label}}<span class="n">{{tb.n}}</span></div></sc-for>
+        </div>
+
+        <!-- Tab Việc con: tick · thêm · xoá (không ghi lịch sử, §7.8) -->
+        <sc-if value="{{d.tabSubs}}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <sc-if value="{{d.hasSubs}}" hint-placeholder-val="{{ true }}"><div style="display: flex; align-items: center; gap: 10px;"><div style="flex: 1; height: 6px; border-radius: 3px; background: var(--pill);"><div style="height: 6px; border-radius: 3px; background: #4DBB7F; width: {{d.subPct}};"></div></div><span class="tm">{{d.subSummary}}</span></div></sc-if>
+            <sc-for list="{{d.subs}}" as="st" hint-placeholder-count="4">
+              <div class="srow"><div class="{{st.cbx}}" onClick="{{st.toggle}}" title="{{st.tip}}"><sc-if value="{{st.done}}" hint-placeholder-val="{{ false }}"><svg class="ic" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></sc-if></div><span class="{{st.tCls}}">{{st.title}}</span><span class="xbtn" title="Xoá việc con" onClick="{{st.remove}}"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"></path></svg></span></div>
+            </sc-for>
+            <sc-if value="{{d.noSubs}}" hint-placeholder-val="{{ false }}"><span class="hint">Chưa có việc con.</span></sc-if>
+            <div style="display: flex; gap: 8px;"><input class="inp" value="{{subText}}" onChange="{{onSubText}}" onKeyDown="{{onSubKey}}" placeholder="Thêm việc con rồi nhấn Enter" style="height: 38px;"><div class="{{d.subAddCls}}" style="height: 38px;" onClick="{{addSub}}">Thêm</div></div>
+          </div>
+        </sc-if>
+
+        <!-- Tab Bình luận: danh sách · thêm (chọn tác giả, mặc định Tôi) · xoá -->
+        <sc-if value="{{d.tabCmts}}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <sc-for list="{{d.cmts}}" as="c" hint-placeholder-count="3">
+              <div style="display: flex; gap: 10px;">
+                <span class="av" style="background: {{c.bg}}; color: {{c.ink}}; margin-top: 2px;">{{c.ini}}</span>
+                <div class="grow" style="display: flex; flex-direction: column; gap: 4px;">
+                  <div style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 13.5px; font-weight: 800;">{{c.author}}</span><span class="tm">{{c.at}}</span><span class="lnk danger" style="margin-left: auto;" onClick="{{c.del}}">Xoá</span></div>
+                  <div class="cmb">{{c.body}}</div>
+                </div>
+              </div>
+            </sc-for>
+            <sc-if value="{{d.noCmts}}" hint-placeholder-val="{{ false }}"><span class="hint">Chưa có bình luận.</span></sc-if>
+            <div style="display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 16px; box-shadow: inset 0 0 0 1.5px var(--line);">
+              <div style="display: flex; align-items: center; gap: 8px; position: relative;">
+                <span class="hint" style="font-weight: 800;">Tác giả</span>
+                <div class="input" style="height: 32px; padding: 0 8px 0 5px; gap: 7px; cursor: pointer; font-size: 13px;" onClick="{{d.authorToggle}}"><span class="av" style="background: {{d.author.bg}}; color: {{d.author.ink}};">{{d.author.ini}}</span><span class="ell">{{d.author.name}}</span><svg class="ic sm" style="color: var(--muted);" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></div>
+                <sc-if value="{{d.authorOpen}}" hint-placeholder-val="{{ false }}">
+                  <div class="pop" style="bottom: 38px; left: 50px; width: 290px;" onClick="{{stop}}">
+                    <sc-for list="{{d.authorItems}}" as="o" hint-placeholder-count="6"><div class="opt {{o.cls}}" onClick="{{o.pick}}"><span class="av" style="background: {{o.bg}}; color: {{o.ink}};">{{o.ini}}</span><div class="grow" style="display: flex; flex-direction: column;"><span class="ell">{{o.name}}</span><span class="optsub ell">{{o.title}}</span></div><sc-if value="{{o.sel}}" hint-placeholder-val="{{ false }}"><svg class="ic sm" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></sc-if></div></sc-for>
+                  </div>
+                </sc-if>
+              </div>
+              <textarea class="inp" style="height: 72px;" value="{{cmText}}" onChange="{{onCmText}}" placeholder="Viết bình luận hoặc ghi lại tiến độ nhân viên báo"></textarea>
+              <div style="display: flex;"><div class="{{d.cmAddCls}}" style="margin-left: auto;" onClick="{{addCmt}}">Thêm bình luận</div></div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- Tab Tệp: danh sách · Mở (ứng dụng mặc định của Windows) · Gỡ -->
+        <sc-if value="{{d.tabFiles}}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <sc-for list="{{d.files}}" as="f" hint-placeholder-count="2">
+              <div class="frow">
+                <div class="fic">{{f.ext}}</div>
+                <div class="grow" style="display: flex; flex-direction: column; gap: 2px;"><span class="ell" style="font-size: 14px; font-weight: 800;">{{f.name}}</span><span class="tm">{{f.meta}}</span></div>
+                <div class="btn soft sm" style="background: var(--surface); padding: 0 12px;" onClick="{{f.open}}">Mở</div>
+                <div class="btn ghost sm" style="padding: 0 12px;" onClick="{{f.remove}}">Gỡ</div>
+              </div>
+            </sc-for>
+            <sc-if value="{{d.noFiles}}" hint-placeholder-val="{{ false }}"><span class="hint">Chưa có tệp đính kèm.</span></sc-if>
+            <span class="hint">Thêm tệp trong form Sửa việc (tối đa 50 MB mỗi tệp).</span>
+          </div>
+        </sc-if>
+
+        <!-- Tab Lịch sử: danh sách phẳng, mới nhất trước (§7.8: việc con và bình luận không ghi) -->
+        <sc-if value="{{d.tabHist}}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <sc-for list="{{d.hist}}" as="h" hint-placeholder-count="6">
+              <div class="hrow" style="background: {{h.bg}};"><span class="tm" style="width: 86px; flex: none; color: var(--ink2); font-weight: 800;">{{h.at}}</span><span class="chg"><sc-if value="{{h.hasDiff}}" hint-placeholder-val="{{ true }}">{{h.label}}: <span style="color: var(--muted);">{{h.old}}</span> → <b>{{h.nw}}</b></sc-if><sc-if value="{{h.hasText}}" hint-placeholder-val="{{ false }}">{{h.text}}</sc-if></span></div>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- §6 Đổi sang Đang chờ / Đã huỷ → hỏi lý do (không bắt buộc) · §5 Xoá → xác nhận → Thùng rác -->
+  <sc-if value="{{hasDlg}}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{dl.cancel}}" style="position: absolute; inset: 0; background: var(--scrim); z-index: 40;"></div>
+    <div class="dlg" style="top: 230px; left: 410px; width: 460px;">
+      <div style="display: flex; align-items: flex-start; gap: 12px;">
+        <div style="width: 40px; height: 40px; border-radius: 14px; flex: none; display: flex; align-items: center; justify-content: center; background: {{dl.icBg}}; color: {{dl.icFg}};"><svg class="ic" viewBox="0 0 24 24"><path d="{{dl.icon}}"></path></svg></div>
+        <div class="grow" style="display: flex; flex-direction: column; gap: 3px;"><div class="ct" style="font-size: 18px;">{{dl.title}}</div><span class="tm" style="white-space: normal;">{{dl.sub}}</span></div>
+      </div>
+      <sc-if value="{{dl.hasBody}}" hint-placeholder-val="{{ false }}"><div class="sub" style="line-height: 1.55; color: var(--ink2);">{{dl.body}}</div></sc-if>
+      <sc-if value="{{dl.hasReason}}" hint-placeholder-val="{{ true }}">
+        <div class="field">
+          <span class="lbl">{{dl.reasonLabel}} <span style="font-weight: 600;">(không bắt buộc)</span></span>
+          <textarea class="inp" value="{{dReason}}" onChange="{{onDReason}}" placeholder="{{dl.reasonPh}}"></textarea>
+        </div>
+      </sc-if>
+      <div style="display: flex; gap: 8px; justify-content: flex-end; padding-top: 2px;"><div class="btn ghost" onClick="{{dl.cancel}}">Huỷ</div><div class="{{dl.okCls}}" onClick="{{dl.ok}}">{{dl.okLabel}}</div></div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{hasToast}}" hint-placeholder-val="{{ false }}">
+    <div style="position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%); z-index: 60; display: flex; align-items: center; gap: 10px; padding: 12px 20px; border-radius: 16px; background: var(--btn); color: var(--btnInk); font-size: 14px; font-weight: 800; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); white-space: nowrap;"><svg class="ic sm" style="stroke-width: 3;" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg>{{toast}}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1280,"height":860}}'>
+// ===== Artboard này thuộc màn hình nào (mục menu được tô sáng) =====
+// Một trong: 'dash' 'tasks' 'employees' 'trash' 'settings' hoặc 'project:web' / 'project:app' / 'project:mkt' / 'project:nb'
+const ACTIVE = 'tasks';
+
+// ===== Ngày giờ mẫu: hôm nay là thứ Bảy 12/09/2026, 10:00 =====
+const TODAY = 12;
+const DOW = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+const dowOf = (d) => (d + 1) % 7; // ngày d của tháng 9/2026
+const pad = (n) => String(n).padStart(2, '0');
+const dmy = (d) => pad(d) + '/09';
+const fmtMins = (m) => { if (!m) return '—'; const h = Math.floor(m / 60); const mm = m % 60; return h ? h + 'g' + (mm ? ' ' + mm + 'p' : '') : mm + 'p'; };
+
+// ===== Icon (một path, lưới 24, nét 2) =====
+const ICON = {
+  dash: 'M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z',
+  tasks: 'M9 6h11M9 12h11M9 18h11M4 5.5l1 1 2-2M4 11.5l1 1 2-2M4 17.5l1 1 2-2',
+  inbox: 'M22 12h-6l-2 3h-4l-2-3H2M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z',
+  today: 'M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM16 2v4M8 2v4M3 10h18M9 16l2 2 4-4',
+  upcoming: 'M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18zM12 7v5l3 2',
+  cal: 'M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM16 2v4M8 2v4M3 10h18',
+  users: 'M9 11a4 4 0 1 0 0-8a4 4 0 0 0 0 8zM2 21v-1a6 6 0 0 1 6-6h2a6 6 0 0 1 6 6v1M16 3.5a4 4 0 0 1 0 7M22 21v-1a6 6 0 0 0-4-5.6',
+  stats: 'M3 3v18h18M7 16v-5M12 16V8M17 16V7',
+  moon: 'M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z',
+  sun: 'M12 8a4 4 0 1 0 0 8a4 4 0 0 0 0-8zM12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4',
+  plus: 'M12 5v14M5 12h14',
+  close: 'M6 6l12 12M18 6 6 18',
+  check: 'M20 6 9 17l-5-5',
+  flag: 'M5 22V4h12l-2 4 2 4H5',
+  clip: 'M21 11.5l-8.6 8.6a5 5 0 0 1-7.1-7.1l8.6-8.6a3.3 3.3 0 0 1 4.7 4.7l-8.6 8.6a1.7 1.7 0 0 1-2.4-2.4l7.9-7.9',
+  chat: 'M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-6.4A8 8 0 1 1 21 12z',
+  history: 'M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5M12 7v5l3 2',
+  edit: 'M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4',
+  alert: 'M12 3 2 20h20L12 3zM12 10v4M12 17v.5',
+  filter: 'M3 5h18l-7 8v6l-4 2v-8L3 5z',
+  more: 'M5 12h.01M12 12h.01M19 12h.01',
+  down: 'm6 9 6 6 6-6',
+  right: 'm9 6 6 6-6 6',
+  left: 'm15 6-6 6 6 6',
+  search: 'M11 4a7 7 0 1 0 0 14a7 7 0 0 0 0-14zM21 21l-4.3-4.3',
+  file: 'M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-6-6zM14 3v6h6',
+  user: 'M12 11a4 4 0 1 0 0-8a4 4 0 0 0 0 8zM4 21v-1a7 7 0 0 1 7-7h2a7 7 0 0 1 7 7v1',
+  clock: 'M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18zM12 7v5l3 2',
+  bell: 'M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10 21a2 2 0 0 0 4 0',
+  trash: 'M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6',
+  copy: 'M9 9h11v11H9zM5 15H4V4h11v1',
+  drag: 'M9 5h.01M15 5h.01M9 12h.01M15 12h.01M9 19h.01M15 19h.01',
+  undo: 'M9 14 4 9l5-5M4 9h11a5 5 0 0 1 0 10h-3',
+};
+
+// ===== Màu =====
+const PAL = { // màu dự án: dot, [nền, chữ] sáng, [nền, chữ] tối
+  sky: { dot: '#5B8DEF', light: ['#DDE8FF', '#1F4E99'], dark: ['#1E2C4A', '#A9C4FF'] },
+  mint: { dot: '#4DBB7F', light: ['#D8F2E3', '#1F6B41'], dark: ['#173A29', '#8FDDB0'] },
+  peach: { dot: '#F28B6E', light: ['#FFE3D9', '#9A3B1E'], dark: ['#43261D', '#FFB59E'] },
+  butter: { dot: '#E5B93A', light: ['#FFF3C9', '#7A5A00'], dark: ['#3A3116', '#F0D27A'] },
+  lilac: { dot: '#8C7AE6', light: ['#ECE6FF', '#4B3A99'], dark: ['#2B2550', '#C7BAFF'] },
+};
+const STATUS = { // trạng thái: chip nền/chữ + icon. Trạng thái dùng chip màu; dự án chỉ dùng ô vuông màu + tên
+  new: { label: 'Mới', light: ['#EEEBF7', '#57536D'], dark: ['#2C2840', '#C3BFD6'], icon: 'M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18z' },
+  in_progress: { label: 'Đang làm', light: ['#DDE8FF', '#1F4E99'], dark: ['#1E2C4A', '#A9C4FF'], icon: 'M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18zM12 3v18' },
+  waiting: { label: 'Đang chờ', light: ['#FFF3C9', '#7A5A00'], dark: ['#3A3116', '#F0D27A'], icon: 'M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18zM10 9v6M14 9v6' },
+  done: { label: 'Hoàn thành', light: ['#D8F2E3', '#1F6B41'], dark: ['#173A29', '#8FDDB0'], icon: 'M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18zM8.5 12.5l2.5 2.5 4.5-5' },
+  cancelled: { label: 'Đã huỷ', light: ['#F1EFF4', '#6B6682'], dark: ['#26232F', '#9A96B0'], icon: 'M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18zM9 9l6 6M15 9l-6 6' },
+};
+const STATUS_ORDER = ['new', 'in_progress', 'waiting', 'done', 'cancelled'];
+const OPEN = ['new', 'in_progress', 'waiting'];
+const PRIO = [ // 0..4; hiển thị: icon cờ + chữ màu, không nền
+  null,
+  { label: 'Thấp', light: '#6B6682', dark: '#9A96B0' },
+  { label: 'Trung bình', light: '#9A6B00', dark: '#F0D27A' },
+  { label: 'Cao', light: '#C4521F', dark: '#FFB59E' },
+  { label: 'Khẩn cấp', light: '#C62828', dark: '#FF9C8A' },
+];
+const AV = ['#6E56CF', '#2F80ED', '#D9622B', '#2E8B57', '#C2527A', '#B7791F', '#0E9AA7', '#7A5AF8', '#E5484D', '#5F6B7A'];
+
+// ===== Dữ liệu mẫu (giống hệt nhau ở mọi artboard) =====
+const EMPLOYEES = [
+  { id: 1, code: 'NV001', name: 'Trần Minh Quân', ini: 'MQ', title: 'Trưởng nhóm', dept: 1, email: 'quan.tran@example.com', phone: '0901 000 001', color: 0, status: 'active', self: true },
+  { id: 2, code: 'NV002', name: 'Lê Thu Hà', ini: 'TH', title: 'Lập trình viên frontend', dept: 1, email: 'ha.le@example.com', phone: '0901 000 002', color: 1, status: 'active' },
+  { id: 3, code: 'NV003', name: 'Phạm Đức Anh', ini: 'ĐA', title: 'Lập trình viên backend', dept: 1, email: 'anh.pham@example.com', phone: '0901 000 003', color: 2, status: 'active' },
+  { id: 4, code: 'NV004', name: 'Nguyễn Ngọc Lan', ini: 'NL', title: 'Nhà thiết kế UI/UX', dept: 2, email: 'lan.nguyen@example.com', phone: '0901 000 004', color: 4, status: 'active' },
+  { id: 5, code: 'NV005', name: 'Võ Hoàng Nam', ini: 'HN', title: 'Kiểm thử phần mềm', dept: 1, email: 'nam.vo@example.com', phone: '0901 000 005', color: 3, status: 'active' },
+  { id: 6, code: 'NV006', name: 'Đặng Mai Phương', ini: 'MP', title: 'Chuyên viên kinh doanh', dept: 3, email: 'phuong.dang@example.com', phone: '0901 000 006', color: 5, status: 'active' },
+  { id: 7, code: 'NV007', name: 'Bùi Quốc Việt', ini: 'QV', title: 'Lập trình viên', dept: 1, email: 'viet.bui@example.com', phone: '0901 000 007', color: 9, status: 'inactive', inactiveSince: '31/08/2026' },
+];
+const PROJECTS = [
+  { id: 'vc', code: 'VC', name: 'Việc chung', pal: 'lilac', nextNo: 2, baseDone: 0, baseTotal: 0 },
+  { id: 'web', code: 'WEB', name: 'Website công ty', pal: 'sky', nextNo: 16, baseDone: 7, baseTotal: 7 },
+  { id: 'app', code: 'APP', name: 'Ứng dụng đặt lịch', pal: 'mint', nextNo: 10, baseDone: 3, baseTotal: 4 },
+  { id: 'mkt', code: 'MKT', name: 'Chiến dịch tháng 10', pal: 'peach', nextNo: 5, baseDone: 0, baseTotal: 0 },
+  { id: 'nb', code: 'NB', name: 'Nội bộ', pal: 'butter', nextNo: 7, baseDone: 2, baseTotal: 2 },
+];
+// baseDone/baseTotal: task cũ đã xong không liệt kê chi tiết, dùng cho % tiến độ dự án
+const COLUMNS = { // cột Kanban: mặc định 5 cột theo trạng thái; WEB có thêm cột tuỳ chỉnh "Review" thuộc trạng thái Đang làm
+  default: [
+    { id: 'c-new', name: 'Mới', status: 'new' }, { id: 'c-prog', name: 'Đang làm', status: 'in_progress' },
+    { id: 'c-wait', name: 'Đang chờ', status: 'waiting' }, { id: 'c-done', name: 'Hoàn thành', status: 'done' },
+    { id: 'c-cancel', name: 'Đã huỷ', status: 'cancelled', collapsed: true },
+  ],
+};
+// Ngày trong tháng 9/2026 dạng số (15 = 15/09). created/aStart/aEnd/completed: chuỗi hiển thị "dd/mm hh:mm".
+const TASKS = [
+  { id: 'web12', code: 'WEB-12', title: 'Hoàn thiện giao diện trang chủ', p: 'web', col: 'c-prog', status: 'in_progress', prio: 3, asg: 2, cre: 1, start: 8, due: 15, time: '', est: 960, aStart: '08/09 09:10', aEnd: '', reason: '', tags: ['giao-diện'], subs: [['Header và menu', true], ['Banner có video nền', false], ['Khối dịch vụ', true], ['Footer', false]], comments: 3, files: 2, created: '05/09 14:20', updated: '12/09 08:20', via: 'manual', desc: 'Hoàn thiện trang chủ theo bản thiết kế v2: header, banner có video nền, khối dịch vụ, footer. Chạy tốt trên Chrome, Edge, Safari.' },
+  { id: 'web13', code: 'WEB-13', title: 'Tích hợp form liên hệ với email', p: 'web', col: 'c-new', status: 'new', prio: 2, asg: 3, cre: 1, start: 14, due: 18, time: '', est: 360, aStart: '', aEnd: '', reason: '', tags: ['backend'], subs: [], comments: 0, files: 0, created: '07/09 09:00', updated: '10/09 09:00', via: 'manual', desc: 'Form gửi email về hộp thư kinh doanh, có chống spam.' },
+  { id: 'web14', code: 'WEB-14', title: 'Duyệt logo mới với khách hàng', p: 'web', col: 'c-wait', status: 'waiting', prio: 2, asg: 4, cre: 6, start: 9, due: 16, time: '', est: 120, aStart: '09/09 14:00', aEnd: '', reason: 'Chờ khách phản hồi 3 phương án gửi ngày 11/09', tags: ['thiết-kế'], subs: [], comments: 1, files: 3, created: '08/09 11:30', updated: '11/09 14:30', via: 'manual', desc: '' },
+  { id: 'web15', code: 'WEB-15', title: 'Kiểm thử trên trình duyệt Safari', p: 'web', col: 'c-new', status: 'new', prio: 2, asg: 5, cre: 1, start: null, due: 19, time: '', est: 240, aStart: '', aEnd: '', reason: '', tags: ['kiểm-thử'], subs: [], comments: 0, files: 0, created: '11/09 16:05', updated: '11/09 16:05', via: 'manual', desc: '' },
+  { id: 'web9', code: 'WEB-9', title: 'Tối ưu tốc độ tải trang', p: 'web', col: 'c-new', status: 'new', prio: 2, asg: null, cre: 1, start: null, due: 20, time: '', est: 480, aStart: '', aEnd: '', reason: '', tags: ['hiệu-năng'], subs: [], comments: 0, files: 0, created: '28/08 15:40', updated: '28/08 15:40', via: 'manual', desc: '' },
+  { id: 'web10', code: 'WEB-10', title: 'Dựng khung trang chủ', p: 'web', col: 'c-done', status: 'done', prio: 3, asg: 2, cre: 1, start: 1, due: 5, time: '', est: 1200, aStart: '01/09 08:30', aEnd: '04/09 17:45', completed: '04/09 17:45', reason: '', tags: ['giao-diện'], subs: [], comments: 2, files: 0, created: '29/08 10:00', updated: '04/09 17:45', via: 'manual', desc: '' },
+  { id: 'web11', code: 'WEB-11', title: 'Viết nội dung trang Giới thiệu', p: 'web', col: 'c-cancel', status: 'cancelled', prio: 1, asg: 6, cre: 1, start: null, due: 10, time: '', est: 180, aStart: '', aEnd: '', reason: 'Khách tự cung cấp nội dung', tags: ['nội-dung'], subs: [], comments: 0, files: 0, created: '02/09 09:15', updated: '07/09 10:00', via: 'manual', desc: '' },
+  { id: 'app7', code: 'APP-7', title: 'Thiết kế luồng đặt lịch khám', p: 'app', col: 'c-prog', status: 'in_progress', prio: 3, asg: 4, cre: 1, start: 9, due: 13, time: '', est: 720, aStart: '09/09 08:45', aEnd: '', reason: '', tags: ['thiết-kế'], subs: [['Luồng chọn bác sĩ', true], ['Luồng chọn giờ', false], ['Màn xác nhận', false]], comments: 1, files: 0, created: '04/09 10:20', updated: '10/09 15:20', via: 'manual', desc: '' },
+  { id: 'app8', code: 'APP-8', title: 'Xây dựng API tạo lịch hẹn', p: 'app', col: 'c-prog', status: 'in_progress', prio: 4, asg: 3, cre: 1, start: 7, due: 11, time: '', est: 1440, aStart: '07/09 13:30', aEnd: '', reason: '', tags: ['backend'], subs: [['Tạo lịch hẹn', true], ['Kiểm tra trùng lịch', false]], comments: 2, files: 1, created: '05/09 09:00', updated: '12/09 08:05', via: 'manual', desc: 'API REST tạo, sửa, huỷ lịch hẹn; kiểm tra trùng lịch bác sĩ.' },
+  { id: 'app9', code: 'APP-9', title: 'Viết test cho API lịch hẹn', p: 'app', col: 'c-new', status: 'new', prio: 3, asg: 5, cre: 3, start: null, due: 17, time: '', est: 480, aStart: '', aEnd: '', reason: '', tags: ['kiểm-thử'], subs: [], comments: 0, files: 0, created: '11/09 10:30', updated: '11/09 10:30', via: 'manual', desc: '' },
+  { id: 'app6', code: 'APP-6', title: 'Chốt yêu cầu với khách hàng', p: 'app', col: 'c-done', status: 'done', prio: 3, asg: 1, cre: 1, start: 3, due: 6, time: '', est: 240, aStart: '03/09 09:00', aEnd: '08/09 11:00', completed: '08/09 11:00', reason: '', tags: [], subs: [], comments: 4, files: 2, created: '01/09 08:00', updated: '08/09 11:00', via: 'manual', desc: '' },
+  { id: 'mkt3', code: 'MKT-3', title: 'Lên kế hoạch nội dung tháng 10', p: 'mkt', col: 'c-prog', status: 'in_progress', prio: 2, asg: 6, cre: 1, start: 10, due: 20, time: '', est: 600, aStart: '10/09 09:30', aEnd: '', reason: '', tags: ['nội-dung'], subs: [], comments: 0, files: 1, created: '09/09 15:00', updated: '10/09 09:30', via: 'manual', desc: '' },
+  { id: 'mkt4', code: 'MKT-4', title: 'Thiết kế banner quảng cáo Facebook', p: 'mkt', col: 'c-new', status: 'new', prio: 2, asg: 4, cre: 6, start: null, due: 22, time: '', est: 300, aStart: '', aEnd: '', reason: '', tags: ['thiết-kế'], subs: [], comments: 0, files: 0, created: '11/09 11:00', updated: '11/09 11:00', via: 'manual', desc: '' },
+  { id: 'mkt2', code: 'MKT-2', title: 'Báo giá quảng cáo cho khách Minh Phát', p: 'mkt', col: 'c-wait', status: 'waiting', prio: 3, asg: 6, cre: 1, start: 9, due: 12, time: '', est: 120, aStart: '10/09 14:00', aEnd: '', reason: 'Chờ giám đốc duyệt ngân sách', tags: ['khách-hàng'], subs: [], comments: 1, files: 1, created: '09/09 09:40', updated: '11/09 09:15', via: 'manual', desc: '' },
+  { id: 'nb5', code: 'NB-5', title: 'Đánh giá hiệu suất quý 3', p: 'nb', col: 'c-new', status: 'new', prio: 3, asg: 1, cre: 1, start: 21, due: 30, time: '', est: 900, aStart: '', aEnd: '', reason: '', tags: [], subs: [], comments: 0, files: 0, created: '03/09 14:30', updated: '03/09 14:30', via: 'manual', desc: '' },
+  { id: 'nb4', code: 'NB-4', title: 'Gia hạn bản quyền phần mềm thiết kế', p: 'nb', col: 'c-new', status: 'new', prio: 4, asg: 1, cre: 4, start: null, due: 10, time: '', est: 60, aStart: '', aEnd: '', reason: '', tags: [], subs: [], comments: 0, files: 0, created: '03/09 10:00', updated: '03/09 10:00', via: 'manual', desc: '' },
+  { id: 'nb3', code: 'NB-3', title: 'Bàn giao thiết bị của Việt', p: 'nb', col: 'c-done', status: 'done', prio: 2, asg: 5, cre: 1, start: null, due: 2, time: '', est: 120, aStart: '01/09 09:00', aEnd: '01/09 16:30', completed: '01/09 16:30', reason: '', tags: [], subs: [], comments: 0, files: 1, created: '29/08 17:00', updated: '01/09 16:30', via: 'manual', desc: '' },
+  { id: 'nb6', code: 'NB-6', title: 'Đặt phòng họp cho buổi review sprint', p: 'nb', col: 'c-new', status: 'new', prio: 2, asg: null, cre: 1, start: null, due: 15, time: '', est: 0, aStart: '', aEnd: '', reason: '', tags: [], subs: [], comments: 0, files: 0, created: '12/09 07:50', updated: '12/09 07:50', via: 'manual', desc: '' },
+  { id: 'vc1', code: 'VC-1', title: 'Chuẩn bị tài liệu họp giao ban tuần', p: 'vc', col: 'c-new', status: 'new', prio: 2, asg: 1, cre: 1, start: null, due: 14, time: '', est: 0, aStart: '', aEnd: '', reason: '', tags: [], subs: [], comments: 0, files: 0, created: '11/09 17:30', updated: '11/09 17:30', via: 'manual', desc: '' },
+];
+const COMMENTS = [
+  { task: 'web12', author: 2, at: '09/09 17:05', body: 'Đã dựng xong header và menu, đang làm phần banner.' },
+  { task: 'web12', author: 1, at: '10/09 16:30', body: 'Khách muốn banner có video nền, cần ước lượng lại thời gian.' },
+  { task: 'web12', author: 2, at: '11/09 10:12', body: 'Ước lượng thêm 4 giờ cho phần video nền.', edited: '11/09 10:20' },
+  { task: 'app8', author: 3, at: '11/09 18:10', body: 'Còn thiếu phần kiểm tra trùng lịch, cần thêm 1 ngày.' },
+  { task: 'app8', author: 1, at: '12/09 08:05', body: 'Đã báo khách lùi buổi demo sang thứ Hai 14/09.' },
+  { task: 'app7', author: 4, at: '10/09 15:20', body: 'Xong luồng chọn bác sĩ, còn luồng chọn giờ và màn xác nhận.' },
+];
+const ATTACHMENTS = [
+  { task: 'web12', name: 'trang-chu-v2.fig', size: '2,4 MB', at: '11/09 08:45', kind: 'Figma' },
+  { task: 'web12', name: 'yeu-cau-khach-hang.pdf', size: '380 KB', at: '05/09 14:22', kind: 'PDF' },
+  { task: 'app8', name: 'api-lich-hen.postman.json', size: '46 KB', at: '10/09 11:00', kind: 'JSON' },
+];
+// Lịch sử WEB-12, mới nhất trước. src: form | detail | kanban | quick_add | bulk | import | system
+const HISTORY_WEB12 = [
+  { at: '12/09 08:20', src: 'Chi tiết task', items: [['field_changed', 'Ưu tiên', 'Trung bình', 'Cao']] },
+  { at: '11/09 09:00', src: 'Chi tiết task', items: [['subtask_checked', 'Việc con', '', 'Khối dịch vụ']] },
+  { at: '11/09 08:45', src: 'Chi tiết task', items: [['attachment_added', 'Tệp', '', 'trang-chu-v2.fig (2,4 MB)']] },
+  { at: '10/09 16:30', src: 'Chi tiết task', items: [['comment_added', 'Bình luận', '', 'Khách muốn banner có video nền…']] },
+  { at: '09/09 10:02', src: 'Chi tiết task', items: [['field_changed', 'Hạn chót', '12/09', '15/09'], ['field_changed', 'Ước lượng', '12g', '16g']] },
+  { at: '09/09 09:30', src: 'Chi tiết task', items: [['subtask_checked', 'Việc con', '', 'Header và menu']] },
+  { at: '08/09 09:10', src: 'Kanban', items: [['status_changed', 'Trạng thái', 'Mới', 'Đang làm'], ['field_changed', 'Bắt đầu thực tế', '—', '08/09 09:10']] },
+  { at: '05/09 14:22', src: 'Chi tiết task', items: [['attachment_added', 'Tệp', '', 'yeu-cau-khach-hang.pdf (380 KB)']] },
+  { at: '05/09 14:20', src: 'Form tạo việc', items: [['created', '', '', 'Tạo việc · Người phụ trách: Lê Thu Hà · Người tạo: Trần Minh Quân · Hạn 12/09 · Ưu tiên Trung bình · 4 việc con']] },
+];
+ // CN 06/09 … T7 12/09
+
+// ===== State mặc định: phần chung + phần riêng của màn hình =====
+const DEFAULTS = { themeMode: 'light', toast: '' };
+// ===== SC-5 · spec gọn §5–§6: hằng và hàm riêng =====
+const ROW_IDS = ['web12', 'app8', 'web14', 'web9', 'web11', 'web10']; // các dòng của bảng nền
+const SELF = EMPLOYEES.find((e) => e.self);
+const CUM = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+const T_RE = /^(\d{1,2})\/(\d{1,2})(?:\/(\d{4}))?\s+(\d{1,2}):(\d{2})$/; // 'dd/mm hh:mm' (dữ liệu mẫu, năm 2026) hoặc 'dd/MM/yyyy HH:mm'
+const FULL_RE = /^\d{1,2}\/\d{1,2}\/\d{4}\s+\d{1,2}:\d{2}$/; // ô sửa tại chỗ: phải nhập đủ năm
+const toMin = (str) => { // → phút; sai định dạng → null
+  const m = T_RE.exec(String(str || '').trim());
+  if (!m) return null;
+  const dd = +m[1]; const mo = +m[2]; const yy = m[3] ? +m[3] : 2026; const hh = +m[4]; const mi = +m[5];
+  if (mo < 1 || mo > 12 || dd < 1 || dd > 31 || hh > 23 || mi > 59 || yy < 2000) return null;
+  return ((yy - 2026) * 365 + CUM[mo - 1] + dd) * 1440 + hh * 60 + mi;
+};
+const fmtFull = (str) => { const m = T_RE.exec(String(str || '').trim()); return m ? pad(+m[1]) + '/' + pad(+m[2]) + '/' + (m[3] || '2026') + ' ' + pad(+m[4]) + ':' + m[5] : ''; }; // → 'dd/MM/yyyy HH:mm'
+const extOf = (n) => n.split('.').pop().slice(0, 4).toUpperCase();
+const dayText = (d) => (d == null ? '—' : dmy(d) + '/2026'); // ngày thuần 'dd/MM/yyyy'
+// Giá trị trong Lịch sử (§7): trống → "(trống)"; ngày 'dd/MM/yyyy'; ngày giờ 'dd/MM/yyyy HH:mm'
+const histVal = (label, v) => {
+  if (!v || v === '—') return '(trống)';
+  if (label === 'Bắt đầu thực tế' || label === 'Kết thúc thực tế') return fmtFull(v) || v;
+  if ((label === 'Ngày bắt đầu' || label === 'Hạn chót') && /^\d{2}\/\d{2}$/.test(v)) return v + '/2026';
+  return v;
+};
+// Lịch sử gốc (§7.8), mới nhất trước: WEB-12 lấy từ HISTORY_WEB12 (bỏ việc con, bình luận, ước lượng); việc khác sinh tối thiểu từ dữ liệu mẫu
+function baseHistory(t) {
+  const out = [];
+  if (t.id === 'web12') {
+    HISTORY_WEB12.forEach((b) => b.items.forEach((it) => {
+      if (it[0] === 'created') out.push({ at: b.at, text: 'Tạo việc' });
+      else if (it[0] === 'attachment_added') out.push({ at: b.at, text: 'Thêm tệp: ' + it[3].replace(/ \(.*\)$/, '') }); // chỉ tên tệp
+      else if ((it[0] === 'field_changed' || it[0] === 'status_changed') && it[1] !== 'Ước lượng') out.push({ at: b.at, label: it[1], old: it[2], nw: it[3] });
+    }));
+    out.push({ at: '10/09 16:40', text: 'Mô tả: đã sửa' }); // minh hoạ dòng đổi Mô tả (§7): sau khi khách muốn banner có video nền
+    return out.sort((a, b) => toMin(b.at) - toMin(a.at));
+  }
+  out.push({ at: t.created, text: 'Tạo việc' });
+  ATTACHMENTS.filter((a) => a.task === t.id).forEach((a) => out.push({ at: a.at, text: 'Thêm tệp: ' + a.name }));
+  if (t.aStart) out.push({ at: t.aStart, label: 'Trạng thái', old: 'Mới', nw: 'Đang làm' }, { at: t.aStart, label: 'Bắt đầu thực tế', old: '—', nw: t.aStart });
+  const prev = t.aStart ? 'Đang làm' : 'Mới';
+  if (t.status === 'waiting' || t.status === 'cancelled') out.push({ at: t.updated, label: 'Trạng thái', old: prev, nw: STATUS[t.status].label + (t.reason ? ' (lý do: ' + t.reason + ')' : '') });
+  if (t.status === 'done') out.push({ at: t.aEnd, label: 'Trạng thái', old: prev, nw: 'Hoàn thành' }, { at: t.aEnd, label: 'Kết thúc thực tế', old: '—', nw: t.aEnd });
+  return out.sort((a, b) => toMin(b.at) - toMin(a.at));
+}
+const SCREEN_DEFAULTS = {
+  openId: 'web12', tab: 'subs', pop: null,
+  ov: {}, addHist: {}, sb: {}, cm: {}, fl: {}, deleted: {}, clock: 0,
+  subText: '', cmText: '', cmAuthor: SELF.id, ae: null, aeText: '', aeErr: '',
+  dlg: null, dTarget: null, dReason: '',
+};
+
+class Component extends DCLogic {
+  S() { return Object.assign({}, DEFAULTS, SCREEN_DEFAULTS, this.state || {}); }
+
+  componentWillUnmount() { clearTimeout(this._tt); }
+
+  helpers(s) {
+    const th = s.themeMode === 'dark' ? 'dark' : 'light';
+    const allP = PROJECTS;
+    const proj = (id) => allP.find((p) => p.id === id);
+    const emp = (id) => EMPLOYEES.find((e) => e.id === id) || null;
+    const pal = (k) => ({ dot: PAL[k].dot, bg: PAL[k][th][0], fg: PAL[k][th][1] });
+    const status = (k) => ({ key: k, label: STATUS[k].label, bg: STATUS[k][th][0], fg: STATUS[k][th][1], icon: STATUS[k].icon });
+    const prio = (n) => (PRIO[n] ? { label: PRIO[n].label, fg: PRIO[n][th], has: true } : { label: 'Không', fg: 'var(--muted)', has: false });
+    const person = (id) => {
+      const e = emp(id);
+      if (!e) return { name: 'Chưa giao', ini: '?', bg: 'var(--pill)', ink: 'var(--muted)', inactive: false, has: false, title: '' };
+      return { name: e.self ? e.name + ' (Tôi)' : e.name, short: e.name, ini: e.ini, bg: AV[e.color], ink: '#FFFFFF', inactive: e.status === 'inactive', has: true, title: e.title };
+    };
+    const isOpen = (t) => OPEN.includes(t.status);
+    const isOverdue = (t) => isOpen(t) && t.due != null && t.due < TODAY;
+    const dueText = (t) => {
+      if (t.due == null) return '';
+      const d = t.due === TODAY ? 'Hôm nay' : (t.due === TODAY + 1 ? 'Mai' : DOW[dowOf(t.due)] + ' ' + dmy(t.due));
+      return t.time ? d + ' · ' + t.time : d;
+    };
+    const overdueDays = (t) => (isOverdue(t) ? Math.max(1, TODAY - t.due) : 0);
+    const flash = (msg) => { clearTimeout(this._tt); this._tt = setTimeout(() => this.setState({ toast: '' }), 2600); return msg; };
+    const set = (patch) => this.setState(patch);
+    const stop = (e) => { if (e && e.stopPropagation) e.stopPropagation(); };
+    return { th, proj, emp, pal, status, prio, person, isOpen, isOverdue, dueText, overdueDays, flash, set, stop };
+  }
+
+  renderVals() {
+    const s = this.S();
+    const H = this.helpers(s);
+    const openCount = (pred) => TASKS.filter((t) => H.isOpen(t) && pred(t)).length;
+    const NAV = [
+      ['dash', 'Tổng quan', ICON.dash, 0],
+      ['tasks', 'Công việc', ICON.tasks, 0],
+      ['employees', 'Nhân viên', ICON.users, 0],
+    ];
+    const nav = NAV.map(([id, label, icon, badge]) => ({
+      label, icon, badge, hasBadge: badge > 0, cls: ACTIVE === id ? 'nav on' : 'nav',
+      go: () => H.set({ toast: H.flash('Màn “' + label + '” nằm ở artboard riêng trên canvas') }),
+    }));
+    const navProjects = PROJECTS.map((p) => ({
+      name: p.name, code: p.code, dot: PAL[p.pal].dot, cls: ACTIVE === 'project:' + p.id ? 'nav on' : 'nav',
+      go: () => H.set({ toast: H.flash('Dự án nằm ở artboard “Dự án — Kanban” trên canvas') }),
+    }));
+    const shell = {
+      themeClass: H.th === 'dark' ? 'dark' : '', themeIcon: H.th === 'dark' ? ICON.sun : ICON.moon,
+      toggleTheme: () => H.set({ themeMode: H.th === 'dark' ? 'light' : 'dark' }),
+      nav, navProjects,
+      trashCls: ACTIVE === 'trash' ? 'nav on' : 'nav', settingsCls: ACTIVE === 'settings' ? 'nav on' : 'nav',
+      goTrash: () => H.set({ toast: H.flash('Thùng rác nằm ở artboard riêng trên canvas') }),
+      goSettings: () => H.set({ toast: H.flash('Cài đặt nằm ở artboard riêng trên canvas') }),
+      onAddTask: () => H.set({ toast: H.flash('Form “Tạo việc mới” nằm ở artboard riêng trên canvas') }),
+      onNewProject: () => H.set({ toast: H.flash('Form Dự án mới nằm ở artboard “Dự án” trên canvas') }),
+      hasToast: !!s.toast, toast: s.toast,
+    };
+    return Object.assign(shell, this.screenVals(s, H));
+  }
+
+  // Artboard viết phần riêng ở đây: trả về các giá trị cho template của màn hình.
+  // Có thể ghi đè onAddTask / nav go nếu artboard tự có form hoặc tự điều hướng nội bộ.
+  screenVals(s, H) {
+    const T = (id) => Object.assign({}, TASKS.find((x) => x.id === id), s.ov[id] || {});
+    const put = (map, id, v) => Object.assign({}, map, { [id]: v });
+    const stamp = () => '12/09 10:' + pad(Math.min(59, s.clock)); // bây giờ = 12/09 10:00; mỗi thao tác +1 phút để thứ tự lịch sử rõ
+    // Ghi thay đổi của việc + lịch sử (§7.8) + Cập nhật lần cuối
+    const commit = (id, patch, entries, extra) => {
+      const at = stamp();
+      const add = entries.map((e) => Object.assign({ at, isNew: true }, e));
+      H.set(Object.assign({
+        ov: put(s.ov, id, Object.assign({}, s.ov[id] || {}, patch, { updated: at })),
+        addHist: put(s.addHist, id, add.concat(s.addHist[id] || [])),
+        clock: s.clock + 1,
+      }, extra || {}));
+    };
+
+    // ---- Bảng nền (SC-2 giản lược): bấm dòng → mở panel ----
+    const bgRows = ROW_IDS.filter((id) => !s.deleted[id]).map((id) => {
+      const t = T(id); const st = H.status(t.status); const who = H.person(t.asg); const od = H.isOverdue(t);
+      return {
+        code: t.code, title: t.title, tCls: t.status === 'done' || t.status === 'cancelled' ? 't done' : 't',
+        stBg: st.bg, stFg: st.fg, stIcon: st.icon, stLabel: st.label,
+        avBg: who.bg, avInk: who.ink, avIni: who.ini, asgName: who.name, inactive: who.inactive,
+        due: t.due == null ? '—' : (od ? 'Quá hạn · ' + dmy(t.due) : H.dueText(t)), dueFg: od ? 'var(--danger)' : 'var(--muted)', od,
+        rowBg: od ? 'var(--overdueRow)' : 'transparent', ring: id === s.openId ? 'inset 0 0 0 2px var(--barHot)' : 'none',
+        open: () => H.set({ openId: id, pop: null, ae: null, aeErr: '', subText: '', cmText: '' }),
+      };
+    });
+    const bgSub = bgRows.length + ' việc · ' + bgRows.filter((r) => r.od).length + ' quá hạn';
+
+    // ---- Việc đang mở trong panel ----
+    const t = T(s.openId && !s.deleted[s.openId] ? s.openId : ROW_IDS[0]);
+    const st = H.status(t.status); const pr = H.proj(t.p); const od = H.isOverdue(t);
+
+    // Đổi trạng thái (§6): chuyển tự do; Đang chờ/Đã huỷ hỏi lý do; tự điền / xoá thời gian thực tế
+    const changeStatus = (to, note) => {
+      const at = stamp();
+      const patch = { status: to, reason: to === 'waiting' || to === 'cancelled' ? (note || '') : '' };
+      const ent = [{ label: 'Trạng thái', old: STATUS[t.status].label, nw: STATUS[to].label + ((to === 'waiting' || to === 'cancelled') && note ? ' (lý do: ' + note + ')' : '') }];
+      if (to === 'in_progress' && !t.aStart) { patch.aStart = at; ent.push({ label: 'Bắt đầu thực tế', old: '—', nw: at }); }
+      if (to === 'done') { patch.aEnd = at; ent.push({ label: 'Kết thúc thực tế', old: t.aEnd || '—', nw: at }); }
+      if (t.status === 'done' && to !== 'done' && t.aEnd) { patch.aEnd = ''; ent.push({ label: 'Kết thúc thực tế', old: t.aEnd, nw: '—' }); }
+      commit(t.id, patch, ent, { pop: null, dlg: null, dTarget: null, dReason: '', toast: H.flash('Đã chuyển ' + t.code + ' sang ' + STATUS[to].label) });
+    };
+    const stItems = STATUS_ORDER.map((k) => {
+      const o = H.status(k); const cur = k === t.status; const ask = k === 'waiting' || k === 'cancelled';
+      let note = '';
+      if (cur) note = 'Hiện tại';
+      else if (ask) note = 'Hỏi lý do';
+      else if (k === 'in_progress' && !t.aStart) note = 'Tự điền Bắt đầu thực tế';
+      else if (k === 'done') note = 'Kết thúc thực tế = bây giờ';
+      if (!cur && !ask && (t.status === 'waiting' || t.status === 'cancelled') && t.reason) note = note ? note + ' · xoá lý do' : 'Xoá lý do';
+      if (!cur && t.status === 'done' && t.aEnd) note = note ? note + ' · xoá Kết thúc thực tế' : 'Xoá Kết thúc thực tế';
+      return {
+        label: o.label, icon: o.icon, bg: o.bg, fg: o.fg, note, sel: cur, cls: cur ? 'on' : '',
+        pick: (e) => { H.stop(e); if (cur) H.set({ pop: null }); else if (ask) H.set({ pop: null, dlg: 'status', dTarget: k, dReason: '' }); else changeStatus(k); },
+      };
+    });
+
+    // ---- Bắt đầu / Kết thúc thực tế: sửa tại chỗ (§5) · kết thúc ≥ bắt đầu (§7.6) ----
+    const ACT = { aStart: 'Bắt đầu thực tế', aEnd: 'Kết thúc thực tế' };
+    const saveActual = (k, raw) => {
+      const v = String(raw || '').trim();
+      if (v && (!FULL_RE.test(v) || toMin(v) == null)) { H.set({ aeErr: 'Nhập đủ ngày giờ theo dạng dd/MM/yyyy HH:mm, ví dụ 08/09/2026 09:10.' }); return; }
+      const val = v ? fmtFull(v) : '';
+      const a = k === 'aStart' ? val : t.aStart; const b = k === 'aEnd' ? val : t.aEnd;
+      if (a && b && toMin(b) < toMin(a)) { H.set({ aeErr: 'Kết thúc thực tế phải sau hoặc bằng bắt đầu thực tế.' }); return; } // R-06
+      if (val === fmtFull(t[k])) { H.set({ ae: null, aeErr: '' }); return; }
+      commit(t.id, { [k]: val }, [{ label: ACT[k], old: t[k] || '', nw: val }], { ae: null, aeErr: '', toast: H.flash('Đã lưu ' + ACT[k]) });
+    };
+    const actual = ['aStart', 'aEnd'].map((k) => {
+      const editing = s.ae === k;
+      return {
+        label: ACT[k], text: fmtFull(t[k]) || '—', view: !editing, editing, span: editing ? 'span 2' : 'auto',
+        val: s.aeText, inpCls: s.aeErr ? 'inp err' : 'inp', hasErr: editing && !!s.aeErr, err: s.aeErr,
+        stop: (e) => H.stop(e),
+        edit: (e) => { H.stop(e); if (!editing) H.set({ ae: k, aeText: fmtFull(t[k]), aeErr: '', pop: null }); },
+        onText: (e) => H.set({ aeText: e.target.value, aeErr: '' }),
+        onKey: (e) => { if (e.key === 'Enter') { e.preventDefault(); saveActual(k, e.target.value); } else if (e.key === 'Escape') H.set({ ae: null, aeErr: '' }); },
+        save: (e) => { H.stop(e); saveActual(k, s.aeText); },
+        clear: (e) => { H.stop(e); saveActual(k, ''); },
+        cancel: (e) => { H.stop(e); H.set({ ae: null, aeErr: '' }); },
+      };
+    });
+
+    // ---- Tab Việc con (không ghi lịch sử) ----
+    const subList = s.sb[t.id] || t.subs.map((x) => ({ title: x[0], done: x[1] }));
+    const setSubs = (list, extra) => H.set(Object.assign({ sb: put(s.sb, t.id, list) }, extra || {}));
+    const doneN = subList.filter((x) => x.done).length;
+    const addSub = (e) => { H.stop(e); const v = s.subText.trim(); if (!v) return; setSubs(subList.concat([{ title: v, done: false }]), { subText: '' }); };
+    const subs = subList.map((x, i) => ({
+      title: x.title, done: x.done, cbx: x.done ? 'cbx on' : 'cbx', tCls: x.done ? 'grow sdone' : 'grow', tip: x.done ? 'Bỏ đánh dấu xong' : 'Đánh dấu xong',
+      toggle: () => setSubs(subList.map((y, j) => (j === i ? { title: y.title, done: !y.done } : y))),
+      remove: (e) => { H.stop(e); setSubs(subList.filter((_, j) => j !== i)); },
+    }));
+
+    // ---- Tab Bình luận (không ghi lịch sử) · tác giả mặc định Tôi ----
+    const cmList = s.cm[t.id] || COMMENTS.filter((c) => c.task === t.id).map((c) => ({ author: c.author, at: c.at, body: c.body }));
+    const cmts = cmList.map((c, i) => {
+      const p = H.person(c.author);
+      return {
+        author: p.name, ini: p.ini, bg: p.bg, ink: p.ink, at: c.at, body: c.body,
+        del: () => H.set({ dlg: 'cmt', dTarget: i, pop: null }), // xác nhận "Xoá bình luận?"
+      };
+    });
+    const addCmt = (e) => { H.stop(e); const v = s.cmText.trim(); if (!v) return; H.set({ cm: put(s.cm, t.id, cmList.concat([{ author: s.cmAuthor, at: stamp(), body: v }])), cmText: '', clock: s.clock + 1 }); };
+    const authorItems = EMPLOYEES.filter((e) => e.status === 'active').map((e) => ({
+      name: e.self ? e.name + ' (Tôi)' : e.name, title: e.title, ini: e.ini, bg: AV[e.color], ink: '#FFFFFF', sel: e.id === s.cmAuthor, cls: e.id === s.cmAuthor ? 'on' : '',
+      pick: (ev) => { H.stop(ev); H.set({ cmAuthor: e.id, pop: null }); },
+    }));
+
+    // ---- Tab Tệp: Mở · Gỡ (gỡ tệp có ghi lịch sử) ----
+    const flList = s.fl[t.id] || ATTACHMENTS.filter((a) => a.task === t.id).map((a) => ({ name: a.name, size: a.size, at: a.at }));
+    const files = flList.map((f, i) => ({
+      ext: extOf(f.name), name: f.name, meta: f.size + ' · thêm lúc ' + f.at,
+      open: () => H.set({ toast: H.flash('Mở ' + f.name + ' bằng ứng dụng mặc định của Windows') }),
+      remove: () => H.set({ dlg: 'file', dTarget: i, pop: null }), // xác nhận "Gỡ tệp “{tên}”?"
+    }));
+    const removeFile = (i) => commit(t.id, {}, [{ text: 'Gỡ tệp: ' + flList[i].name }], { fl: put(s.fl, t.id, flList.filter((_, j) => j !== i)), dlg: null, dTarget: null, toast: H.flash('Đã gỡ ' + flList[i].name) });
+
+    // ---- Tab Lịch sử: danh sách phẳng, mới nhất trước ----
+    const hist = (s.addHist[t.id] || []).concat(baseHistory(TASKS.find((x) => x.id === t.id))).map((h) => ({
+      at: h.at + ' ·', hasDiff: !!h.label, label: h.label || '', old: h.label ? histVal(h.label, h.old) : '', nw: h.label ? histVal(h.label, h.nw) : '', hasText: !!h.text, text: h.text || '',
+      bg: h.isNew ? 'var(--surface2)' : 'transparent',
+    }));
+    const TABS = [['subs', 'Việc con', doneN + '/' + subList.length], ['cmts', 'Bình luận', cmList.length], ['files', 'Tệp', flList.length], ['hist', 'Lịch sử', hist.length]];
+    const tabs = TABS.map(([k, label, n]) => ({ label, n, cls: s.tab === k ? 'tab on' : 'tab', pick: () => H.set({ tab: k, pop: null }) }));
+
+    // ---- Hộp thoại (§9): lý do chờ/huỷ · xác nhận xoá việc · gỡ tệp · xoá bình luận ----
+    const dl = { cancel: () => H.set({ dlg: null, dTarget: null, dReason: '' }), hasBody: false, hasReason: false, title: '', sub: '', body: '', icon: '', icBg: '', icFg: '', reasonLabel: '', reasonPh: '', okLabel: '', okCls: 'btn', ok: () => {} };
+    if (s.dlg === 'status' && s.dTarget) {
+      const to = H.status(s.dTarget); const w = s.dTarget === 'waiting';
+      const body = t.status === 'done' && t.aEnd ? 'Kết thúc thực tế (' + fmtFull(t.aEnd) + ') sẽ được xoá vì việc rời Hoàn thành.' : '';
+      Object.assign(dl, {
+        title: w ? 'Lý do chờ' : 'Lý do huỷ', sub: 'Chuyển ' + t.code + ' sang ' + to.label, icon: to.icon, icBg: to.bg, icFg: to.fg, hasBody: !!body, body, hasReason: true,
+        reasonLabel: 'Lý do', reasonPh: w ? 'Ví dụ: Chờ khách phản hồi' : 'Ví dụ: Khách không cần nữa',
+        okLabel: 'Xác nhận', ok: () => changeStatus(s.dTarget, s.dReason.trim()),
+      });
+    } else if (s.dlg === 'delete') {
+      Object.assign(dl, {
+        title: 'Xoá ' + t.code + '?', sub: t.title, icon: ICON.trash, icBg: 'var(--dangerBg)', icFg: 'var(--danger)', hasBody: true,
+        body: 'Việc sẽ được chuyển vào Thùng rác và tự xoá vĩnh viễn sau 30 ngày.', okLabel: 'Xoá', okCls: 'btn danger',
+        ok: () => H.set({ deleted: put(s.deleted, t.id, true), openId: null, dlg: null, pop: null, toast: H.flash('Đã chuyển ' + t.code + ' vào Thùng rác') }),
+      });
+    } else if (s.dlg === 'file' && s.dTarget != null && flList[s.dTarget]) {
+      const i = s.dTarget;
+      Object.assign(dl, {
+        title: 'Gỡ tệp “' + flList[i].name + '”?', sub: t.code + ' · ' + t.title, icon: ICON.file, icBg: 'var(--dangerBg)', icFg: 'var(--danger)', hasBody: true,
+        body: 'Tệp sẽ bị gỡ khỏi việc này.', okLabel: 'Gỡ tệp', okCls: 'btn danger', ok: () => removeFile(i),
+      });
+    } else if (s.dlg === 'cmt' && s.dTarget != null && cmList[s.dTarget]) {
+      const i = s.dTarget; const c = cmList[i];
+      Object.assign(dl, {
+        title: 'Xoá bình luận?', sub: H.person(c.author).name + ' · ' + c.at, icon: ICON.chat, icBg: 'var(--dangerBg)', icFg: 'var(--danger)', hasBody: true,
+        body: 'Bình luận sẽ bị xoá hẳn.', okLabel: 'Xoá', okCls: 'btn danger',
+        ok: () => H.set({ cm: put(s.cm, t.id, cmList.filter((_, j) => j !== i)), dlg: null, dTarget: null, toast: H.flash('Đã xoá bình luận') }),
+      });
+    }
+
+    const d = {
+      code: t.code, title: t.title, ttlCls: t.status === 'done' || t.status === 'cancelled' ? 'ttl done' : 'ttl',
+      desc: t.desc || '', hasDesc: !!(t.desc || '').trim(), noDesc: !(t.desc || '').trim(),
+      st, stOpen: s.pop === 'status', stItems,
+      stToggle: (e) => { H.stop(e); H.set({ pop: s.pop === 'status' ? null : 'status', ae: null, aeErr: '' }); },
+      edit: (e) => { H.stop(e); H.set({ pop: null, toast: H.flash('Form Sửa việc nằm ở artboard “SC-4 · Tạo / Sửa việc” trên canvas') }); },
+      del: (e) => { H.stop(e); H.set({ pop: null, dlg: 'delete' }); },
+      hasNote: (t.status === 'waiting' || t.status === 'cancelled') && !!t.reason,
+      noteText: (t.status === 'cancelled' ? 'Lý do huỷ: ' : 'Lý do chờ: ') + t.reason,
+      noteBg: t.status === 'cancelled' ? 'var(--surface2)' : 'var(--warnBg)', noteFg: t.status === 'cancelled' ? 'var(--ink2)' : 'var(--warn)',
+      projDot: PAL[pr.pal].dot, projName: pr.name, projCode: pr.code,
+      asg: H.person(t.asg), cre: H.person(t.cre), prio: H.prio(t.prio),
+      startText: dayText(t.start), dueText: dayText(t.due), dueFg: od ? 'var(--danger)' : 'var(--ink)',
+      overdue: od, overdueText: 'Quá hạn ' + H.overdueDays(t) + ' ngày',
+      actual, createdText: fmtFull(t.created) || '—', updatedText: fmtFull(t.updated) || '—',
+      tabs, tabSubs: s.tab === 'subs', tabCmts: s.tab === 'cmts', tabFiles: s.tab === 'files', tabHist: s.tab === 'hist',
+      subs, hasSubs: subList.length > 0, noSubs: subList.length === 0,
+      subPct: (subList.length ? Math.round(doneN * 100 / subList.length) : 0) + '%', subSummary: 'Xong ' + doneN + '/' + subList.length,
+      subAddCls: s.subText.trim() ? 'btn soft sm' : 'btn soft sm off',
+      cmts, noCmts: cmList.length === 0, author: H.person(s.cmAuthor), authorOpen: s.pop === 'author', authorItems,
+      authorToggle: (e) => { H.stop(e); H.set({ pop: s.pop === 'author' ? null : 'author' }); },
+      cmAddCls: s.cmText.trim() ? 'btn sm' : 'btn sm off',
+      files, noFiles: flList.length === 0, hist,
+    };
+
+    return {
+      bgSub, bgRows, d, hasPanel: !!s.openId && !s.deleted[s.openId],
+      stop: (e) => H.stop(e), closePop: () => { if (s.pop) H.set({ pop: null }); },
+      closePanel: (e) => { H.stop(e); H.set({ openId: null, pop: null, ae: null, aeErr: '' }); },
+      subText: s.subText, onSubText: (e) => H.set({ subText: e.target.value }), addSub,
+      onSubKey: (e) => { if (e.key === 'Enter') { e.preventDefault(); addSub(); } },
+      cmText: s.cmText, onCmText: (e) => H.set({ cmText: e.target.value }), addCmt,
+      hasDlg: !!s.dlg, dl, dReason: s.dReason, onDReason: (e) => H.set({ dReason: e.target.value }),
+    };
+  }
+}
+</script>
+</body>
+</html>

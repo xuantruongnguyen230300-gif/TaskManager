@@ -1,0 +1,422 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800&amp;display=swap">
+  <style>
+    body { margin: 0; font-family: "Nunito", "Segoe UI", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #5B45C9; } a:hover { color: #43329A; }
+    .app { --bg: #F1F0F7; --surface: #FFFFFF; --surface2: #F6F5FB; --ink: #26233A; --ink2: #4E4868; --muted: #6B6682; --line: #ECEAF3; --hero: #E6DEFF; --heroInk: #6A5BB0; --btn: #2A2540; --btnInk: #FFFFFF; --pill: #EEEBF7; --bar: #DCD2FF; --barHot: #6E56CF; --danger: #B23A26; --dangerBg: #FFE7E2; --warn: #7A5A00; --warnBg: #FFF3C9; --overdueRow: #FFF1EE; --ring: #FFFFFF; --lane: rgba(255, 255, 255, 0.5); --scrim: rgba(38, 35, 58, 0.28); --shadow: 0 1px 2px rgba(38, 35, 58, 0.05); --pop: 0 20px 60px rgba(38, 35, 58, 0.22); font-family: "Nunito", "Segoe UI", system-ui, sans-serif; }
+    .app.dark { --bg: #14121D; --surface: #1D1A29; --surface2: #25213A; --ink: #ECEAF5; --ink2: #C3BFD6; --muted: #9A96B0; --line: #2C2840; --hero: #2C2550; --heroInk: #BBAEFF; --btn: #E6DEFF; --btnInk: #1B1730; --pill: #2C2840; --bar: #3B3263; --barHot: #9B87F5; --danger: #FF9C8A; --dangerBg: #3A1D1A; --warn: #F0D27A; --warnBg: #3A3116; --overdueRow: #2E1C22; --ring: #3A3456; --lane: rgba(255, 255, 255, 0.035); --scrim: rgba(0, 0, 0, 0.55); --shadow: none; --pop: 0 20px 60px rgba(0, 0, 0, 0.5); }
+    .ic { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+    .ic.sm { width: 15px; height: 15px; }
+    .wc { width: 44px; display: flex; align-items: center; justify-content: center; color: var(--muted); }
+    .wc .ic { width: 13px; height: 13px; stroke-width: 1.6; }
+    .nav { display: flex; align-items: center; gap: 12px; height: 38px; padding: 0 14px; border-radius: 14px; font-size: 14px; font-weight: 700; color: var(--ink2); cursor: pointer; }
+    .nav:hover { background: var(--surface2); }
+    .nav.on { background: var(--btn); color: var(--btnInk); }
+    .navcode { margin-left: auto; font-size: 11px; font-weight: 800; color: var(--muted); letter-spacing: 0.04em; }
+    .nav.on .navcode { color: inherit; opacity: 0.8; }
+    .pill { margin-left: auto; min-width: 22px; height: 22px; padding: 0 6px; box-sizing: border-box; border-radius: 11px; background: var(--pill); color: var(--ink2); font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; }
+    .nav.on .pill { background: rgba(255, 255, 255, 0.2); color: inherit; }
+    .sq { width: 12px; height: 12px; border-radius: 4px; flex: none; display: inline-block; }
+    .card { background: var(--surface); border-radius: 22px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; min-width: 0; box-shadow: var(--shadow); }
+    .ct { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 800; }
+    .sub { font-size: 13px; font-weight: 600; color: var(--muted); }
+    .h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.01em; line-height: 1.15; }
+    .lbl { font-size: 12px; font-weight: 800; color: var(--muted); letter-spacing: 0.02em; }
+    .chip { height: 22px; padding: 0 9px; border-radius: 11px; font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+    .chip .ic { width: 13px; height: 13px; stroke-width: 2.4; }
+    .code { font-size: 12px; font-weight: 800; color: var(--muted); letter-spacing: 0.02em; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .av { width: 24px; height: 24px; border-radius: 50%; flex: none; display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 10px; font-weight: 800; letter-spacing: 0.02em; }
+    .av.lg { width: 40px; height: 40px; font-size: 14px; }
+    .t { font-size: 14.5px; font-weight: 700; }
+    .t.done { color: var(--muted); text-decoration: line-through; font-weight: 600; }
+    .tm { font-size: 12.5px; color: var(--muted); font-weight: 600; white-space: nowrap; }
+    .btn { height: 40px; padding: 0 18px; border-radius: 20px; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 800; background: var(--btn); color: var(--btnInk); cursor: pointer; white-space: nowrap; box-sizing: border-box; }
+    .btn.soft { background: var(--surface2); color: var(--ink); }
+    .btn.ghost { background: transparent; color: var(--ink2); box-shadow: inset 0 0 0 1.5px var(--line); }
+    .btn.danger { background: var(--dangerBg); color: var(--danger); }
+    .btn.sm { height: 32px; padding: 0 14px; font-size: 13px; }
+    .btn.off { opacity: 0.45; cursor: not-allowed; }
+    .seg { display: inline-flex; gap: 4px; padding: 4px; background: var(--surface2); border-radius: 14px; }
+    .seg div { height: 30px; padding: 0 12px; border-radius: 10px; display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 800; color: var(--muted); cursor: pointer; }
+    .seg div.on { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
+    .kbd { font-size: 12px; font-weight: 800; background: var(--surface2); color: var(--ink2); border-radius: 8px; padding: 3px 8px; white-space: nowrap; }
+    .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+    .input { height: 40px; border-radius: 12px; background: var(--surface2); color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--line); padding: 0 12px; display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; box-sizing: border-box; min-width: 0; }
+    .input.err { box-shadow: inset 0 0 0 1.5px var(--danger); }
+    .errmsg { font-size: 12px; font-weight: 700; color: var(--danger); }
+    .row { display: flex; align-items: center; gap: 12px; padding: 8px 10px; border-radius: 14px; cursor: pointer; }
+    .row:hover { box-shadow: inset 0 0 0 1.5px var(--line); }
+    .hov { cursor: pointer; transition: transform 0.12s; }
+    .hov:hover { transform: translateY(-1px); }
+    .tog { width: 40px; height: 24px; border-radius: 12px; background: var(--pill); position: relative; cursor: pointer; flex: none; }
+    .tog.on { background: #4DBB7F; }
+    .tog i { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #FFFFFF; }
+    .tog.on i { left: 19px; }
+    .tbl { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    .tbl th { text-align: left; font-size: 12px; font-weight: 800; color: var(--muted); padding: 8px 10px; border-bottom: 1.5px solid var(--line); white-space: nowrap; }
+    .tbl td { padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+    .banner { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 14px; font-size: 13.5px; font-weight: 700; }
+    .scroll { flex: 1; min-height: 0; overflow-y: auto; }
+    *:focus-visible { outline: 2px solid #8C7AE6; outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+    /* ===== Màn chào lần đầu (SC-20) ===== */
+    .inp { width: 100%; height: 44px; box-sizing: border-box; border: none; border-radius: 12px; background: var(--surface2); color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--line); padding: 0 14px; font-family: inherit; font-size: 15px; font-weight: 700; outline: none; }
+    .inp:focus { box-shadow: inset 0 0 0 2px var(--barHot); }
+    .inp.err { box-shadow: inset 0 0 0 2px var(--danger); }
+    .inp::placeholder { color: var(--muted); font-weight: 600; }
+  </style>
+</helmet>
+<!-- SC-20 Màn chào lần đầu mở app (Đề xuất) · spec §3.2 (bản ghi is_self tạo lúc mở app lần đầu, nhập họ tên), §10 SC-20, §0 (tiếng Việt + English, sáng/tối) -->
+<div class="app {{themeClass}}" style="position: relative; width: 1280px; height: 860px; display: flex; flex-direction: column; background: var(--bg); color: var(--ink); overflow: hidden;">
+
+  <div style="height: 32px; flex: none; display: flex; justify-content: flex-end;">
+    <div class="wc"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12h14"></path></svg></div>
+    <div class="wc"><svg class="ic" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"></rect></svg></div>
+    <div class="wc"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"></path></svg></div>
+  </div>
+
+  <div style="flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; padding: 0 14px 46px;">
+    <div style="width: 1000px; height: 620px; display: grid; grid-template-columns: 380px minmax(0, 1fr); background: var(--surface); border-radius: 24px; overflow: hidden; box-shadow: var(--shadow);">
+
+      <!-- Giới thiệu: tên app + một câu -->
+      <div style="background: var(--hero); padding: 44px 40px; display: flex; flex-direction: column; gap: 18px;">
+        <div style="width: 52px; height: 52px; border-radius: 16px; background: var(--btn); color: var(--btnInk); display: flex; align-items: center; justify-content: center;"><svg class="ic" style="width: 26px; height: 26px; stroke-width: 3;" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div>
+        <div style="font-size: 34px; font-weight: 800; letter-spacing: -0.01em; line-height: 1.1;">Quản lý Task</div>
+        <div style="font-size: 16px; font-weight: 600; color: var(--ink2); line-height: 1.6;">{{t.intro}}</div>
+        <div style="margin-top: auto; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; color: var(--heroInk);"><svg class="ic sm" viewBox="0 0 24 24"><path d="M6 11h12v10H6zM8 11V7a4 4 0 0 1 8 0v4"></path></svg>{{t.offline}}</div>
+      </div>
+
+      <!-- Form hồ sơ của người quản lý (bản ghi is_self = NV001) -->
+      <sc-if value="{{isForm}}" hint-placeholder-val="{{ true }}">
+      <div style="padding: 40px 44px; display: flex; flex-direction: column; gap: 16px; min-width: 0;">
+        <div style="display: flex; flex-direction: column; gap: 6px;"><div class="h1">{{t.hello}}</div><div class="sub">{{t.helloSub}}</div></div>
+        <div class="field">
+          <span class="lbl">{{t.nameLbl}} <span style="color: var(--danger);">*</span></span>
+          <input class="{{nameCls}}" value="{{name}}" onChange="{{onName}}" onKeyDown="{{onEnter}}" placeholder="{{t.namePh}}">
+          <sc-if value="{{hasNameErr}}" hint-placeholder-val="{{ false }}"><span class="errmsg">{{nameErr}}</span></sc-if>
+        </div>
+        <div class="field">
+          <span class="lbl">{{t.titleLbl}}</span>
+          <input class="{{titleCls}}" value="{{title}}" onChange="{{onTitle}}" onKeyDown="{{onEnter}}" placeholder="{{t.titlePh}}">
+          <sc-if value="{{hasTitleErr}}" hint-placeholder-val="{{ false }}"><span class="errmsg">{{titleErr}}</span></sc-if>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 14px;">
+          <div class="field"><span class="lbl">{{t.langLbl}}</span><div class="seg"><sc-for list="{{langOpts}}" as="o" hint-placeholder-count="2"><div class="{{o.cls}}" onClick="{{o.pick}}">{{o.label}}</div></sc-for></div></div>
+          <div class="field">
+            <span class="lbl">{{t.themeLbl}}</span>
+            <div class="seg"><sc-for list="{{themeOpts}}" as="o" hint-placeholder-count="3"><div class="{{o.cls}}" onClick="{{o.pick}}"><svg class="ic sm" viewBox="0 0 24 24"><path d="{{o.icon}}"></path></svg>{{o.label}}</div></sc-for></div>
+            <sc-if value="{{hasSysNow}}" hint-placeholder-val="{{ false }}"><span class="tm">{{sysNow}}</span></sc-if>
+          </div>
+        </div>
+        <div class="banner" style="background: var(--surface2); color: var(--ink2); align-items: flex-start; line-height: 1.5;"><svg class="ic" style="margin-top: 2px; color: var(--heroInk);" viewBox="0 0 24 24"><path d="M12 11a4 4 0 1 0 0-8a4 4 0 0 0 0 8zM4 21v-1a7 7 0 0 1 7-7h2a7 7 0 0 1 7 7v1"></path></svg><span>{{t.note}}</span></div>
+        <div style="margin-top: auto; display: flex; align-items: center; gap: 12px;">
+          <span class="tm" style="white-space: normal;">{{t.later}}</span>
+          <div class="{{startCls}}" style="margin-left: auto;" onClick="{{start}}">{{t.start}}<svg class="ic sm" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"></path></svg></div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- Hoàn tất: đã tạo hồ sơ NV001 -->
+      <sc-if value="{{isDone}}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 40px 44px; display: flex; flex-direction: column; justify-content: center; gap: 18px; min-width: 0;">
+        <div style="position: relative; width: 72px; height: 72px;">
+          <span class="av" style="width: 72px; height: 72px; font-size: 24px; background: {{selfBg}};">{{ini}}</span>
+          <span style="position: absolute; right: -4px; bottom: -4px; width: 28px; height: 28px; border-radius: 14px; background: #4DBB7F; color: #FFFFFF; box-shadow: 0 0 0 3px var(--surface); display: flex; align-items: center; justify-content: center;"><svg class="ic sm" style="stroke-width: 3;" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px;"><div class="h1">{{doneTitle}}</div><div class="sub" style="line-height: 1.5;">{{t.doneSub}}</div></div>
+        <div style="display: flex; flex-direction: column; gap: 10px; padding: 16px 18px; border-radius: 16px; background: var(--surface2);">
+          <sc-for list="{{doneRows}}" as="r" hint-placeholder-count="5">
+            <div style="display: flex; align-items: center; gap: 12px; font-size: 14px;"><span class="tm" style="width: 130px; flex: none;">{{r.k}}</span><span style="font-weight: 700;">{{r.v}}</span></div>
+          </sc-for>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span class="tm" style="white-space: normal;">{{t.editLater}}</span>
+          <div class="btn" style="margin-left: auto;" onClick="{{goDash}}">{{t.goDash}}<svg class="ic sm" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"></path></svg></div>
+        </div>
+      </div>
+      </sc-if>
+    </div>
+  </div>
+
+  <sc-if value="{{hasToast}}" hint-placeholder-val="{{ false }}">
+    <div style="position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%); z-index: 60; display: flex; align-items: center; gap: 10px; padding: 12px 20px; border-radius: 16px; background: var(--btn); color: var(--btnInk); font-size: 14px; font-weight: 800; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); white-space: nowrap;"><svg class="ic sm" style="stroke-width: 3;" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg>{{toast}}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1280,"height":860}}'>
+// Artboard SC-20 — màn chào lần đầu, không có khung app. Dữ liệu mẫu dưới đây chép nguyên văn từ khung Shell.
+// ===== Ngày giờ mẫu: hôm nay là thứ Bảy 12/09/2026, 10:00 =====
+const TODAY = 12;
+const DOW = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+const dowOf = (d) => (d + 1) % 7; // ngày d của tháng 9/2026
+const pad = (n) => String(n).padStart(2, '0');
+const dmy = (d) => pad(d) + '/09';
+const fmtMins = (m) => { if (!m) return '—'; const h = Math.floor(m / 60); const mm = m % 60; return h ? h + 'g' + (mm ? ' ' + mm + 'p' : '') : mm + 'p'; };
+
+// ===== Icon (một path, lưới 24, nét 2) =====
+const ICON = {
+  dash: 'M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z',
+  tasks: 'M9 6h11M9 12h11M9 18h11M4 5.5l1 1 2-2M4 11.5l1 1 2-2M4 17.5l1 1 2-2',
+  inbox: 'M22 12h-6l-2 3h-4l-2-3H2M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z',
+  today: 'M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM16 2v4M8 2v4M3 10h18M9 16l2 2 4-4',
+  upcoming: 'M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18zM12 7v5l3 2',
+  cal: 'M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM16 2v4M8 2v4M3 10h18',
+  users: 'M9 11a4 4 0 1 0 0-8a4 4 0 0 0 0 8zM2 21v-1a6 6 0 0 1 6-6h2a6 6 0 0 1 6 6v1M16 3.5a4 4 0 0 1 0 7M22 21v-1a6 6 0 0 0-4-5.6',
+  stats: 'M3 3v18h18M7 16v-5M12 16V8M17 16V7',
+  moon: 'M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z',
+  sun: 'M12 8a4 4 0 1 0 0 8a4 4 0 0 0 0-8zM12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4',
+  plus: 'M12 5v14M5 12h14',
+  close: 'M6 6l12 12M18 6 6 18',
+  check: 'M20 6 9 17l-5-5',
+  flag: 'M5 22V4h12l-2 4 2 4H5',
+  clip: 'M21 11.5l-8.6 8.6a5 5 0 0 1-7.1-7.1l8.6-8.6a3.3 3.3 0 0 1 4.7 4.7l-8.6 8.6a1.7 1.7 0 0 1-2.4-2.4l7.9-7.9',
+  chat: 'M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-6.4A8 8 0 1 1 21 12z',
+  history: 'M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5M12 7v5l3 2',
+  edit: 'M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4',
+  alert: 'M12 3 2 20h20L12 3zM12 10v4M12 17v.5',
+  filter: 'M3 5h18l-7 8v6l-4 2v-8L3 5z',
+  more: 'M5 12h.01M12 12h.01M19 12h.01',
+  down: 'm6 9 6 6 6-6',
+  right: 'm9 6 6 6-6 6',
+  left: 'm15 6-6 6 6 6',
+  search: 'M11 4a7 7 0 1 0 0 14a7 7 0 0 0 0-14zM21 21l-4.3-4.3',
+  file: 'M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-6-6zM14 3v6h6',
+  user: 'M12 11a4 4 0 1 0 0-8a4 4 0 0 0 0 8zM4 21v-1a7 7 0 0 1 7-7h2a7 7 0 0 1 7 7v1',
+  clock: 'M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18zM12 7v5l3 2',
+  bell: 'M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10 21a2 2 0 0 0 4 0',
+  trash: 'M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6',
+  copy: 'M9 9h11v11H9zM5 15H4V4h11v1',
+  drag: 'M9 5h.01M15 5h.01M9 12h.01M15 12h.01M9 19h.01M15 19h.01',
+  undo: 'M9 14 4 9l5-5M4 9h11a5 5 0 0 1 0 10h-3',
+};
+
+// ===== Màu =====
+const PAL = { // màu dự án: dot, [nền, chữ] sáng, [nền, chữ] tối
+  sky: { dot: '#5B8DEF', light: ['#DDE8FF', '#1F4E99'], dark: ['#1E2C4A', '#A9C4FF'] },
+  mint: { dot: '#4DBB7F', light: ['#D8F2E3', '#1F6B41'], dark: ['#173A29', '#8FDDB0'] },
+  peach: { dot: '#F28B6E', light: ['#FFE3D9', '#9A3B1E'], dark: ['#43261D', '#FFB59E'] },
+  butter: { dot: '#E5B93A', light: ['#FFF3C9', '#7A5A00'], dark: ['#3A3116', '#F0D27A'] },
+  lilac: { dot: '#8C7AE6', light: ['#ECE6FF', '#4B3A99'], dark: ['#2B2550', '#C7BAFF'] },
+};
+const STATUS = { // trạng thái: chip nền/chữ + icon. Trạng thái dùng chip màu; dự án chỉ dùng ô vuông màu + tên
+  new: { label: 'Mới', light: ['#EEEBF7', '#57536D'], dark: ['#2C2840', '#C3BFD6'], icon: 'M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18z' },
+  in_progress: { label: 'Đang làm', light: ['#DDE8FF', '#1F4E99'], dark: ['#1E2C4A', '#A9C4FF'], icon: 'M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18zM12 3v18' },
+  waiting: { label: 'Đang chờ', light: ['#FFF3C9', '#7A5A00'], dark: ['#3A3116', '#F0D27A'], icon: 'M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18zM10 9v6M14 9v6' },
+  done: { label: 'Hoàn thành', light: ['#D8F2E3', '#1F6B41'], dark: ['#173A29', '#8FDDB0'], icon: 'M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18zM8.5 12.5l2.5 2.5 4.5-5' },
+  cancelled: { label: 'Đã huỷ', light: ['#F1EFF4', '#6B6682'], dark: ['#26232F', '#9A96B0'], icon: 'M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18zM9 9l6 6M15 9l-6 6' },
+};
+const STATUS_ORDER = ['new', 'in_progress', 'waiting', 'done', 'cancelled'];
+const OPEN = ['new', 'in_progress', 'waiting'];
+const TRANSITIONS = { // spec §4
+  new: ['in_progress', 'waiting', 'done', 'cancelled'],
+  in_progress: ['new', 'waiting', 'done', 'cancelled'],
+  waiting: ['new', 'in_progress', 'done', 'cancelled'],
+  done: ['new', 'in_progress'],
+  cancelled: ['new'],
+};
+const PRIO = [ // 0..4; hiển thị: icon cờ + chữ màu, không nền
+  null,
+  { label: 'Thấp', light: '#6B6682', dark: '#9A96B0' },
+  { label: 'Trung bình', light: '#9A6B00', dark: '#F0D27A' },
+  { label: 'Cao', light: '#C4521F', dark: '#FFB59E' },
+  { label: 'Khẩn cấp', light: '#C62828', dark: '#FF9C8A' },
+];
+const AV = ['#6E56CF', '#2F80ED', '#D9622B', '#2E8B57', '#C2527A', '#B7791F', '#0E9AA7', '#7A5AF8', '#E5484D', '#5F6B7A'];
+
+// ===== Dữ liệu mẫu (giống hệt nhau ở mọi artboard) =====
+const DEPARTMENTS = [
+  { id: 1, name: 'Kỹ thuật' }, { id: 2, name: 'Thiết kế' }, { id: 3, name: 'Kinh doanh' },
+];
+const EMPLOYEES = [
+  { id: 1, code: 'NV001', name: 'Trần Minh Quân', ini: 'MQ', title: 'Trưởng nhóm', dept: 1, email: 'quan.tran@example.com', phone: '0901 000 001', color: 0, status: 'active', self: true },
+  { id: 2, code: 'NV002', name: 'Lê Thu Hà', ini: 'TH', title: 'Lập trình viên frontend', dept: 1, email: 'ha.le@example.com', phone: '0901 000 002', color: 1, status: 'active' },
+  { id: 3, code: 'NV003', name: 'Phạm Đức Anh', ini: 'ĐA', title: 'Lập trình viên backend', dept: 1, email: 'anh.pham@example.com', phone: '0901 000 003', color: 2, status: 'active' },
+  { id: 4, code: 'NV004', name: 'Nguyễn Ngọc Lan', ini: 'NL', title: 'Nhà thiết kế UI/UX', dept: 2, email: 'lan.nguyen@example.com', phone: '0901 000 004', color: 4, status: 'active' },
+  { id: 5, code: 'NV005', name: 'Võ Hoàng Nam', ini: 'HN', title: 'Kiểm thử phần mềm', dept: 1, email: 'nam.vo@example.com', phone: '0901 000 005', color: 3, status: 'active' },
+  { id: 6, code: 'NV006', name: 'Đặng Mai Phương', ini: 'MP', title: 'Chuyên viên kinh doanh', dept: 3, email: 'phuong.dang@example.com', phone: '0901 000 006', color: 5, status: 'active' },
+  { id: 7, code: 'NV007', name: 'Bùi Quốc Việt', ini: 'QV', title: 'Lập trình viên', dept: 1, email: 'viet.bui@example.com', phone: '0901 000 007', color: 9, status: 'inactive', inactiveSince: '31/08/2026' },
+];
+const PROJECTS = [
+  { id: 'web', code: 'WEB', name: 'Website công ty', pal: 'sky', nextNo: 16, baseDone: 9, baseTotal: 9 },
+  { id: 'app', code: 'APP', name: 'Ứng dụng đặt lịch', pal: 'mint', nextNo: 10, baseDone: 4, baseTotal: 5 },
+  { id: 'mkt', code: 'MKT', name: 'Chiến dịch tháng 10', pal: 'peach', nextNo: 5, baseDone: 1, baseTotal: 1 },
+  { id: 'nb', code: 'NB', name: 'Nội bộ', pal: 'butter', nextNo: 6, baseDone: 2, baseTotal: 2 },
+];
+const INBOX = { id: 'inbox', code: 'HT', name: 'Hộp thư', pal: 'lilac', nextNo: 4, baseDone: 1, baseTotal: 1 };
+// baseDone/baseTotal: task cũ đã xong không liệt kê chi tiết, dùng cho % tiến độ dự án
+const COLUMNS = { // cột Kanban: mặc định 5 cột theo trạng thái; WEB có thêm cột tuỳ chỉnh "Review" thuộc trạng thái Đang làm
+  web: [
+    { id: 'c-new', name: 'Mới', status: 'new' }, { id: 'c-prog', name: 'Đang làm', status: 'in_progress' },
+    { id: 'c-review', name: 'Review', status: 'in_progress' }, { id: 'c-wait', name: 'Đang chờ', status: 'waiting' },
+    { id: 'c-done', name: 'Hoàn thành', status: 'done' }, { id: 'c-cancel', name: 'Đã huỷ', status: 'cancelled', collapsed: true },
+  ],
+  default: [
+    { id: 'c-new', name: 'Mới', status: 'new' }, { id: 'c-prog', name: 'Đang làm', status: 'in_progress' },
+    { id: 'c-wait', name: 'Đang chờ', status: 'waiting' }, { id: 'c-done', name: 'Hoàn thành', status: 'done' },
+    { id: 'c-cancel', name: 'Đã huỷ', status: 'cancelled', collapsed: true },
+  ],
+};
+// Ngày trong tháng 9/2026 dạng số (15 = 15/09). created/aStart/aEnd/completed: chuỗi hiển thị "dd/mm hh:mm".
+const TASKS = [
+  { id: 'web12', code: 'WEB-12', title: 'Hoàn thiện giao diện trang chủ', p: 'web', col: 'c-prog', status: 'in_progress', prio: 3, asg: 2, cre: 1, start: 8, due: 15, time: '', est: 960, aStart: '08/09 09:10', aEnd: '', reason: '', tags: ['giao-diện'], subs: [['Header và menu', true], ['Banner có video nền', false], ['Khối dịch vụ', true], ['Footer', false]], comments: 3, files: 2, created: '05/09 14:20', updated: '12/09 08:20', via: 'manual', desc: 'Hoàn thiện trang chủ theo bản thiết kế v2: header, banner có video nền, khối dịch vụ, footer. Chạy tốt trên Chrome, Edge, Safari.' },
+  { id: 'web13', code: 'WEB-13', title: 'Tích hợp form liên hệ với email', p: 'web', col: 'c-new', status: 'new', prio: 2, asg: 3, cre: 1, start: 14, due: 18, time: '', est: 360, aStart: '', aEnd: '', reason: '', tags: ['backend'], subs: [], comments: 0, files: 0, created: '10/09 09:00', updated: '10/09 09:00', via: 'manual', desc: 'Form gửi email về hộp thư kinh doanh, có chống spam.' },
+  { id: 'web14', code: 'WEB-14', title: 'Duyệt logo mới với khách hàng', p: 'web', col: 'c-wait', status: 'waiting', prio: 2, asg: 4, cre: 6, start: 9, due: 16, time: '', est: 120, aStart: '09/09 14:00', aEnd: '', reason: 'Chờ khách phản hồi 3 phương án gửi ngày 11/09', tags: ['thiết-kế'], subs: [], comments: 1, files: 3, created: '08/09 11:30', updated: '11/09 14:30', via: 'manual', desc: '' },
+  { id: 'web15', code: 'WEB-15', title: 'Kiểm thử trên trình duyệt Safari', p: 'web', col: 'c-new', status: 'new', prio: 2, asg: 5, cre: 1, start: null, due: 19, time: '', est: 240, aStart: '', aEnd: '', reason: '', tags: ['kiểm-thử'], subs: [], comments: 0, files: 0, created: '11/09 16:05', updated: '11/09 16:05', via: 'manual', desc: '' },
+  { id: 'web9', code: 'WEB-9', title: 'Tối ưu tốc độ tải trang', p: 'web', col: 'c-new', status: 'new', prio: 2, asg: 7, cre: 1, start: null, due: 20, time: '', est: 480, aStart: '', aEnd: '', reason: '', tags: ['hiệu-năng'], subs: [], comments: 0, files: 0, created: '28/08 15:40', updated: '28/08 15:40', via: 'manual', desc: '' },
+  { id: 'web10', code: 'WEB-10', title: 'Dựng khung trang chủ', p: 'web', col: 'c-done', status: 'done', prio: 3, asg: 2, cre: 1, start: 1, due: 5, time: '', est: 1200, aStart: '01/09 08:30', aEnd: '04/09 17:45', completed: '04/09 17:45', reason: '', tags: ['giao-diện'], subs: [], comments: 2, files: 0, created: '29/08 10:00', updated: '04/09 17:45', via: 'manual', desc: '' },
+  { id: 'web11', code: 'WEB-11', title: 'Viết nội dung trang Giới thiệu', p: 'web', col: 'c-cancel', status: 'cancelled', prio: 1, asg: 6, cre: 1, start: null, due: 10, time: '', est: 180, aStart: '', aEnd: '', reason: 'Khách tự cung cấp nội dung', tags: ['nội-dung'], subs: [], comments: 0, files: 0, created: '02/09 09:15', updated: '07/09 10:00', via: 'manual', desc: '' },
+  { id: 'app7', code: 'APP-7', title: 'Thiết kế luồng đặt lịch khám', p: 'app', col: 'c-prog', status: 'in_progress', prio: 3, asg: 4, cre: 1, start: 9, due: 13, time: '', est: 720, aStart: '09/09 08:45', aEnd: '', reason: '', tags: ['thiết-kế'], subs: [['Luồng chọn bác sĩ', true], ['Luồng chọn giờ', false], ['Màn xác nhận', false]], comments: 1, files: 0, created: '06/09 10:20', updated: '10/09 15:20', via: 'manual', desc: '' },
+  { id: 'app8', code: 'APP-8', title: 'Xây dựng API tạo lịch hẹn', p: 'app', col: 'c-prog', status: 'in_progress', prio: 4, asg: 3, cre: 1, start: 7, due: 11, time: '17:00', est: 1440, aStart: '07/09 13:30', aEnd: '', reason: '', tags: ['backend'], subs: [['Tạo lịch hẹn', true], ['Kiểm tra trùng lịch', false]], comments: 2, files: 1, created: '05/09 09:00', updated: '12/09 08:05', via: 'manual', desc: 'API REST tạo, sửa, huỷ lịch hẹn; kiểm tra trùng lịch bác sĩ.' },
+  { id: 'app9', code: 'APP-9', title: 'Viết test cho API lịch hẹn', p: 'app', col: 'c-new', status: 'new', prio: 3, asg: 5, cre: 3, start: null, due: 17, time: '', est: 480, aStart: '', aEnd: '', reason: '', tags: ['kiểm-thử'], subs: [], comments: 0, files: 0, created: '11/09 10:30', updated: '11/09 10:30', via: 'manual', desc: '' },
+  { id: 'app6', code: 'APP-6', title: 'Chốt yêu cầu với khách hàng', p: 'app', col: 'c-done', status: 'done', prio: 3, asg: 1, cre: 1, start: 3, due: 6, time: '', est: 240, aStart: '03/09 09:00', aEnd: '08/09 11:00', completed: '08/09 11:00', reason: '', tags: [], subs: [], comments: 4, files: 2, created: '01/09 08:00', updated: '08/09 11:00', via: 'manual', desc: '' },
+  { id: 'mkt3', code: 'MKT-3', title: 'Lên kế hoạch nội dung tháng 10', p: 'mkt', col: 'c-prog', status: 'in_progress', prio: 2, asg: 6, cre: 1, start: 10, due: 20, time: '', est: 600, aStart: '10/09 09:30', aEnd: '', reason: '', tags: ['nội-dung'], subs: [], comments: 0, files: 1, created: '09/09 15:00', updated: '10/09 09:30', via: 'manual', desc: '' },
+  { id: 'mkt4', code: 'MKT-4', title: 'Thiết kế banner quảng cáo Facebook', p: 'mkt', col: 'c-new', status: 'new', prio: 2, asg: 4, cre: 6, start: null, due: 22, time: '', est: 300, aStart: '', aEnd: '', reason: '', tags: ['thiết-kế'], subs: [], comments: 0, files: 0, created: '11/09 11:00', updated: '11/09 11:00', via: 'manual', desc: '' },
+  { id: 'mkt2', code: 'MKT-2', title: 'Báo giá quảng cáo cho khách Minh Phát', p: 'mkt', col: 'c-wait', status: 'waiting', prio: 3, asg: 6, cre: 1, start: 9, due: 12, time: '16:00', est: 120, aStart: '10/09 14:00', aEnd: '', reason: 'Chờ giám đốc duyệt ngân sách', tags: ['khách-hàng'], subs: [], comments: 1, files: 1, created: '09/09 09:40', updated: '11/09 09:15', via: 'manual', desc: '' },
+  { id: 'nb5', code: 'NB-5', title: 'Đánh giá hiệu suất quý 3', p: 'nb', col: 'c-new', status: 'new', prio: 3, asg: 1, cre: 1, start: 21, due: 30, time: '', est: 900, aStart: '', aEnd: '', reason: '', tags: [], subs: [], comments: 0, files: 0, created: '01/09 08:30', updated: '01/09 08:30', via: 'manual', desc: '' },
+  { id: 'nb4', code: 'NB-4', title: 'Gia hạn bản quyền phần mềm thiết kế', p: 'nb', col: 'c-new', status: 'new', prio: 4, asg: 1, cre: 4, start: null, due: 10, time: '', est: 60, aStart: '', aEnd: '', reason: '', tags: [], subs: [], comments: 0, files: 0, created: '03/09 10:00', updated: '03/09 10:00', via: 'manual', desc: '' },
+  { id: 'nb3', code: 'NB-3', title: 'Bàn giao thiết bị của Việt', p: 'nb', col: 'c-done', status: 'done', prio: 2, asg: 5, cre: 1, start: null, due: 2, time: '', est: 120, aStart: '01/09 09:00', aEnd: '01/09 16:30', completed: '01/09 16:30', reason: '', tags: [], subs: [], comments: 0, files: 1, created: '29/08 17:00', updated: '01/09 16:30', via: 'manual', desc: '' },
+  { id: 'ht2', code: 'HT-2', title: 'Tìm hiểu công cụ quản lý mã nguồn mới', p: 'inbox', col: 'c-new', status: 'new', prio: 0, asg: null, cre: 1, start: null, due: null, time: '', est: 0, aStart: '', aEnd: '', reason: '', tags: [], subs: [], comments: 0, files: 0, created: '11/09 21:15', updated: '11/09 21:15', via: 'quick_add', desc: '' },
+  { id: 'ht3', code: 'HT-3', title: 'Đặt phòng họp cho buổi review sprint', p: 'inbox', col: 'c-new', status: 'new', prio: 1, asg: null, cre: 1, start: null, due: 15, time: '09:00', est: 0, aStart: '', aEnd: '', reason: '', tags: [], subs: [], comments: 0, files: 0, created: '12/09 07:50', updated: '12/09 07:50', via: 'quick_add', desc: '' },
+];
+const COMMENTS = [
+  { task: 'web12', author: 2, at: '09/09 17:05', body: 'Đã dựng xong header và menu, đang làm phần banner.' },
+  { task: 'web12', author: 1, at: '10/09 16:30', body: 'Khách muốn banner có video nền, cần ước lượng lại thời gian.' },
+  { task: 'web12', author: 2, at: '11/09 10:12', body: 'Ước lượng thêm 4 giờ cho phần video nền.', edited: '11/09 10:20' },
+  { task: 'app8', author: 3, at: '11/09 18:10', body: 'Còn thiếu phần kiểm tra trùng lịch, cần thêm 1 ngày.' },
+  { task: 'app8', author: 1, at: '12/09 08:05', body: 'Đã báo khách lùi buổi demo sang thứ Hai 14/09.' },
+  { task: 'app7', author: 4, at: '10/09 15:20', body: 'Xong luồng chọn bác sĩ, còn luồng chọn giờ và màn xác nhận.' },
+];
+const ATTACHMENTS = [
+  { task: 'web12', name: 'trang-chu-v2.fig', size: '2,4 MB', at: '11/09 08:45', kind: 'Figma' },
+  { task: 'web12', name: 'yeu-cau-khach-hang.pdf', size: '380 KB', at: '05/09 14:22', kind: 'PDF' },
+  { task: 'app8', name: 'api-lich-hen.postman.json', size: '46 KB', at: '10/09 11:00', kind: 'JSON' },
+];
+// Lịch sử WEB-12, mới nhất trước. src: form | detail | kanban | quick_add | bulk | import | system
+const HISTORY_WEB12 = [
+  { at: '12/09 08:20', src: 'Chi tiết task', items: [['field_changed', 'Ưu tiên', 'Trung bình', 'Cao']] },
+  { at: '11/09 09:00', src: 'Chi tiết task', items: [['subtask_checked', 'Việc con', '', 'Khối dịch vụ']] },
+  { at: '11/09 08:45', src: 'Chi tiết task', items: [['attachment_added', 'Tệp', '', 'trang-chu-v2.fig (2,4 MB)']] },
+  { at: '10/09 16:30', src: 'Chi tiết task', items: [['comment_added', 'Bình luận', '', 'Khách muốn banner có video nền…']] },
+  { at: '09/09 10:02', src: 'Chi tiết task', items: [['field_changed', 'Hạn chót', '12/09', '15/09'], ['field_changed', 'Ước lượng', '12g', '16g']] },
+  { at: '09/09 09:30', src: 'Chi tiết task', items: [['subtask_checked', 'Việc con', '', 'Header và menu']] },
+  { at: '08/09 09:10', src: 'Kanban', items: [['status_changed', 'Trạng thái', 'Mới', 'Đang làm'], ['field_changed', 'Bắt đầu thực tế', '—', '08/09 09:10']] },
+  { at: '05/09 14:22', src: 'Chi tiết task', items: [['attachment_added', 'Tệp', '', 'yeu-cau-khach-hang.pdf (380 KB)']] },
+  { at: '05/09 14:20', src: 'Form tạo việc', items: [['created', '', '', 'Tạo việc · Người phụ trách: Lê Thu Hà · Người tạo: Trần Minh Quân · Hạn 12/09 · Ưu tiên Trung bình · 4 việc con']] },
+];
+// Hoạt động gần đây toàn hệ thống (Tổng quan), mới nhất trước
+const ACTIVITY = [
+  { at: '12/09 08:20', task: 'web12', text: 'đổi Ưu tiên: Trung bình → Cao' },
+  { at: '12/09 08:05', task: 'app8', text: 'thêm bình luận: “Đã báo khách lùi buổi demo…”' },
+  { at: '12/09 07:50', task: 'ht3', text: 'tạo bằng Thêm nhanh' },
+  { at: '11/09 16:05', task: 'web15', text: 'tạo việc, giao cho Võ Hoàng Nam' },
+  { at: '11/09 14:30', task: 'web14', text: 'Đang làm → Đang chờ: “Chờ khách phản hồi 3 phương án…”' },
+  { at: '11/09 11:00', task: 'mkt4', text: 'tạo việc (người tạo: Đặng Mai Phương), giao cho Nguyễn Ngọc Lan' },
+  { at: '11/09 09:15', task: 'mkt2', text: 'Đang làm → Đang chờ: “Chờ giám đốc duyệt ngân sách”' },
+  { at: '10/09 15:20', task: 'app7', text: 'thêm bình luận của Nguyễn Ngọc Lan' },
+];
+// Số liệu tổng hợp mẫu (gồm cả task cũ không liệt kê), dùng cho biểu đồ/thống kê
+const WEEK_DONE = [3, 1, 4, 2, 5, 3, 1]; // CN 06/09 … T7 12/09
+const EMP_STATS = { // 30 ngày gần nhất
+  1: { done30: 6, onTime: 83, delay: 2.0, dur: '1,8 ngày', est: '42g', act: '47g' },
+  2: { done30: 9, onTime: 89, delay: 1.0, dur: '2,6 ngày', est: '120g', act: '131g' },
+  3: { done30: 7, onTime: 71, delay: 1.5, dur: '3,1 ngày', est: '98g', act: '118g' },
+  4: { done30: 8, onTime: 88, delay: 0.5, dur: '1,9 ngày', est: '64g', act: '60g' },
+  5: { done30: 10, onTime: 100, delay: 0, dur: '0,9 ngày', est: '40g', act: '36g' },
+  6: { done30: 5, onTime: 60, delay: 3.0, dur: '4,2 ngày', est: '30g', act: '44g' },
+  7: { done30: 2, onTime: 50, delay: 4.0, dur: '5,0 ngày', est: '24g', act: '38g' },
+};
+
+// ===== Màn chào (Đề xuất): tạo bản ghi nhân viên is_self = NV001, chọn ngôn ngữ và giao diện (có hiệu lực ngay) =====
+const I18N = {
+  vi: {
+    intro: 'Giao việc cho nhân viên, theo dõi trạng thái và hạn chót của cả nhóm — ngay trên máy tính, không cần mạng.',
+    offline: 'Hoạt động offline · dữ liệu chỉ lưu trên máy này',
+    hello: 'Chào mừng bạn!', helloSub: 'Lần đầu mở app — cho biết bạn là ai để bắt đầu.',
+    nameLbl: 'Họ tên của bạn', namePh: 'Ví dụ: Trần Minh Quân', titleLbl: 'Chức danh', titlePh: 'Ví dụ: Trưởng nhóm',
+    langLbl: 'Ngôn ngữ', themeLbl: 'Giao diện', themes: ['Sáng', 'Tối', 'Theo hệ thống'], sysNow: 'Hệ thống đang dùng:',
+    note: 'Bạn là người quản lý duy nhất dùng app trên máy này. Hồ sơ này được lưu là nhân viên NV001 và là người tạo mặc định.',
+    later: 'Có thể đổi các mục này sau trong Cài đặt.', start: 'Bắt đầu',
+    errName: 'Nhập họ tên để bắt đầu.', errNameLong: 'Họ tên tối đa 100 ký tự.', errTitleLong: 'Chức danh tối đa 100 ký tự.',
+    doneTitle: 'Đã tạo hồ sơ NV001 · ', doneSub: 'Bạn hiển thị là “Tôi” trong danh mục nhân viên và là người tạo mặc định khi thêm việc.',
+    fCode: 'Mã nhân viên', fName: 'Họ tên', fTitle: 'Chức danh', fLang: 'Ngôn ngữ', fTheme: 'Giao diện', notSet: 'Chưa có',
+    editLater: 'Sửa hồ sơ trong Cài đặt → Hồ sơ của tôi.', goDash: 'Vào Tổng quan', toastDash: 'Tổng quan nằm ở artboard riêng trên canvas',
+  },
+  en: {
+    intro: 'Assign work to your team and track every status and deadline — right on your computer, no internet needed.',
+    offline: 'Works offline · data stays on this computer',
+    hello: 'Welcome!', helloSub: 'First launch — tell us who you are to get started.',
+    nameLbl: 'Your full name', namePh: 'e.g. Tran Minh Quan', titleLbl: 'Job title', titlePh: 'e.g. Team lead',
+    langLbl: 'Language', themeLbl: 'Appearance', themes: ['Light', 'Dark', 'System'], sysNow: 'System is using:',
+    note: 'You are the only manager using the app on this computer. This profile is saved as employee NV001 and is the default creator.',
+    later: 'You can change these later in Settings.', start: 'Get started',
+    errName: 'Enter your full name to get started.', errNameLong: 'Name can be at most 100 characters.', errTitleLong: 'Job title can be at most 100 characters.',
+    doneTitle: 'Profile NV001 created · ', doneSub: 'You appear as “Me” in the employee list and are the default creator of new tasks.',
+    fCode: 'Employee code', fName: 'Full name', fTitle: 'Job title', fLang: 'Language', fTheme: 'Appearance', notSet: 'Not set',
+    editLater: 'Edit your profile in Settings → My profile.', goDash: 'Go to Overview', toastDash: 'Overview is a separate artboard on the canvas',
+  },
+};
+const THEME_IDS = ['light', 'dark', 'system'];
+const THEME_ICON = { light: ICON.sun, dark: ICON.moon, system: 'M3 4h18v12H3zM8 20h8M12 16v4' };
+const sysDark = () => { try { return !!(typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches); } catch (err) { return false; } };
+const initials = (name) => { // như dữ liệu mẫu: "Trần Minh Quân" → "MQ"
+  const w = name.trim().split(/\s+/).filter(Boolean);
+  if (!w.length) return '?';
+  return (w.length >= 2 ? [w[w.length - 2], w[w.length - 1]] : [w[0]]).map((x) => x.charAt(0).toUpperCase()).join('');
+};
+
+// Mở sẵn: đang nhập hồ sơ (họ tên đã gõ), giao diện mặc định theo hệ thống
+const DEFAULTS = { themeMode: 'system', lang: 'vi', name: 'Trần Minh Quân', title: 'Trưởng nhóm', touched: false, done: false, toast: '' };
+
+class Component extends DCLogic {
+  S() { return Object.assign({}, DEFAULTS, this.state || {}); }
+
+  componentWillUnmount() { clearTimeout(this._tt); }
+
+  renderVals() {
+    const s = this.S();
+    const t = I18N[s.lang] || I18N.vi;
+    const set = (patch) => this.setState(patch);
+    const flash = (msg) => { clearTimeout(this._tt); this._tt = setTimeout(() => this.setState({ toast: '' }), 2600); return msg; };
+    const dark = s.themeMode === 'dark' || (s.themeMode === 'system' && sysDark());
+    const name = String(s.name || '').trim();
+    const title = String(s.title || '').trim();
+    const nameErr = !name ? t.errName : (name.length > 100 ? t.errNameLong : '');
+    const titleErr = title.length > 100 ? t.errTitleLong : '';
+    const valid = !nameErr && !titleErr;
+    const start = () => { if (!valid) { set({ touched: true }); return; } set({ done: true, touched: false }); };
+    const themeLabel = (id) => t.themes[THEME_IDS.indexOf(id)];
+    const nowLabel = dark ? t.themes[1] : t.themes[0];
+    return {
+      themeClass: dark ? 'dark' : '', t, name: s.name, title: s.title,
+      onName: (e) => set({ name: e.target.value, touched: true }), onTitle: (e) => set({ title: e.target.value }),
+      onEnter: (e) => { if (e && e.key === 'Enter') start(); },
+      nameCls: s.touched && nameErr ? 'inp err' : 'inp', hasNameErr: !!(s.touched && nameErr), nameErr,
+      titleCls: titleErr ? 'inp err' : 'inp', hasTitleErr: !!titleErr, titleErr,
+      langOpts: [['vi', 'Tiếng Việt'], ['en', 'English']].map(([id, label]) => ({ label, cls: s.lang === id ? 'on' : '', pick: () => set({ lang: id }) })),
+      themeOpts: THEME_IDS.map((id) => ({ label: themeLabel(id), icon: THEME_ICON[id], cls: s.themeMode === id ? 'on' : '', pick: () => set({ themeMode: id }) })),
+      hasSysNow: s.themeMode === 'system', sysNow: t.sysNow + ' ' + nowLabel,
+      startCls: valid ? 'btn' : 'btn off', start,
+      isForm: !s.done, isDone: !!s.done,
+      ini: initials(name), selfBg: AV[0],
+      doneTitle: t.doneTitle + name,
+      doneRows: [
+        [t.fCode, 'NV001'], [t.fName, name], [t.fTitle, title || t.notSet],
+        [t.fLang, s.lang === 'en' ? 'English' : 'Tiếng Việt'],
+        [t.fTheme, themeLabel(s.themeMode) + (s.themeMode === 'system' ? ' (' + nowLabel + ')' : '')],
+      ].map(([k, v]) => ({ k, v })),
+      goDash: () => set({ toast: flash(t.toastDash) }),
+      hasToast: !!s.toast, toast: s.toast,
+    };
+  }
+}
+</script>
+</body>
+</html>

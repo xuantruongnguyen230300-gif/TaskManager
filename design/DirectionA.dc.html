@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap">
+  <style>
+    body { margin: 0; background: #F4F5F3; font-family: "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif; color: #1C201E; -webkit-font-smoothing: antialiased; }
+    a { color: #2D6A4F; } a:hover { color: #1F4D39; }
+    .ic { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+    .wc { width: 46px; display: flex; align-items: center; justify-content: center; color: #5A615D; }
+    .wc .ic { width: 14px; height: 14px; stroke-width: 1.4; }
+    .nav { display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 10px; border-radius: 7px; font-size: 13.5px; color: #4A514D; }
+    .nav.on { background: #E6EBE7; color: #1C201E; font-weight: 600; }
+    .count { margin-left: auto; font-size: 12px; color: #8A918D; font-variant-numeric: tabular-nums; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+    .label { font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: #7B827E; font-weight: 600; }
+    .kbd { font-size: 11px; padding: 1px 6px; border: 1px solid #E3E6E2; border-radius: 4px; color: #7B827E; background: #F7F8F6; }
+    .stat { display: flex; flex-direction: column; gap: 4px; padding: 14px 0 14px 22px; border-left: 1px solid #ECEEEA; }
+    .stat:first-child { border-left: 0; padding-left: 0; }
+    .statnum { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+    .statcap { font-size: 12.5px; color: #7B827E; }
+    .row { display: flex; align-items: center; gap: 12px; padding: 11px 2px; border-bottom: 1px solid #EEF0EC; }
+    .box { width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid #B9BFBB; flex: none; display: flex; align-items: center; justify-content: center; box-sizing: border-box; }
+    .box.done { background: #2D6A4F; border-color: #2D6A4F; color: #FFFFFF; }
+    .box .ic { width: 12px; height: 12px; stroke-width: 3; }
+    .title { font-size: 14px; font-weight: 500; }
+    .title.done { color: #9AA19D; text-decoration: line-through; }
+    .meta { display: flex; gap: 12px; font-size: 12px; color: #7B827E; align-items: center; }
+    .proj { display: flex; align-items: center; gap: 6px; }
+    .prio { display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; }
+    .prio .ic { width: 14px; height: 14px; }
+    .h2 { font-size: 15.5px; font-weight: 600; }
+    .bar { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .bv { font-size: 11.5px; color: #7B827E; font-variant-numeric: tabular-nums; }
+    .bl { font-size: 11.5px; color: #7B827E; }
+    .btn { height: 32px; padding: 0 14px; border-radius: 7px; display: flex; align-items: center; font-size: 13px; font-weight: 500; background: #2D6A4F; color: #FFFFFF; }
+    .btn.ghost { background: transparent; color: #3A403C; border: 1px solid #D9DDD9; }
+    .up { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 1px solid #EEF0EC; }
+    .date { width: 40px; flex: none; display: flex; flex-direction: column; align-items: center; line-height: 1.1; }
+    .date b { font-size: 17px; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .date span { font-size: 11px; color: #7B827E; }
+    .pj { display: flex; flex-direction: column; gap: 6px; }
+    .pjtop { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+    .pjtop .pct { margin-left: auto; color: #7B827E; font-variant-numeric: tabular-nums; font-size: 12px; }
+    .track { height: 4px; border-radius: 2px; background: #EDEFEC; }
+    .fill { height: 4px; border-radius: 2px; }
+  </style>
+</helmet>
+<div style="width: 1280px; height: 860px; display: flex; flex-direction: column; background: #F4F5F3; overflow: hidden;">
+
+  <div style="height: 36px; flex: none; display: flex; align-items: center; gap: 10px; padding-left: 16px;">
+    <div style="width: 18px; height: 18px; border-radius: 5px; background: #2D6A4F; color: #FFFFFF; display: flex; align-items: center; justify-content: center;">
+      <svg class="ic" style="width: 12px; height: 12px; stroke-width: 3;" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg>
+    </div>
+    <div style="font-size: 12.5px; font-weight: 600; color: #3A403C;">TaskManager</div>
+    <div style="margin-left: auto; display: flex; height: 36px;">
+      <div class="wc"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12h14"></path></svg></div>
+      <div class="wc"><svg class="ic" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="1"></rect></svg></div>
+      <div class="wc"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"></path></svg></div>
+    </div>
+  </div>
+
+  <div style="flex: 1; min-height: 0; display: flex;">
+    <div style="width: 232px; flex: none; display: flex; flex-direction: column; gap: 2px; padding: 6px 12px 16px;">
+      <div class="nav on"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1"></rect><rect x="14" y="3" width="7" height="5" rx="1"></rect><rect x="14" y="12" width="7" height="9" rx="1"></rect><rect x="3" y="16" width="7" height="5" rx="1"></rect></svg>Tổng quan</div>
+      <div class="nav"><svg class="ic" viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>Hộp thư<span class="count">3</span></div>
+      <div class="nav"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path><path d="m9 16 2 2 4-4"></path></svg>Hôm nay<span class="count">3</span></div>
+      <div class="nav"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>Sắp tới<span class="count">8</span></div>
+      <div class="nav"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>Lịch</div>
+      <div class="nav"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2 2M9 2h6"></path></svg>Tập trung</div>
+      <div class="nav"><svg class="ic" viewBox="0 0 24 24"><path d="M3 3v18h18"></path><path d="M7 16v-5M12 16V8M17 16V7"></path></svg>Thống kê</div>
+      <div class="label" style="padding: 22px 10px 8px;">Dự án</div>
+      <div class="nav"><span class="dot" style="background: #3B6FD8;"></span>Website công ty<span class="count">8</span></div>
+      <div class="nav"><span class="dot" style="background: #D9912B;"></span>Học IELTS<span class="count">13</span></div>
+      <div class="nav"><span class="dot" style="background: #3F9A6B;"></span>Việc nhà<span class="count">2</span></div>
+      <div class="nav"><span class="dot" style="background: #C2527A;"></span>Cá nhân<span class="count">3</span></div>
+      <div class="nav" style="color: #7B827E;"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>Dự án mới</div>
+      <div class="nav" style="margin-top: auto;"><svg class="ic" viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"></path></svg>Cài đặt</div>
+    </div>
+
+    <div style="flex: 1; min-width: 0; background: #FFFFFF; border-top-left-radius: 14px; box-shadow: 0 0 0 1px #E3E6E2, 0 10px 30px rgba(28, 32, 30, 0.05); padding: 30px 44px 24px; display: flex; flex-direction: column; gap: 24px; overflow: hidden;">
+
+      <div style="display: flex; align-items: flex-end; gap: 16px;">
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div class="label">Thứ Bảy, 12 tháng 9</div>
+          <div style="font-size: 28px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.15;">Chào buổi sáng</div>
+        </div>
+        <div style="margin-left: auto; display: flex; gap: 10px; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 8px; width: 270px; height: 36px; padding: 0 10px; box-sizing: border-box; border: 1px solid #E3E6E2; border-radius: 8px; color: #8A918D; font-size: 13px;"><svg class="ic" style="width: 16px; height: 16px;" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.3-4.3"></path></svg>Tìm kiếm hoặc chạy lệnh<span class="kbd" style="margin-left: auto;">Ctrl K</span></div>
+          <div style="display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border-radius: 8px; background: #2D6A4F; color: #FFFFFF; font-size: 13px; font-weight: 600;"><svg class="ic" style="width: 16px; height: 16px;" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>Thêm task</div>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid #ECEEEA; border-bottom: 1px solid #ECEEEA;">
+        <div class="stat"><div class="statnum">2<span style="color: #A3AAA6;">/5</span></div><div class="statcap">Việc hôm nay đã xong</div></div>
+        <div class="stat"><div class="statnum" style="color: #B8432F;">1</div><div class="statcap">Quá hạn</div></div>
+        <div class="stat"><div class="statnum">19</div><div class="statcap">Hoàn thành tuần này</div></div>
+        <div class="stat"><div class="statnum">1g 40p</div><div class="statcap">Tập trung hôm nay</div></div>
+      </div>
+
+      <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 44px;">
+
+        <div style="display: flex; flex-direction: column; gap: 28px; min-width: 0;">
+          <div style="display: flex; flex-direction: column;">
+            <div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 6px;">
+              <div class="h2">Hôm nay</div>
+              <div style="font-size: 12.5px; color: #7B827E;">3 việc còn lại</div>
+              <a style="margin-left: auto; font-size: 12.5px; font-weight: 500; text-decoration: none;">Xem tất cả</a>
+            </div>
+            <div class="row">
+              <div class="box"></div>
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+                <div class="title">Thanh toán hoá đơn điện tháng 9</div>
+                <div class="meta"><span class="proj"><span class="dot" style="background: #3F9A6B;"></span>Việc nhà</span><span style="color: #B8432F; font-weight: 500;">Quá hạn · 10/9</span></div>
+              </div>
+              <span class="prio" style="color: #B8432F;"><svg class="ic" viewBox="0 0 24 24"><path d="M5 22V4h12l-2 4 2 4H5"></path></svg>Cao</span>
+            </div>
+            <div class="row">
+              <div class="box"></div>
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+                <div class="title">Gửi báo giá cho khách hàng Minh Phát</div>
+                <div class="meta"><span class="proj"><span class="dot" style="background: #3B6FD8;"></span>Website công ty</span><span>10:00</span></div>
+              </div>
+              <span class="prio" style="color: #B8432F;"><svg class="ic" viewBox="0 0 24 24"><path d="M5 22V4h12l-2 4 2 4H5"></path></svg>Cao</span>
+            </div>
+            <div class="row">
+              <div class="box"></div>
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+                <div class="title">Review thiết kế trang chủ</div>
+                <div class="meta"><span class="proj"><span class="dot" style="background: #3B6FD8;"></span>Website công ty</span><span>14:00</span><span>2/4 việc con</span></div>
+              </div>
+              <span class="prio" style="color: #B7791F;"><svg class="ic" viewBox="0 0 24 24"><path d="M5 22V4h12l-2 4 2 4H5"></path></svg>Trung bình</span>
+            </div>
+            <div class="row">
+              <div class="box done"><svg class="ic" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div>
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+                <div class="title done">Luyện đề Reading Cambridge 17</div>
+                <div class="meta"><span class="proj"><span class="dot" style="background: #D9912B;"></span>Học IELTS</span><span>Xong lúc 08:15</span></div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="box done"><svg class="ic" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div>
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+                <div class="title done">Đặt lịch khám răng</div>
+                <div class="meta"><span class="proj"><span class="dot" style="background: #C2527A;"></span>Cá nhân</span><span>Xong lúc 07:40</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; align-items: baseline; gap: 10px;"><div class="h2">Hoàn thành 7 ngày qua</div><div style="font-size: 12.5px; color: #7B827E;">20 việc</div></div>
+            <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 14px; align-items: end;">
+              <div class="bar"><div class="bv">1</div><div style="width: 100%; height: 16px; background: #CFE0D6; border-radius: 4px 4px 2px 2px;"></div><div class="bl">CN</div></div>
+              <div class="bar"><div class="bv">3</div><div style="width: 100%; height: 48px; background: #CFE0D6; border-radius: 4px 4px 2px 2px;"></div><div class="bl">T2</div></div>
+              <div class="bar"><div class="bv">5</div><div style="width: 100%; height: 80px; background: #CFE0D6; border-radius: 4px 4px 2px 2px;"></div><div class="bl">T3</div></div>
+              <div class="bar"><div class="bv">2</div><div style="width: 100%; height: 32px; background: #CFE0D6; border-radius: 4px 4px 2px 2px;"></div><div class="bl">T4</div></div>
+              <div class="bar"><div class="bv">4</div><div style="width: 100%; height: 64px; background: #CFE0D6; border-radius: 4px 4px 2px 2px;"></div><div class="bl">T5</div></div>
+              <div class="bar"><div class="bv">3</div><div style="width: 100%; height: 48px; background: #CFE0D6; border-radius: 4px 4px 2px 2px;"></div><div class="bl">T6</div></div>
+              <div class="bar"><div class="bv" style="color: #1C201E; font-weight: 600;">2</div><div style="width: 100%; height: 32px; background: #2D6A4F; border-radius: 4px 4px 2px 2px;"></div><div class="bl" style="color: #1C201E; font-weight: 600;">Hôm nay</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 26px; min-width: 0;">
+          <div style="border: 1px solid #E3E6E2; border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; background: #F8FAF8;">
+            <div style="display: flex; align-items: center; gap: 8px;"><span class="dot" style="background: #2D6A4F;"></span><span class="label">Đang tập trung · Pomodoro 3/4</span></div>
+            <div style="font-size: 14px; font-weight: 500;">Review thiết kế trang chủ</div>
+            <div style="font-size: 44px; font-weight: 600; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums;">18:24</div>
+            <div class="track"><div class="fill" style="width: 26%; background: #2D6A4F;"></div></div>
+            <div style="display: flex; gap: 8px;"><div class="btn">Tạm dừng</div><div class="btn ghost">Kết thúc</div></div>
+          </div>
+
+          <div style="display: flex; flex-direction: column;">
+            <div class="h2" style="padding-bottom: 4px;">Sắp tới</div>
+            <div class="up"><div class="date"><b>14</b><span>T2</span></div><div style="display: flex; flex-direction: column; gap: 2px;"><div style="font-size: 13.5px; font-weight: 500;">Nộp bài Writing Task 2</div><div class="meta"><span class="proj"><span class="dot" style="background: #D9912B;"></span>Học IELTS</span></div></div></div>
+            <div class="up"><div class="date"><b>15</b><span>T3</span></div><div style="display: flex; flex-direction: column; gap: 2px;"><div style="font-size: 13.5px; font-weight: 500;">Họp kick-off dự án app</div><div class="meta"><span class="proj"><span class="dot" style="background: #3B6FD8;"></span>Website công ty</span><span>09:00</span></div></div></div>
+            <div class="up" style="border-bottom: 0;"><div class="date"><b>18</b><span>T6</span></div><div style="display: flex; flex-direction: column; gap: 2px;"><div style="font-size: 13.5px; font-weight: 500;">Gia hạn bảo hiểm xe máy</div><div class="meta"><span class="proj"><span class="dot" style="background: #C2527A;"></span>Cá nhân</span></div></div></div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div class="h2">Tiến độ dự án</div>
+            <div class="pj"><div class="pjtop"><span class="dot" style="background: #3B6FD8;"></span>Website công ty<span class="pct">13/21</span></div><div class="track"><div class="fill" style="width: 62%; background: #3B6FD8;"></div></div></div>
+            <div class="pj"><div class="pjtop"><span class="dot" style="background: #D9912B;"></span>Học IELTS<span class="pct">7/20</span></div><div class="track"><div class="fill" style="width: 35%; background: #D9912B;"></div></div></div>
+            <div class="pj"><div class="pjtop"><span class="dot" style="background: #3F9A6B;"></span>Việc nhà<span class="pct">8/10</span></div><div class="track"><div class="fill" style="width: 80%; background: #3F9A6B;"></div></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>
