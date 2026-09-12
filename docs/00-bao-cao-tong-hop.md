@@ -1,6 +1,6 @@
 # Báo cáo tổng hợp — Quản lý Task (bản Gọn)
 
-> Ngày 12/09/2026 · Trạng thái: **thiết kế đã chốt đủ, sẵn sàng code**. Chưa có dòng code ứng dụng nào. Bước tiếp theo: mốc M0.
+> Ngày 12/09/2026 · Trạng thái: **đã code xong phạm vi Gọn (M0–M4) và build được bộ cài**. Bước tiếp theo: bạn test tay.
 
 ## 1. Phạm vi đã chốt
 
@@ -45,11 +45,18 @@ App desktop Windows (`.exe`), offline, **chỉ manager dùng** để giao việc
 
 Không còn câu hỏi mở.
 
-## 4. Bước tiếp theo
+## 4. Kết quả code (12/09/2026)
 
-1. **M0 (1–1,5 tuần):**
-   - Cài Rust và Visual Studio Build Tools.
-   - Dựng khung Tauri + React theo [05](05-kien-truc.md).
-   - Dựng CI build ra file `.exe`.
-   - Kết quả: một bộ cài chạy được, có giao diện khung (sidebar, sáng/tối).
-2. Làm lần lượt M1 → M4. Cuối mỗi mốc có một bộ cài để bạn dùng thử.
+| Hạng mục | Kết quả |
+|---|---|
+| Mã nguồn | `src/` (giao diện React, 9 màn) · `src-tauri/` (Rust: 8 bảng SQLite, đủ command theo [05](05-kien-truc.md)) |
+| Test tự động | 52 test Rust (quy tắc R-01…R-11, trạng thái, lịch sử, thùng rác, sao lưu → khôi phục) · 24 test giao diện · clippy và Biome sạch |
+| Bộ cài | `src-tauri/target/release/bundle/nsis/Quản lý Task_0.1.0_x64-setup.exe` — **5,1 MB** (mục tiêu ≤ 12 MB), build 7,3 phút |
+| Chạy thử | App mở được, tự tạo dữ liệu và thư mục; tiến trình chính khoảng 42 MB RAM (chưa tính WebView2) |
+| Chưa làm | Test tay toàn bộ luồng; khôi phục từ `.zip` (app tự khởi động lại) chưa chạy thử thực tế; chưa ký số bộ cài (Windows SmartScreen sẽ cảnh báo khi cài) |
+
+## 5. Bước tiếp theo
+
+1. Test tay bằng bản dev: `pnpm tauri dev` → Cài đặt → "Nạp dữ liệu mẫu" → thử các màn (dữ liệu dev nằm riêng, không lẫn dữ liệu thật).
+2. Hoặc cài thử bộ cài `.exe` ở trên. Khi SmartScreen hiện "Windows protected your PC": bấm **More info → Run anyway**.
+3. Gặp lỗi thì báo lại (màn nào, làm gì, thấy gì) để sửa và build lại.

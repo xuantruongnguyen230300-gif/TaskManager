@@ -1,0 +1,263 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Chế độ tối: class .dark trên <html> (ThemeProvider đặt). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ===== Design token — docs/04 §3 (hướng C · Sổ màu) ===== */
+:root {
+  --bg: #f1f0f7;
+  --surface: #ffffff;
+  --surface2: #f6f5fb;
+  --ink: #26233a;
+  --ink2: #4e4868;
+  --muted: #6b6682;
+  --line: #eceaf3;
+  --hero: #e6deff;
+  --heroInk: #6a5bb0;
+  --btn: #2a2540;
+  --btnInk: #ffffff;
+  --pill: #eeebf7;
+  --danger: #b23a26;
+  --dangerBg: #ffe7e2;
+  --overdueRow: #fff1ee;
+  --scrim: rgba(38, 35, 58, 0.28);
+  --focus: #8c7ae6;
+  /* Bổ sung theo prototype design/Main.dc.html */
+  --warn: #7a5a00;
+  --warnBg: #fff3c9;
+  --bar: #dcd2ff;
+  --barHot: #6e56cf;
+  --lane: rgba(255, 255, 255, 0.5);
+  --shadow: 0 1px 2px rgba(38, 35, 58, 0.05);
+  --pop: 0 20px 60px rgba(38, 35, 58, 0.22);
+
+  /* Trạng thái (chip nền / chữ) — §3.1 */
+  --st-new-bg: #eeebf7;
+  --st-new-fg: #57536d;
+  --st-progress-bg: #dde8ff;
+  --st-progress-fg: #1f4e99;
+  --st-waiting-bg: #fff3c9;
+  --st-waiting-fg: #7a5a00;
+  --st-done-bg: #d8f2e3;
+  --st-done-fg: #1f6b41;
+  --st-cancelled-bg: #f1eff4;
+  --st-cancelled-fg: #6b6682;
+
+  /* Ưu tiên (màu chữ + cờ) — §3.2 */
+  --prio-1: #6b6682;
+  --prio-2: #9a6b00;
+  --prio-3: #c4521f;
+  --prio-4: #c62828;
+}
+
+.dark {
+  --bg: #14121d;
+  --surface: #1d1a29;
+  --surface2: #25213a;
+  --ink: #eceaf5;
+  --ink2: #c3bfd6;
+  --muted: #9a96b0;
+  --line: #2c2840;
+  --hero: #2c2550;
+  --heroInk: #bbaeff;
+  --btn: #e6deff;
+  --btnInk: #1b1730;
+  --pill: #2c2840;
+  --danger: #ff9c8a;
+  --dangerBg: #3a1d1a;
+  --overdueRow: #2e1c22;
+  --scrim: rgba(0, 0, 0, 0.55);
+  --warn: #f0d27a;
+  --warnBg: #3a3116;
+  --bar: #3b3263;
+  --barHot: #9b87f5;
+  --lane: rgba(255, 255, 255, 0.035);
+  --shadow: none;
+  --pop: 0 20px 60px rgba(0, 0, 0, 0.5);
+
+  --st-new-bg: #2c2840;
+  --st-new-fg: #c3bfd6;
+  --st-progress-bg: #1e2c4a;
+  --st-progress-fg: #a9c4ff;
+  --st-waiting-bg: #3a3116;
+  --st-waiting-fg: #f0d27a;
+  --st-done-bg: #173a29;
+  --st-done-fg: #8fddb0;
+  --st-cancelled-bg: #26232f;
+  --st-cancelled-fg: #9a96b0;
+
+  --prio-1: #9a96b0;
+  --prio-2: #f0d27a;
+  --prio-3: #ffb59e;
+  --prio-4: #ff9c8a;
+}
+
+/* ===== Map token → tiện ích Tailwind (bg-surface, text-ink, border-line, …) ===== */
+@theme inline {
+  --font-sans: "Nunito", "Segoe UI", system-ui, sans-serif;
+
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface2: var(--surface2);
+  --color-ink: var(--ink);
+  --color-ink2: var(--ink2);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-hero: var(--hero);
+  --color-hero-ink: var(--heroInk);
+  --color-btn: var(--btn);
+  --color-btn-ink: var(--btnInk);
+  --color-pill: var(--pill);
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--dangerBg);
+  --color-overdue-row: var(--overdueRow);
+  --color-scrim: var(--scrim);
+  --color-focus: var(--focus);
+  --color-warn: var(--warn);
+  --color-warn-bg: var(--warnBg);
+  --color-bar: var(--bar);
+  --color-bar-hot: var(--barHot);
+  --color-lane: var(--lane);
+
+  --color-st-new-bg: var(--st-new-bg);
+  --color-st-new-fg: var(--st-new-fg);
+  --color-st-progress-bg: var(--st-progress-bg);
+  --color-st-progress-fg: var(--st-progress-fg);
+  --color-st-waiting-bg: var(--st-waiting-bg);
+  --color-st-waiting-fg: var(--st-waiting-fg);
+  --color-st-done-bg: var(--st-done-bg);
+  --color-st-done-fg: var(--st-done-fg);
+  --color-st-cancelled-bg: var(--st-cancelled-bg);
+  --color-st-cancelled-fg: var(--st-cancelled-fg);
+
+  --color-prio-1: var(--prio-1);
+  --color-prio-2: var(--prio-2);
+  --color-prio-3: var(--prio-3);
+  --color-prio-4: var(--prio-4);
+
+  /* Tên token shadcn/ui → token thiết kế (để component trong shared/ui dùng đúng màu) */
+  --color-background: var(--surface);
+  --color-foreground: var(--ink);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--ink);
+  --color-popover: var(--surface);
+  --color-popover-foreground: var(--ink);
+  --color-primary: var(--btn);
+  --color-primary-foreground: var(--btnInk);
+  --color-secondary: var(--surface2);
+  --color-secondary-foreground: var(--ink);
+  --color-muted-foreground: var(--muted);
+  --color-accent: var(--surface2);
+  --color-accent-foreground: var(--ink);
+  --color-destructive: var(--danger);
+  --color-border: var(--line);
+  --color-input: var(--line);
+  --color-ring: var(--focus);
+
+  /* Bo góc — docs/04 §4 */
+  --radius-panel: 24px; /* sidebar, panel, hộp thoại */
+  --radius-card: 22px; /* thẻ */
+  --radius-kanban: 16px; /* thẻ Kanban */
+  --radius-nav: 14px; /* mục menu, dòng */
+  --radius-field: 12px; /* ô nhập */
+  --radius-chip: 11px; /* chip */
+
+  --shadow-card: var(--shadow);
+  --shadow-pop: var(--pop);
+}
+
+/* ===== Kiểu chữ dùng lại (docs/04 §4) ===== */
+@utility text-h1 {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+@utility text-card-title {
+  font-size: 16px;
+  font-weight: 800;
+}
+@utility text-task {
+  font-size: 14.5px;
+  font-weight: 700;
+}
+@utility text-sub {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+@utility text-label {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+@utility text-code {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+@utility num {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+}
+/* Vùng tự cuộn trong màn hình (sidebar, thanh trên đứng yên) */
+@utility scroll-y {
+  flex: 1 1 0%;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  *,
+  ::before,
+  ::after {
+    border-color: var(--line);
+  }
+  *:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--pill);
+    border-radius: 5px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+}

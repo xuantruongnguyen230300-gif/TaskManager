@@ -19,13 +19,13 @@
 | Tauri | 2.11.5 | Khung app desktop, IPC, cửa sổ | Bộ cài nhỏ, dùng WebView2 có sẵn trên Windows, mô hình quyền (capabilities) chặt |
 | @tauri-apps/cli / @tauri-apps/api | 2.11.4 / 2.11.1 | CLI build + API JS | Đi kèm Tauri |
 | tauri-bundler (NSIS) | 2.9.4 | Tạo bộ cài `.exe` | Mặc định của Tauri, cài không cần quyền admin (`currentUser`) |
-| sqlx (feature `sqlite`, `runtime-tokio`, `migrate`, `macros`) | 0.9.0 | Truy cập SQLite, migration nhúng (`sqlx::migrate!`) | Kiểm tra câu SQL lúc biên dịch, không cần ORM |
+| sqlx (feature `sqlite`, `runtime-tokio`, `migrate`, `macros`) | 0.9.0 | Truy cập SQLite, migration nhúng (`sqlx::migrate!`) | Truy vấn runtime (`sqlx::query`), không cần ORM |
 | tokio | 1.x (bản mới nhất lúc dựng khung) | Runtime async | Tauri đã dùng sẵn |
 | serde / serde_json | 1.x | Dữ liệu IPC, `manifest.json` của file sao lưu | Chuẩn de-facto |
-| thiserror | 2.x | Định nghĩa `AppError` có mã lỗi | tauri-specta cũng dùng `thiserror ^2` |
+| thiserror | 2.x | Định nghĩa `AppError` có mã lỗi | Chuẩn de-facto |
 | tracing (+ tracing-subscriber, tracing-appender) | 0.1.x | Ghi log ra file | Chẩn đoán lỗi offline |
 | chrono | 0.4.x (xác nhận ở M0) | Ngày theo giờ máy: "hôm nay", quá hạn, "tuần này", 30 ngày thùng rác | Cần múi giờ máy trong Rust |
-| tauri-specta + specta + specta-typescript | **=2.0.0-rc.25** / =2.0.0-rc.25 / 0.0.12 | Sinh `bindings.ts` (kiểu + hàm gọi command) từ Rust | IPC có kiểu. **Vẫn là RC**, phải pin bằng `=` (rủi ro R5) |
+| (Không dùng) tauri-specta | — | — | IPC viết tay `dto.rs` ⇄ `types.ts` ([05](05-kien-truc.md)), tránh phụ thuộc bản RC |
 | tauri-plugin-single-instance | 2.4.3 | Chặn mở 2 tiến trình, lần mở thứ 2 focus cửa sổ cũ | Tránh 2 tiến trình cùng ghi một DB |
 | tauri-plugin-window-state | 2.4.1 | Nhớ vị trí/kích thước cửa sổ | Plugin chính thức |
 | tauri-plugin-dialog | 2.7.2 | Chọn tệp đính kèm, chọn nơi lưu / chọn file `.zip` khôi phục | Plugin chính thức. Chỉ gọi từ Rust |
@@ -49,13 +49,13 @@
 | @fontsource/nunito | 5.x (xác nhận ở M0) | Font Nunito đóng gói sẵn (subset latin, latin-ext, vietnamese) | App offline nên không tải từ Google Fonts |
 | @dnd-kit/core | 6.3.1 | Kéo thẻ Kanban giữa 5 cột trạng thái | Chỉ cần `core` (draggable/droppable): thẻ tự sắp theo hạn nên không cần `sortable`. `@dnd-kit/react` 0.5.0 còn beta (rủi ro R7) |
 | @tanstack/react-query | 5.102.8 | Cache dữ liệu lấy qua IPC, làm mới sau mỗi thao tác ghi | Đã chốt |
-| @tanstack/react-router | 1.170.35 | Định tuyến có kiểu, file-based routes | Kiểm tra kiểu cho params/search params (`?task=id`, bộ lọc) |
+| @tanstack/react-router | 1.170.35 | Định tuyến có kiểu, khai báo route bằng code (`src/app/router.tsx`) | Kiểm tra kiểu cho params/search params (`?task=id`, bộ lọc) |
 | zustand | 5.0.15 | Trạng thái UI nhỏ (bộ lọc đang chọn, chế độ Kanban/Danh sách) | Đã chốt |
 | date-fns | 4.4.0 (locale `vi`) | Định dạng ngày ở giao diện | Đã chốt. v5 mới ở alpha |
 | Biome **(thay ESLint + Prettier)** | 2.5.13 | Lint + format TS/JSON/CSS | typescript-eslint cần TS API, mà TS 7 chưa có. Biome là một binary, cấu hình một file |
 | Vitest + Testing Library | Vitest 5.0 (ra 03/09/2026) | Test UI | Cùng pipeline với Vite |
 
-> Quy tắc phiên bản: `Cargo.toml` và `package.json` ghi đúng bản ở trên. `tauri-specta`/`specta` pin bằng `=`. Các bản khác dùng `^` và khoá bằng `Cargo.lock`/`pnpm-lock.yaml`. Nâng cấp làm thành một thay đổi riêng.
+> Quy tắc phiên bản: `Cargo.toml` và `package.json` ghi đúng bản ở trên. Các bản khác dùng `^` và khoá bằng `Cargo.lock`/`pnpm-lock.yaml`. Nâng cấp làm thành một thay đổi riêng.
 >
 > Không dùng: thư viện biểu đồ, danh sách ảo (virtualization), i18n, trình soạn Markdown, thư viện animation. Mô tả việc là văn bản thuần.
 
@@ -67,7 +67,7 @@
 | **.NET WPF / WinUI 3** | Native Windows, tooling Visual Studio mạnh | Làm UI hiện đại (Kanban kéo thả, sáng/tối) tốn công hơn React + shadcn. WinUI 3 còn vướng đóng gói/triển khai |
 | **Python + PySide6 (Qt)** | Viết nhanh | Bộ cài lớn (60–150 MB), khởi động chậm, antivirus hay báo nhầm file PyInstaller |
 | **Flutter (Windows)** | UI đẹp, một codebase | Không tận dụng được hệ UI web (shadcn). Phải học Dart |
-| **Tauri 2 (đã chọn)** | Bộ cài ~5–12 MB, RAM thấp, Rust an toàn và nhanh, UI web đầy đủ | Phải học Rust. Phụ thuộc WebView2 (Win11 có sẵn). tauri-specta còn RC |
+| **Tauri 2 (đã chọn)** | Bộ cài ~5–12 MB, RAM thấp, Rust an toàn và nhanh, UI web đầy đủ | Phải học Rust. Phụ thuộc WebView2 (Win11 có sẵn) |
 
 ## 3. Cơ sở dữ liệu: vì sao SQLite
 
@@ -116,7 +116,7 @@ Lần build Rust đầu mất 3–8 phút, các lần sau nhanh hơn nhiều.
 | R2 | **SmartScreen** cảnh báo do chưa ký số | Trung bình (chỉ gây phiền) | v1 chấp nhận: hướng dẫn *More info → Run anyway*. Nếu phát hành rộng: chứng chỉ OV hoặc Azure Artifact Signing (`signCommand`). Từ 2024 chứng chỉ EV không còn cho uy tín SmartScreen ngay |
 | R3 | **Antivirus báo nhầm** bộ cài chưa ký | Trung bình | Không nén UPX, giữ script NSIS mặc định. Quét VirusTotal trước mỗi bản phát hành. Bị báo nhầm thì gửi mẫu cho Microsoft Defender |
 | R4 | **Cập nhật khi offline**, không có auto-update | Thấp | Cài đè bằng bộ cài mới. Migration chỉ thêm, tự sao lưu DB trước khi migrate |
-| R5 | **tauri-specta còn RC** (2.0.0-rc.25) | Trung bình | Pin `=2.0.0-rc.25`, commit `bindings.ts`. Nếu thư viện hỏng: viết tay wrapper `invoke` có kiểu (đã cô lập ở `src/shared/api/`) |
+| R5 | (Đã loại) tauri-specta còn bản RC | — | Không dùng: IPC viết tay `dto.rs` ⇄ `types.ts` ([05](05-kien-truc.md)) |
 | R6 | **TypeScript 7 chưa có API**, vài công cụ chưa tương thích | Thấp | Stack đã tránh công cụ cần API. Dự phòng: `@typescript/typescript6` hoặc quay về TS 6.0.3 |
 | R7 | **dnd-kit legacy** không còn phát hành mới | Thấp | Kéo thả chỉ dùng ở một chỗ (Kanban, kéo giữa cột), bọc trong `features/projects/kanban/`. Thử với React 19 ở M0 (nửa ngày). Hỏng thì đổi thư viện chỉ động vào thư mục đó |
 | R8 | Dev mới với Rust → chậm tiến độ | Trung bình | Backend mỏng, nghiệp vụ gom ở `services`. Ước lượng ở [06](06-quy-trinh-phat-trien.md) đã cộng thời gian học |
@@ -134,7 +134,6 @@ Tra ngày 2026-09-12. Tauri 2.11.5 và React 19.3.0 do chủ dự án xác nhậ
 - Yêu cầu môi trường Windows: https://v2.tauri.app/start/prerequisites/
 - Rust 1.98.1: https://blog.rust-lang.org/2026/09/03/Rust-1.98.1/
 - sqlx 0.9.0 (MSRV 1.94): https://github.com/launchbadge/sqlx/blob/main/CHANGELOG.md · https://docs.rs/crate/sqlx/latest
-- tauri-specta 2.0.0-rc.25 (specta =2.0.0-rc.25, specta-typescript ^0.0.12): https://github.com/specta-rs/tauri-specta/releases · https://docs.rs/crate/tauri-specta/2.0.0-rc.25
 - Vite 8.3.0: https://github.com/vitejs/vite/releases · https://vite.dev/blog/announcing-vite8
 - TypeScript 7.0.2 và ghi chú về API: https://github.com/microsoft/typescript/releases · https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/
 - Tailwind CSS 4.3.3: https://github.com/tailwindlabs/tailwindcss/releases

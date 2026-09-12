@@ -14,14 +14,14 @@
 |---|---|
 | Nhánh | `main` luôn build được. Làm việc trên nhánh ngắn `feat/…`, `fix/…`, `chore/…`, gộp vào `main` bằng squash merge |
 | Commit | Conventional Commits: `type(scope): mô tả`. Type: `feat` `fix` `refactor` `test` `docs` `chore` `ci`. Ví dụ: `feat(tasks): ghi lịch sử khi đổi người phụ trách (R-08)` |
-| File sinh | `bindings.ts`, `routeTree.gen.ts`, `.sqlx/`: commit cùng thay đổi gây ra chúng |
+| DTO | Đổi DTO thì sửa cùng lúc `src-tauri/src/dto.rs` và `src/shared/api/types.ts` (+ `commands.ts` nếu đổi chữ ký) |
 | Tag | `vX.Y.Z` trên `main` khi phát hành |
 
-Trước khi gộp, tự kiểm tra: đọc lại diff, không còn code debug; nghiệp vụ nằm ở `services`; đổi SQL thì có migration mới (không sửa migration cũ) và đã chạy `cargo sqlx prepare`; CI xanh.
+Trước khi gộp, tự kiểm tra: đọc lại diff, không còn code debug; nghiệp vụ nằm ở `services`; đổi SQL thì có migration mới (không sửa migration cũ); CI xanh.
 
 ## 2. Chuẩn code
 
-- **TypeScript:** `strict`, không `any`. Biome bộ `recommended`, format 2 space, 100 cột. Dữ liệu IPC luôn dùng kiểu từ `bindings.ts`.
+- **TypeScript:** `strict`, không `any`. Biome bộ `recommended`, format 2 space, 100 cột. Dữ liệu IPC luôn dùng kiểu từ `src/shared/api/types.ts`.
 - **Rust:** `cargo fmt`, `cargo clippy --all-targets -- -D warnings`. Không `unwrap()`/`expect()` ngoài test. Lỗi luôn là `AppError` có mã ([05 §7](05-kien-truc.md#7-xử-lý-lỗi)).
 - **Chỗ đặt logic:** component chỉ hiển thị và gọi hook; command Rust ≤ ~10 dòng; quy tắc nghiệp vụ và ghi lịch sử chỉ ở `services`.
 - **Đặt tên:** component/type PascalCase, hook `useXxx`, file TS kebab-case (component `PascalCase.tsx`), Rust và SQL snake_case, command IPC dạng động từ + danh từ (`set_task_status`). Tên test ghi mã quy tắc: `r07_purge_removes_comments_and_files`.
@@ -40,35 +40,25 @@ Không làm E2E tự động ở v1. Trước mỗi bản phát hành chạy che
 
 ## 4. CI — GitHub Actions (`windows-latest`)
 
-`.github/workflows/ci.yml`, chạy trên mỗi push/PR vào `main`:
+File `.github/workflows/ci.yml`, gồm 2 job:
 
-```yaml
-jobs:
-  build:
-    runs-on: windows-latest
-    env: { SQLX_OFFLINE: "true" }
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: 24, cache: pnpm }
-      - uses: dtolnay/rust-toolchain@stable
-        with: { components: "rustfmt, clippy" }
-      - uses: Swatinem/rust-cache@v2
-        with: { workspaces: src-tauri }
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm biome ci .
-      - run: pnpm tsc --noEmit
-      - run: pnpm vitest run
-      - run: cargo fmt --manifest-path src-tauri/Cargo.toml --check
-      - run: cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets -- -D warnings
-      - run: cargo test --manifest-path src-tauri/Cargo.toml
-      - run: pnpm tauri build
-      - uses: actions/upload-artifact@v4
-        with: { name: quanlytask-setup, path: src-tauri/target/release/bundle/nsis/*.exe }
-```
+| Job | Chạy khi | Làm gì | Thời gian ước tính |
+|---|---|---|---|
+| `check` | Mỗi lần push vào `main`, mỗi PR, khi gắn tag, khi bấm chạy tay | `pnpm lint` → `tsc --noEmit` → `pnpm test` → `cargo fmt --check` → `cargo clippy -D warnings` → `cargo test`. Dừng ngay ở bước lỗi | 4–7 phút |
+| `build` | Chỉ khi gắn tag `v*` hoặc bấm "Run workflow" | `pnpm tauri build`, tải bộ cài `.exe` lên artifact `quanlytask-setup` | 8–15 phút (có cache) |
 
-Phiên bản các action là minh hoạ, xác nhận bản mới nhất ở M0. Phát hành: tag `vX.Y.Z` → tải `.exe` từ artifact của CI.
+Không build `.exe` ở mỗi lần push để tiết kiệm phút CI (máy Windows tính gấp đôi quota miễn phí). Phát hành: gắn tag `vX.Y.Z` rồi tải `.exe` từ artifact.
+
+### 4.1 Test tay trước khi có bộ cài
+
+| Cách | Lệnh | Dùng khi |
+|---|---|---|
+| Bản dev | `pnpm tauri dev` | Hằng ngày; sửa giao diện thấy ngay, sửa Rust biên dịch lại 5–30 giây |
+| Bản release không cần cài | `pnpm tauri build --no-bundle` | Kiểm tra tốc độ như bản thật, cuối mỗi mốc |
+| Bộ cài trên máy | `pnpm tauri build` | Test cài mới, cài đè giữ dữ liệu, gỡ cài đặt |
+
+- Bản dev dùng thư mục dữ liệu riêng `%APPDATA%\vn.personal.quanlytask\dev\`, không lẫn với dữ liệu thật.
+- Bản dev có nút "Nạp dữ liệu mẫu" ở Cài đặt (command `dev_seed_sample_data`, chỉ có trong bản debug), nạp bộ dữ liệu giống prototype để test nhanh.
 
 ## 5. Phát hành
 
@@ -100,7 +90,7 @@ Một hạng mục **xong** khi:
 | M4 | Thùng rác + Cài đặt + sao lưu/khôi phục + bộ cài → **v1.0** | 1,5–2 tuần | **9–11,5** |
 
 ### M0 — Môi trường + khung (1–1,5 tuần)
-- Cài môi trường ([01 §5](01-cong-nghe.md#5-chuẩn-bị-môi-trường)). Dựng Tauri 2 + Vite 8 + React 19 + TS 7 + Tailwind 4 + `shadcn init --base radix`, cấu trúc thư mục theo [05 §2–3](05-kien-truc.md#2-cây-thư-mục-frontend). Biome, CI build `.exe`. `db.rs` + PRAGMA, tauri-specta sinh `bindings.ts` cho 1 command mẫu, `AppError`, log. Layout sidebar + thanh trên, sáng/tối.
+- Cài môi trường ([01 §5](01-cong-nghe.md#5-chuẩn-bị-môi-trường)). Dựng Tauri 2 + Vite 8 + React 19 + TS 7 + Tailwind 4 + `shadcn init --base radix`, cấu trúc thư mục theo [05 §2–3](05-kien-truc.md#2-cây-thư-mục-frontend). Biome, CI build `.exe`. `db.rs` + PRAGMA, hợp đồng IPC viết tay (`dto.rs` ⇄ `types.ts`), `AppError`, log. Layout sidebar + thanh trên, sáng/tối.
 - Thử nhanh (nửa ngày): `@dnd-kit/core` với React 19.
 - **Nghiệm thu:** `pnpm tauri dev` chạy, CI xanh, cài `.exe` từ artifact trên máy sạch chạy được.
 

@@ -27,6 +27,12 @@ App desktop Windows (cài bằng `.exe`), chạy offline, dành cho **manager** 
 - Mã định danh app: `vn.personal.quanlytask` (đã chốt; không đổi sau khi phát hành). Icon app làm ở M0.
 - Tên app: **Quản lý Task**. Hướng giao diện **C · Sổ màu** (Nunito, bo góc lớn, sáng/tối).
 
+## Trạng thái code (12/09/2026)
+
+- Đã code đủ phạm vi Gọn (M0–M4): frontend `src/` (React), backend `src-tauri/` (Rust). Hợp đồng IPC viết tay: `src-tauri/src/dto.rs` ⇄ `src/shared/api/types.ts` + `commands.ts` — đổi một bên phải sửa bên kia.
+- Kiểm tra: `pnpm lint` · `pnpm build` · `pnpm test` · `cargo fmt/clippy/test --manifest-path src-tauri/Cargo.toml`. Chạy app: `pnpm tauri dev` (dữ liệu dev ở `%APPDATA%\vn.personal.quanlytask\dev\`, Cài đặt có nút "Nạp dữ liệu mẫu"). Bộ cài: `pnpm tauri build`.
+- Chưa test tay đầy đủ trên app thật; khôi phục từ .zip (khởi động lại app) chưa chạy thử thực tế.
+
 ## Môi trường máy dev
 
 - Đã có: Node 24, npm 11, Git, WebView2, Chrome.

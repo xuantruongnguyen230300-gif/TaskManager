@@ -420,4 +420,4 @@ COMMIT;
 3. Trước khi chạy migration mới trên DB đã có dữ liệu: `VACUUM INTO 'backups\pre-migrate-v<cũ>-to-v<mới>-<ts>.db'`.
 4. DB có version lớn hơn bản app (cài bản cũ đè bản mới) → không mở DB, báo cài bản mới hơn.
 5. Đổi `CHECK`/FK phải dựng lại bảng theo quy trình 12 bước của SQLite (migration riêng, tắt `foreign_keys` tạm thời, nhớ tạo lại index/trigger), kết thúc bằng `PRAGMA foreign_key_check`.
-6. Truy vấn kiểm tra lúc biên dịch bằng `sqlx::query!` chế độ offline (`.sqlx/` được commit, CI đặt `SQLX_OFFLINE=true`).
+6. Truy vấn sqlx dạng runtime (`sqlx::query`, `query_as`), không dùng macro `query!` nên không cần `.sqlx/` hay `SQLX_OFFLINE`.
